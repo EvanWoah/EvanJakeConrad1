@@ -10,4 +10,7 @@ public class CreditCard implements Serializable{
         this.creditCardId = creditCardId;
         this.creditCardNumber = ccNumber;
     }
+
+    public getCreditCardId() {return this.creditCardId}
+
 }
