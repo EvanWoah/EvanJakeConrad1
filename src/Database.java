@@ -62,9 +62,9 @@ public class Database implements Serializable {
      * Private for the singleton pattern Creates the catalog and member
      * collection objects
      */
-    private Library() {
-        catalog = Catalog.instance();
-        memberList = MemberList.instance();
+    private Database() {
+        cccontrol = CCControl.instance();
+        donorList = DonorList.instance();
     }
 
     /**
@@ -72,12 +72,12 @@ public class Database implements Serializable {
      *
      * @return the singleton object
      */
-    public static Library instance() {
-        if (library == null) {
-            MemberIdServer.instance(); // instantiate all singletons
-            return (library = new Library());
+    public static Database instance() {
+        if (database == null) {
+            DonorIdServer.instance(); // instantiate all singletons
+            return (database = new Database());
         } else {
-            return library;
+            return database;
         }
     }
 
@@ -155,8 +155,8 @@ public class Database implements Serializable {
      *            id of the member
      * @return true iff the member is in the member list collection
      */
-    public Member searchMembership(String memberId) {
-        return memberList.search(memberId);
+    public Donor searchDonorList(String donorId) {
+        return donorList.search(donorId);
     }
 
     /**
@@ -343,7 +343,7 @@ public class Database implements Serializable {
      * @return iterator to the collection
      */
     public Iterator getTransactions(String memberId, Calendar date) {
-        Member member = memberList.search(memberId);
+        Donor donor = DonorList.search(memberId);
         if (member == null) {
             return (null);
         }
@@ -355,13 +355,13 @@ public class Database implements Serializable {
      *
      * @return a Library object
      */
-    public static Library retrieve() {
+    public static Database retrieve() {
         try {
-            FileInputStream file = new FileInputStream("LibraryData");
+            FileInputStream file = new FileInputStream("DatabaseData");
             ObjectInputStream input = new ObjectInputStream(file);
-            library = (Library) input.readObject();
-            MemberIdServer.retrieve(input);
-            return library;
+            database = (Database) input.readObject();
+            DonorIdServer.retrieve(input);
+            return database;
         } catch (IOException ioe) {
             ioe.printStackTrace();
             return null;
@@ -378,10 +378,10 @@ public class Database implements Serializable {
      */
     public static boolean save() {
         try {
-            FileOutputStream file = new FileOutputStream("LibraryData");
+            FileOutputStream file = new FileOutputStream("DatabaseData");
             ObjectOutputStream output = new ObjectOutputStream(file);
-            output.writeObject(library);
-            output.writeObject(MemberIdServer.instance());
+            output.writeObject(database);
+            output.writeObject(DonorIdServer.instance());
             file.close();
             return true;
         } catch (IOException ioe) {
