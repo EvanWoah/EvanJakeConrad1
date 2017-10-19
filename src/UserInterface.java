@@ -191,7 +191,6 @@ public class UserInterface {
         System.out.println(REMOVE_DONOR + " to  remove a donor");
         System.out.println(REMOVE_CREDIT_CARD + " to  remove a credit card");
         System.out.println(SAVE + " to  save data");
-        System.out.println(HELP + " for help");
     }
 
     /**
@@ -278,22 +277,11 @@ public class UserInterface {
      *
      */
     public void removeDonor() {
-        String memberID = getToken("Enter member id");
-        String bookID = getToken("Enter book id");
-        int duration = getNumber("Enter duration of hold");
-        int result =  database.placeHold(memberID, bookID, duration);
+        int donorID = Integer.parseInt(getToken("Enter donor id"));
+        int result =  database.removeDonor(donorID);
         switch (result) {
-            case Database.BOOK_NOT_FOUND:
-                System.out.println("No such Book in Library");
-                break;
-            case Database.BOOK_NOT_ISSUED:
-                System.out.println(" Book is not checked out");
-                break;
-            case Database.NO_SUCH_MEMBER:
-                System.out.println("Not a valid member ID");
-                break;
-            case Database.HOLD_PLACED:
-                System.out.println("A hold has been placed");
+            case Database.NO_SUCH_DONOR:
+                System.out.println("Not a valid donor ID");
                 break;
             default:
                 System.out.println("An error has occurred");
@@ -307,8 +295,8 @@ public class UserInterface {
      *
      */
     public void removeCreditCard() {
-        String donorID = getToken("Enter donor id");
-        String ccNumber = getToken("Enter credit card number");
+        int donorID =   Integer.parseInt(getToken("Enter donor id"));
+        int ccNumber = Integer.parseInt(getToken("Enter credit card number"));
         int result = database.removeCreditCard(donorID, ccNumber);
         switch (result) {
             case Database.BOOK_NOT_FOUND:
@@ -353,7 +341,7 @@ public class UserInterface {
      */
     private void save() {
         if (database.save()) {
-            System.out.println(" The library has been successfully saved in the file LibraryData \n");
+            System.out.println(" The database has been successfully saved in the file DatabaseData \n");
         } else {
             System.out.println(" There has been an error in saving \n");
         }

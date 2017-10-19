@@ -50,7 +50,7 @@ public class Database implements Serializable {
     public static final int BOOK_HAS_HOLD = 3;
     public static final int BOOK_ISSUED = 4;
     public static final int HOLD_PLACED = 5;
-    public static final int NO_HOLD_FOUND = 6;
+    public static final int NO_CREDIT_CARD_FOUND = 6;
     public static final int OPERATION_COMPLETED = 7;
     public static final int OPERATION_FAILED = 8;
     public static final int NO_SUCH_DONOR = 9;
@@ -102,7 +102,7 @@ public class Database implements Serializable {
      * @return result of the operation
      */
     public int removeCreditCard(int donorId, int ccNumber) {
-        Donor donor = donorList.search(memberId);
+        Donor donor = donorList.search(donorId);
         if (donor == null) {
             return (NO_SUCH_DONOR);
         }
@@ -110,22 +110,18 @@ public class Database implements Serializable {
         if (book == null) {
             return (CREDIT_CARD_NOT_FOUND);
         }
-        return member.removeHold(bookId) && book.removeHold(memberId) ? OPERATION_COMPLETED : NO_HOLD_FOUND;
+        return cccontrol.removeCreditCard(ccNumber) ? OPERATION_COMPLETED : NO_CREDIT_CARD_FOUND;
     }
 
     /*
      * Removes all out-of-date holds
      */
-    private void removeInvalidHolds() {
-        for (Iterator catalogIterator = catalog.getBooks(); catalogIterator.hasNext();) {
-            for (Iterator iterator = ((Book) catalogIterator.next()).getHolds(); iterator.hasNext();) {
-                Hold hold = (Hold) iterator.next();
-                if (!hold.isValid()) {
-                    hold.getBook().removeHold(hold.getMember().getId());
-                    hold.getMember().removeHold(hold.getBook().getId());
-                }
-            }
+    private void removeDonor(int donorId) {
+        Donor donor = donorList.search(donorId);
+        if (donor == null) {
+            return (NO_SUCH_DONOR);
         }
+        return donorList.removeDonor(donorId) ? OPERATION_COMPLETED : NO_SUCH_DONOR;
     }
 
     /**

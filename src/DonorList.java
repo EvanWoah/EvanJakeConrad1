@@ -85,8 +85,7 @@ public class DonorList implements Serializable {
     }
 
     public Boolean removeDonor(int donorID) {
-        for (Donor donor: donors
-             ) {
+        for (Donor donor: donors) {
             if (donor.getDonorID().equals(donorID)){
                 donors.remove(donor);
                 return true;
