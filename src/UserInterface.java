@@ -44,8 +44,8 @@ public class UserInterface {
     private static final int ADD_CREDIT_CARD = 2;
     private static final int PROCESS_DONATIONS = 3;
     private static final int LIST_TRANSACTIONS = 4;
-    private static final int LIST_DONORS = 5;
-    private static final int LIST_DONOR = 6;
+    private static final int LIST_DONOR = 5;
+    private static final int LIST_DONORS = 6;
     private static final int REMOVE_DONOR = 7;
     private static final int REMOVE_CREDIT_CARD = 8;
     private static final int SAVE = 9;
