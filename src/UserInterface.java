@@ -188,7 +188,7 @@ public class UserInterface {
         System.out.println(PROCESS_DONATIONS + " to  process donations");
         System.out.println(LIST_TRANSACTIONS + " to  list transactions ");
         System.out.println(LIST_DONORS + " to  list all donors ");
-        System.out.println(LIST_DONOR + " to  list a specifc donor");
+        System.out.println(LIST_DONOR + " to  list a specific donor");
         System.out.println(REMOVE_DONOR + " to  remove a donor");
         System.out.println(REMOVE_CREDIT_CARD + " to  remove a credit card");
         System.out.println(SAVE + " to  save data");
@@ -245,7 +245,7 @@ public class UserInterface {
     public void listDonors() {
         Iterator result = database.getDonors();
         while (result.hasNext()) {
-            Transaction transaction = (Transaction) result.next();
+            Donor donor = (Donor) result.next();
             System.out.println(result + "\n");
         }
         System.out.println("\n  There are no more donors \n");

@@ -104,8 +104,7 @@ public class DonorList implements Serializable {
     }
 
     public Iterator getDonors() {
-        Donor donor = donors.iterator().next();
-        if (donor == null) {
+        if (donors.iterator() == null) {
             return (null);
         }
         return donors.iterator();
