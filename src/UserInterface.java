@@ -220,9 +220,6 @@ public class UserInterface {
 
     }
 
-
-
-
     /**
      * Method to be called for displaying all transactions.
      *
@@ -410,6 +407,10 @@ public class UserInterface {
     }
 
     private void addCreditCard() {
+        int donorID = getNumber("Enter donor id");
+        int creditCardNumber = getNumber("Enter credit card number");
+        int donationAmount = getNumber("Enter even dollar donation amount as integer");
+        database.addCreditCard(donorID, creditCardNumber, donationAmount);
     }
 
     /**

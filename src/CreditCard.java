@@ -2,15 +2,15 @@ import java.io.Serializable;
 
 public class CreditCard implements Serializable{
     private int donorId;
-    private int creditCardId;
-    private String creditCardNumber;
+    private int creditCardNumber;
+    private int donationAmount;
 
-    public CreditCard(int donorId, int creditCardId, String ccNumber) {
+    public CreditCard(int donorId, int ccNumber, int donationAmount) {
         this.donorId = donorId;
-        this.creditCardId = creditCardId;
         this.creditCardNumber = ccNumber;
+        this.donationAmount = donationAmount;
     }
 
-    public int getCreditCardId() {return this.creditCardId;}
+    public int getCreditCardId() {return this.creditCardNumber;}
 
 }

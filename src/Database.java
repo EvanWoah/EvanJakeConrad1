@@ -191,4 +191,8 @@ public class Database implements Serializable {
     public Iterator getDonors() {
         return donorList.getDonors();
     }
+
+    public void addCreditCard(int donorId, int creditCardNumber, int donationAmount) {
+        cccontrol.addCreditCard(donorId, creditCardNumber, donationAmount);
+    }
 }

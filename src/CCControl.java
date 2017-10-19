@@ -37,4 +37,9 @@ public class CCControl implements Serializable{
             return ccNumbers.remove(cc);
         }
     }
+
+    public void addCreditCard(int donorId, int creditCardNumber, int donationAmount) {
+        CreditCard cc = new CreditCard(donorId, creditCardNumber, donationAmount);
+        ccNumbers.add(cc);
+    }
 }
