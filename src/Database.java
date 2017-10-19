@@ -54,7 +54,7 @@ public class Database implements Serializable {
     public static final int OPERATION_COMPLETED = 7;
     public static final int OPERATION_FAILED = 8;
     public static final int NO_SUCH_DONOR = 9;
-    private Catalog catalog;
+    private CCControl cccontrol;
     private DonorList donorList;
     private static Database database;
 
@@ -183,18 +183,18 @@ public class Database implements Serializable {
     /**
      * Removes a hold for a specific book and member combincation
      *
-     * @param memberId
+     * @param donorId
      *            id of the member
-     * @param bookId
+     * @param ccNumber
      *            book id
      * @return result of the operation
      */
-    public int removeCreditCard(String donorId, String ccNumber) {
+    public int removeCreditCard(int donorId, int ccNumber) {
         Donor donor = donorList.search(memberId);
         if (donor == null) {
             return (NO_SUCH_DONOR);
         }
-        CreditCard creditCard = catalog.search(ccNumber);
+        CreditCard creditCard = cccontrol.search(ccNumber);
         if (book == null) {
             return (CREDIT_CARD_NOT_FOUND);
         }
