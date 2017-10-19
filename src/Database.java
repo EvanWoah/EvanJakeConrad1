@@ -43,9 +43,9 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Iterator;
 
-public class Library implements Serializable {
+public class Database implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final int BOOK_NOT_FOUND = 1;
+    public static final int CREDIT_CARD_NOT_FOUND = 1;
     public static final int BOOK_NOT_ISSUED = 2;
     public static final int BOOK_HAS_HOLD = 3;
     public static final int BOOK_ISSUED = 4;
@@ -53,10 +53,10 @@ public class Library implements Serializable {
     public static final int NO_HOLD_FOUND = 6;
     public static final int OPERATION_COMPLETED = 7;
     public static final int OPERATION_FAILED = 8;
-    public static final int NO_SUCH_MEMBER = 9;
+    public static final int NO_SUCH_DONOR = 9;
     private Catalog catalog;
-    private MemberList memberList;
-    private static Library library;
+    private DonorList donorList;
+    private static Database database;
 
     /**
      * Private for the singleton pattern Creates the catalog and member
@@ -189,14 +189,14 @@ public class Library implements Serializable {
      *            book id
      * @return result of the operation
      */
-    public int removeHold(String memberId, String bookId) {
-        Member member = memberList.search(memberId);
-        if (member == null) {
-            return (NO_SUCH_MEMBER);
+    public int removeCreditCard(String donorId, String ccNumber) {
+        Donor donor = donorList.search(memberId);
+        if (donor == null) {
+            return (NO_SUCH_DONOR);
         }
-        Book book = catalog.search(bookId);
+        CreditCard creditCard = catalog.search(ccNumber);
         if (book == null) {
-            return (BOOK_NOT_FOUND);
+            return (CREDIT_CARD_NOT_FOUND);
         }
         return member.removeHold(bookId) && book.removeHold(memberId) ? OPERATION_COMPLETED : NO_HOLD_FOUND;
     }

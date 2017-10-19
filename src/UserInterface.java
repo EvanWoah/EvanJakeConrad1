@@ -335,9 +335,9 @@ public class UserInterface {
      *
      */
     public void removeCreditCard() {
-        String memberID = getToken("Enter member id");
-        String bookID = getToken("Enter book id");
-        int result = database.removeHold(memberID, bookID);
+        String donorID = getToken("Enter donor id");
+        String ccNumber = getToken("Enter credit card number");
+        int result = database.removeCreditCard(donorID, ccNumber);
         switch (result) {
             case Database.BOOK_NOT_FOUND:
                 System.out.println("No such Book in Library");
