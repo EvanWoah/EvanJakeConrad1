@@ -82,76 +82,9 @@ public class Database implements Serializable {
     }
 
     /**
-     * Organizes the operations for adding a book
-     *
-     * @param title
-     *            book title
-     * @param author
-     *            author name
-     * @param id
-     *            book id
-     * @return the Book object created
-     */
-    public Book addBook(String title, String author, String id) {
-        Book book = new Book(title, author, id);
-        if (catalog.insertBook(book)) {
-            return (book);
-        }
-        return null;
-    }
-
-    /**
-     * Organizes the operations for adding a member
-     *
-     * @param name
-     *            member name
-     * @param address
-     *            member address
-     * @param phone
-     *            member phone
-     * @return the Member object created
-     */
-    public Member addMember(String name, String address, String phone) {
-        Member member = new Member(name, address, phone);
-        if (memberList.insertMember(member)) {
-            return (member);
-        }
-        return null;
-    }
-
-    /**
-     * Organizes the placing of a hold
-     *
-     * @param memberId
-     *            member's id
-     * @param bookId
-     *            book's id
-     * @param duration
-     *            for how long the hold should be valid in days
-     * @return indication on the outcome
-     */
-    public int placeHold(String memberId, String bookId, int duration) {
-        Book book = catalog.search(bookId);
-        if (book == null) {
-            return (BOOK_NOT_FOUND);
-        }
-        if (book.getBorrower() == null) {
-            return (BOOK_NOT_ISSUED);
-        }
-        Member member = memberList.search(memberId);
-        if (member == null) {
-            return (NO_SUCH_MEMBER);
-        }
-        Hold hold = new Hold(member, book, duration);
-        book.placeHold(hold);
-        member.placeHold(hold);
-        return (HOLD_PLACED);
-    }
-
-    /**
      * Searches for a given member
      *
-     * @param memberId
+     * @param donorId
      *            id of the member
      * @return true iff the member is in the member list collection
      */
@@ -160,31 +93,10 @@ public class Database implements Serializable {
     }
 
     /**
-     * Processes holds for a single book
-     *
-     * @param bookId
-     *            id of the book
-     * @return the member who should be notified
-     */
-    public Member processHold(String bookId) {
-        Book book = catalog.search(bookId);
-        if (book == null) {
-            return (null);
-        }
-        Hold hold = book.getNextHold();
-        if (hold == null) {
-            return (null);
-        }
-        hold.getMember().removeHold(bookId);
-        hold.getBook().removeHold(hold.getMember().getId());
-        return (hold.getMember());
-    }
-
-    /**
-     * Removes a hold for a specific book and member combincation
+     * Removes a credit card from the database
      *
      * @param donorId
-     *            id of the member
+     *            id of the donor
      * @param ccNumber
      *            book id
      * @return result of the operation
@@ -336,18 +248,18 @@ public class Database implements Serializable {
      * Returns an iterator to the transactions for a specific member on a
      * certain date
      *
-     * @param memberId
-     *            member id
+     * @param donorId
+     *            donor id
      * @param date
      *            date of issue
      * @return iterator to the collection
      */
-    public Iterator getTransactions(String memberId, Calendar date) {
-        Donor donor = DonorList.search(memberId);
-        if (member == null) {
+    public Iterator getTransactions(String donorId, Calendar date) {
+        Donor donor = donorList.search(donorId);
+        if (donor == null) {
             return (null);
         }
-        return member.getTransactions(date);
+        return donor.getTransactions(date);
     }
 
     /**
@@ -390,12 +302,12 @@ public class Database implements Serializable {
         }
     }
 
-    /**
-     * String form of the library
-     *
-     */
-    @Override
-    public String toString() {
-        return catalog + "\n" + memberList;
+    public Donor addDonor(String name, String phone) {
+        try{
+            Donor newDonor = new Donor(name, phone);
+            donorList.insertDonor(newDonor);
+            return newDonor;
+        }catch(Exception e){return null;}
+
     }
 }

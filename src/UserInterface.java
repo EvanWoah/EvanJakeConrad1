@@ -203,10 +203,9 @@ public class UserInterface {
     public void addDonor() {
         do {
             String name = getToken("Enter donor name");
-            String address = getToken("Enter address");
             String phone = getToken("Enter phone");
             Donor result;
-            result = database.addDonor(name, address, phone);
+            result = database.addDonor(name, phone);
             if (result == null) {
                 System.out.println("Could not add donor");
             }
