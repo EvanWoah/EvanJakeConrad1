@@ -3,4 +3,12 @@
  */
 public class Database {
 
+    public static Database instance() {
+    }
+
+    public Donor addDonor(String name, String address, String phone) {
+    }
+
+    public static Database retrieve() {
+    }
 }

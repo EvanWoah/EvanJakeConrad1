@@ -59,7 +59,7 @@ public class UserInterface {
         if (yesOrNo("Look for saved data and  use it?")) {
             retrieve();
         } else {
-            database = Library.instance();
+            database = Database.instance();
         }
     }
 
@@ -182,16 +182,14 @@ public class UserInterface {
     public void help() {
         System.out.println("Enter a number between 0 and 12 as explained below:");
         System.out.println(EXIT + " to Exit\n");
-        System.out.println(ADD_DONOR + " to add a member");
-        System.out.println(ADD_CREDIT_CARD + " to  add books");
-        System.out.println(PROCESS_DONATIONS + " to  issue books to a  member");
-        System.out.println(LIST_TRANSACTIONS + " to  return books ");
-        System.out.println(LIST_DONORS + " to  renew books ");
-        System.out.println(LIST_DONOR + " to  remove books");
-        System.out.println(REMOVE_DONOR + " to  place a hold on a book");
-        System.out.println(REMOVE_CREDIT_CARD + " to  remove a hold on a book");
-        System.out.println(SAVE + " to  process holds");
-        System.out.println(HELP + " to  print transactions");
+        System.out.println(ADD_DONOR + " to add a donor");
+        System.out.println(ADD_CREDIT_CARD + " to  add a credit card");
+        System.out.println(PROCESS_DONATIONS + " to  process donations");
+        System.out.println(LIST_TRANSACTIONS + " to  list transactions ");
+        System.out.println(LIST_DONORS + " to  list donor ");
+        System.out.println(LIST_DONOR + " to  list donors");
+        System.out.println(REMOVE_DONOR + " to  remove a donor");
+        System.out.println(REMOVE_CREDIT_CARD + " to  remove a credit card");
         System.out.println(SAVE + " to  save data");
         System.out.println(HELP + " for help");
     }
@@ -203,36 +201,24 @@ public class UserInterface {
      *
      */
     public void addDonor() {
-        String name = getToken("Enter donor name");
-        String address = getToken("Enter address");
-        String phone = getToken("Enter phone");
-        Donor result;
-        result = database.addDonor(name, address, phone);
-        if (result == null) {
-            System.out.println("Could not add donor");
-        }
-        System.out.println(result);
+        do {
+            String name = getToken("Enter donor name");
+            String address = getToken("Enter address");
+            String phone = getToken("Enter phone");
+            Donor result;
+            result = database.addDonor(name, address, phone);
+            if (result == null) {
+                System.out.println("Could not add donor");
+            }
+            System.out.println(result);
+        }while(yesOrNo("Add another donor?"));
     }
 
     /**
-     * Method to be called for adding a book. Prompts the user for the
-     * appropriate values and uses the appropriate Library method for adding the
-     * book.
-     *
+     * TODO
      */
-    public void addBooks() {
-        Book result;
-        do {
-            String title = getToken("Enter  title");
-            String bookID = getToken("Enter id");
-            String author = getToken("Enter author");
-            result = database.addBook(title, author, bookID);
-            if (result != null) {
-                System.out.println(result);
-            } else {
-                System.out.println("Book could not be added");
-            }
-        } while (yesOrNo("Add more books?"));
+    public void processDonations() {
+
     }
 
 
@@ -248,27 +234,27 @@ public class UserInterface {
         int result;
         do {
             String bookID = getToken("Enter book id");
-            result = library.returnBook(bookID);
+            result = database.returnBook(bookID);
             switch (result) {
-                case Library.BOOK_NOT_FOUND:
+                case Database.BOOK_NOT_FOUND:
                     System.out.println("No such Book in Library");
                     break;
-                case Library.BOOK_NOT_ISSUED:
+                case Database.BOOK_NOT_ISSUED:
                     System.out.println(" Book  was not checked out");
                     break;
-                case Library.BOOK_HAS_HOLD:
+                case Database.BOOK_HAS_HOLD:
                     System.out.println("Book has a hold");
                     break;
-                case Library.OPERATION_FAILED:
+                case Database.OPERATION_FAILED:
                     System.out.println("Book could not be returned");
                     break;
-                case Library.OPERATION_COMPLETED:
+                case Database.OPERATION_COMPLETED:
                     System.out.println(" Book has been returned");
                     break;
                 default:
                     System.out.println("An error has occurred");
             }
-            if (!yesOrNo("Return more books?")) {
+            if (!yesOrNo("List transactions again?")) {
                 break;
             }
         } while (true);
@@ -284,21 +270,21 @@ public class UserInterface {
         int result;
         do {
             String bookID = getToken("Enter book id");
-            result = library.removeBook(bookID);
+            result = database.removeBook(bookID);
             switch (result) {
-                case Library.BOOK_NOT_FOUND:
+                case Database.BOOK_NOT_FOUND:
                     System.out.println("No such Book in Library");
                     break;
-                case Library.BOOK_ISSUED:
+                case Database.BOOK_ISSUED:
                     System.out.println(" Book is currently checked out");
                     break;
-                case Library.BOOK_HAS_HOLD:
+                case Database.BOOK_HAS_HOLD:
                     System.out.println("Book has a hold");
                     break;
-                case Library.OPERATION_FAILED:
+                case Database.OPERATION_FAILED:
                     System.out.println("Book could not be removed");
                     break;
-                case Library.OPERATION_COMPLETED:
+                case Database.OPERATION_COMPLETED:
                     System.out.println(" Book has been removed");
                     break;
                 default:
@@ -308,6 +294,9 @@ public class UserInterface {
                 break;
             }
         } while (true);
+    }
+
+    private void listDonors() {
     }
 
     /**
@@ -320,18 +309,18 @@ public class UserInterface {
         String memberID = getToken("Enter member id");
         String bookID = getToken("Enter book id");
         int duration = getNumber("Enter duration of hold");
-        int result = library.placeHold(memberID, bookID, duration);
+        int result =  database.placeHold(memberID, bookID, duration);
         switch (result) {
-            case Library.BOOK_NOT_FOUND:
+            case Database.BOOK_NOT_FOUND:
                 System.out.println("No such Book in Library");
                 break;
-            case Library.BOOK_NOT_ISSUED:
+            case Database.BOOK_NOT_ISSUED:
                 System.out.println(" Book is not checked out");
                 break;
-            case Library.NO_SUCH_MEMBER:
+            case Database.NO_SUCH_MEMBER:
                 System.out.println("Not a valid member ID");
                 break;
-            case Library.HOLD_PLACED:
+            case Database.HOLD_PLACED:
                 System.out.println("A hold has been placed");
                 break;
             default:
@@ -348,15 +337,15 @@ public class UserInterface {
     public void removeCreditCard() {
         String memberID = getToken("Enter member id");
         String bookID = getToken("Enter book id");
-        int result = library.removeHold(memberID, bookID);
+        int result = database.removeHold(memberID, bookID);
         switch (result) {
-            case Library.BOOK_NOT_FOUND:
+            case Database.BOOK_NOT_FOUND:
                 System.out.println("No such Book in Library");
                 break;
-            case Library.NO_SUCH_MEMBER:
+            case Database.NO_SUCH_MEMBER:
                 System.out.println("Not a valid member ID");
                 break;
-            case Library.OPERATION_COMPLETED:
+            case Database.OPERATION_COMPLETED:
                 System.out.println("The hold has been removed");
                 break;
             default:
@@ -373,7 +362,7 @@ public class UserInterface {
     public void getTransactions() {
         String memberID = getToken("Enter member id");
         Calendar date = getDate("Please enter the date for which you want records as mm/dd/yy");
-        Iterator result = library.getTransactions(memberID, date);
+        Iterator result = database.getTransactions(memberID, date);
         if (result == null) {
             System.out.println("Invalid Member ID");
         } else {
@@ -391,7 +380,7 @@ public class UserInterface {
      *
      */
     private void save() {
-        if (library.save()) {
+        if (database.save()) {
             System.out.println(" The library has been successfully saved in the file LibraryData \n");
         } else {
             System.out.println(" There has been an error in saving \n");
@@ -405,13 +394,13 @@ public class UserInterface {
      */
     private void retrieve() {
         try {
-            if (library == null) {
-                library = Library.retrieve();
-                if (library != null) {
+            if (database == null) {
+                database = Database.retrieve();
+                if (database != null) {
                     System.out.println(" The library has been successfully retrieved from the file LibraryData \n");
                 } else {
                     System.out.println("File doesnt exist; creating new library");
-                    library = Library.instance();
+                    database = Database.instance();
                 }
             }
         } catch (Exception cnfe) {
@@ -433,7 +422,7 @@ public class UserInterface {
                     addDonor();
                     break;
                 case ADD_CREDIT_CARD:
-                    addBooks();
+                    addCreditCard();
                     break;
                 case PROCESS_DONATIONS:
                     processDonations();
@@ -461,6 +450,9 @@ public class UserInterface {
                     break;
             }
         }
+    }
+
+    private void addCreditCard() {
     }
 
     /**
