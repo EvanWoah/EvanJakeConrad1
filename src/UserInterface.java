@@ -225,78 +225,51 @@ public class UserInterface {
 
 
     /**
-     * Method to be called for returning books. Prompts the user for the
-     * appropriate values and uses the appropriate Library method for returning
-     * books.
+     * Method to be called for displaying all transactions.
      *
      */
     public void listTransactions() {
-        int result;
-        do {
-            String bookID = getToken("Enter book id");
-            result = database.returnBook(bookID);
-            switch (result) {
-                case Database.BOOK_NOT_FOUND:
-                    System.out.println("No such Book in Library");
-                    break;
-                case Database.BOOK_NOT_ISSUED:
-                    System.out.println(" Book  was not checked out");
-                    break;
-                case Database.BOOK_HAS_HOLD:
-                    System.out.println("Book has a hold");
-                    break;
-                case Database.OPERATION_FAILED:
-                    System.out.println("Book could not be returned");
-                    break;
-                case Database.OPERATION_COMPLETED:
-                    System.out.println(" Book has been returned");
-                    break;
-                default:
-                    System.out.println("An error has occurred");
-            }
-            if (!yesOrNo("List transactions again?")) {
-                break;
-            }
-        } while (true);
+        Iterator result = database.getTransactions();
+        while (result.hasNext()) {
+            Transaction transaction = (Transaction) result.next();
+            System.out.println(transaction.getTitle() + "\n");
+        }
+        System.out.println("\n  There are no more transactions \n");
     }
 
     /**
-     * Method to be called for removing books. Prompts the user for the
-     * appropriate values and uses the appropriate Library method for removing
-     * books.
+     * Method to be called displaying all donors.
      *
      */
-    public void listDonor() {
+    public void listDonors() {
+        Iterator result = database.toString();
+        while (result.hasNext()) {
+            Transaction transaction = (Transaction) result.next();
+            System.out.println(donorList.getTitle() + "\n");
+        }
+        System.out.println("\n  There are no more donors \n");
+    }
+
+    /**
+     * Method to be called displaying a single donor.
+     *
+     */
+    private void listDonor() {
         int result;
         do {
-            String bookID = getToken("Enter book id");
-            result = database.removeBook(bookID);
+            String donorID = getToken("Enter donor id");
+            result = database.searchDonorList(donorID);
             switch (result) {
-                case Database.BOOK_NOT_FOUND:
-                    System.out.println("No such Book in Library");
-                    break;
-                case Database.BOOK_ISSUED:
-                    System.out.println(" Book is currently checked out");
-                    break;
-                case Database.BOOK_HAS_HOLD:
-                    System.out.println("Book has a hold");
-                    break;
-                case Database.OPERATION_FAILED:
-                    System.out.println("Book could not be removed");
-                    break;
-                case Database.OPERATION_COMPLETED:
-                    System.out.println(" Book has been removed");
+                case Database.DONOR_NOT_FOUND:
+                    System.out.println("No such Donor exists");
                     break;
                 default:
                     System.out.println("An error has occurred");
             }
-            if (!yesOrNo("Remove more books?")) {
+            if (!yesOrNo("Find another Donor?")) {
                 break;
             }
         } while (true);
-    }
-
-    private void listDonors() {
     }
 
     /**
