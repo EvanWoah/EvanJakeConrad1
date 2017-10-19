@@ -59,13 +59,13 @@ public class DonorList implements Serializable {
      *
      * @param donorID
      *            the id of the member
-     * @return true iff member exists
+     * @return true if member exists
      *
      */
-    public Donor search(String donorID) {
+    public Donor search(int donorID) {
         for (Iterator iterator = donors.iterator(); iterator.hasNext();) {
             Donor donor = (Donor) iterator.next();
-            if (donor.getDonorID().equals(donorID)) {
+            if (donor.getDonorID()==(donorID)) {
                 return donor;
             }
         }
@@ -86,7 +86,7 @@ public class DonorList implements Serializable {
 
     public Boolean removeDonor(int donorID) {
         for (Donor donor: donors) {
-            if (donor.getDonorID().equals(donorID)){
+            if (donor.getDonorID()==(donorID)){
                 donors.remove(donor);
                 return true;
             }
@@ -101,5 +101,13 @@ public class DonorList implements Serializable {
     @Override
     public String toString() {
         return donors.toString();
+    }
+
+    public Iterator getDonors() {
+        Donor donor = donors.iterator().next();
+        if (donor == null) {
+            return (null);
+        }
+        return donors.iterator();
     }
 }

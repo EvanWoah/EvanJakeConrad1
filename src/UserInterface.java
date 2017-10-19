@@ -50,6 +50,7 @@ public class UserInterface {
     private static final int REMOVE_CREDIT_CARD = 8;
     private static final int SAVE = 9;
     private static final int HELP = 10;
+    public static int DONOR_ID_COUNT = 0;
 
     /**
      * Made private for singleton pattern. Conditionally looks for any saved
@@ -227,10 +228,12 @@ public class UserInterface {
      *
      */
     public void listTransactions() {
-        Iterator result = database.getTransactions();
+        int donorID = getNumber("Enter donor id");
+        Calendar date = getDate("Enter date mm/dd/yy");
+        Iterator result = database.getTransactions(donorID, date);
         while (result.hasNext()) {
             Transaction transaction = (Transaction) result.next();
-            System.out.println(transaction.getTitle() + "\n");
+            System.out.println(transaction.toString() + "\n");
         }
         System.out.println("\n  There are no more transactions \n");
     }
@@ -240,10 +243,10 @@ public class UserInterface {
      *
      */
     public void listDonors() {
-        Iterator result = database.toString();
+        Iterator result = database.getDonors();
         while (result.hasNext()) {
             Transaction transaction = (Transaction) result.next();
-            System.out.println(donorList.getTitle() + "\n");
+            System.out.println(result + "\n");
         }
         System.out.println("\n  There are no more donors \n");
     }
@@ -253,17 +256,11 @@ public class UserInterface {
      *
      */
     private void listDonor() {
-        int result;
+        Donor resultDonor;
         do {
-            String donorID = getToken("Enter donor id");
-            result = database.searchDonorList(donorID);
-            switch (result) {
-                case Database.DONOR_NOT_FOUND:
-                    System.out.println("No such Donor exists");
-                    break;
-                default:
-                    System.out.println("An error has occurred");
-            }
+            int donorID = getNumber("Enter donor id");
+            resultDonor = database.searchDonorList(donorID);
+            System.out.println(resultDonor);
             if (!yesOrNo("Find another Donor?")) {
                 break;
             }
@@ -299,11 +296,11 @@ public class UserInterface {
         int ccNumber = Integer.parseInt(getToken("Enter credit card number"));
         int result = database.removeCreditCard(donorID, ccNumber);
         switch (result) {
-            case Database.BOOK_NOT_FOUND:
-                System.out.println("No such Book in Library");
+            case Database.CREDIT_CARD_NOT_FOUND:
+                System.out.println("No such Credit Card");
                 break;
-            case Database.NO_SUCH_MEMBER:
-                System.out.println("Not a valid member ID");
+            case Database.NO_SUCH_DONOR:
+                System.out.println("Not a valid donor ID");
                 break;
             case Database.OPERATION_COMPLETED:
                 System.out.println("The hold has been removed");
@@ -320,15 +317,15 @@ public class UserInterface {
      *
      */
     public void getTransactions() {
-        String memberID = getToken("Enter member id");
+        int donorID = getNumber("Enter donor id");
         Calendar date = getDate("Please enter the date for which you want records as mm/dd/yy");
-        Iterator result = database.getTransactions(memberID, date);
+        Iterator result = database.getTransactions(donorID, date);
         if (result == null) {
-            System.out.println("Invalid Member ID");
+            System.out.println("Invalid Donor ID");
         } else {
             while (result.hasNext()) {
                 Transaction transaction = (Transaction) result.next();
-                System.out.println(transaction.getType() + "   " + transaction.getTitle() + "\n");
+                System.out.println(transaction.toString() + "\n");
             }
             System.out.println("\n  There are no more transactions \n");
         }
@@ -423,5 +420,10 @@ public class UserInterface {
      */
     public static void main(String[] args) {
         UserInterface.instance().process();
+    }
+
+    public static int getDonorID() {
+        DONOR_ID_COUNT=DONOR_ID_COUNT+1;
+        return DONOR_ID_COUNT;
     }
 }

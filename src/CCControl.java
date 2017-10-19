@@ -1,4 +1,7 @@
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CCControl implements Serializable{
     private static final long serialVersionUID = 1L;
@@ -19,7 +22,7 @@ public class CCControl implements Serializable{
     public CreditCard search(int ccNumber) {
         for (Iterator iterator = ccNumbers.iterator(); iterator.hasNext();) {
             CreditCard cc = (CreditCard) iterator.next();
-            if (cc.getId().equals(ccNumber)) {
+            if (cc.getCreditCardId() == (ccNumber)) {
                 return cc;
             }
         }

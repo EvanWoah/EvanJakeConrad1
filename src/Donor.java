@@ -28,12 +28,8 @@ import java.util.ListIterator;
 public class Donor implements Serializable {
     private static final long serialVersionUID = 1L;
     private String name;
-    private String donorID;
+    private int donorID;
     private String phoneNumber;
-    private int creditCardNumber;
-    private static final String DONOR_STRING = "D";
-//    private List booksBorrowed = new LinkedList();
-//    private List booksOnHold = new LinkedList();
     private List transactions = new LinkedList();
 
     /**
@@ -47,7 +43,7 @@ public class Donor implements Serializable {
     public Donor(String name, String phoneNumber) {
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.donorID = DONOR_STRING + (DonorIdServer.instance()).getId();
+        this.donorID = 10000+UserInterface.getDonorID();
     }
 
     public boolean donate(double donationAmount) {
@@ -58,16 +54,6 @@ public class Donor implements Serializable {
             return false;
         }
     }
-
-    /**
-     * Gets an iterator to the issued books
-     *
-     * @return Iterator to the collection of issued books
-     */
-    public Iterator getTransactions() {
-        return (transactions.listIterator());
-    }
-
 
     /**
      * Gets an iterator to a collection of selected ransactions
@@ -110,7 +96,7 @@ public class Donor implements Serializable {
      *
      * @return donor id
      */
-    public String getDonorID() {
+    public int getDonorID() {
         return donorID;
     }
 
@@ -142,8 +128,8 @@ public class Donor implements Serializable {
      *            of the Donor who should be compared
      * @return true iff the Donor ids match
      */
-    public boolean equals(String incomingDonorID) {
-        return this.donorID.equals(incomingDonorID);
+    public boolean equals(int incomingDonorID) {
+        return this.donorID == (incomingDonorID);
     }
 
     /**
