@@ -40,18 +40,16 @@ public class UserInterface {
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private static Database database;
     private static final int EXIT = 0;
-    private static final int ADD_MEMBER = 1;
-    private static final int ADD_BOOKS = 2;
-    private static final int ISSUE_BOOKS = 3;
-    private static final int RETURN_BOOKS = 4;
-    private static final int RENEW_BOOKS = 5;
-    private static final int REMOVE_BOOKS = 6;
-    private static final int PLACE_HOLD = 7;
-    private static final int REMOVE_HOLD = 8;
-    private static final int PROCESS_HOLD = 9;
-    private static final int GET_TRANSACTIONS = 10;
-    private static final int SAVE = 11;
-    private static final int HELP = 12;
+    private static final int ADD_DONOR = 1;
+    private static final int ADD_CREDIT_CARD = 2;
+    private static final int PROCESS_DONATIONS = 3;
+    private static final int LIST_TRANSACTIONS = 4;
+    private static final int LIST_DONORS = 5;
+    private static final int LIST_DONOR = 6;
+    private static final int REMOVE_DONOR = 7;
+    private static final int REMOVE_CREDIT_CARD = 8;
+    private static final int SAVE = 9;
+    private static final int HELP = 10;
 
     /**
      * Made private for singleton pattern. Conditionally looks for any saved
@@ -184,16 +182,16 @@ public class UserInterface {
     public void help() {
         System.out.println("Enter a number between 0 and 12 as explained below:");
         System.out.println(EXIT + " to Exit\n");
-        System.out.println(ADD_MEMBER + " to add a member");
-        System.out.println(ADD_BOOKS + " to  add books");
-        System.out.println(ISSUE_BOOKS + " to  issue books to a  member");
-        System.out.println(RETURN_BOOKS + " to  return books ");
-        System.out.println(RENEW_BOOKS + " to  renew books ");
-        System.out.println(REMOVE_BOOKS + " to  remove books");
-        System.out.println(PLACE_HOLD + " to  place a hold on a book");
-        System.out.println(REMOVE_HOLD + " to  remove a hold on a book");
-        System.out.println(PROCESS_HOLD + " to  process holds");
-        System.out.println(GET_TRANSACTIONS + " to  print transactions");
+        System.out.println(ADD_DONOR + " to add a member");
+        System.out.println(ADD_CREDIT_CARD + " to  add books");
+        System.out.println(PROCESS_DONATIONS + " to  issue books to a  member");
+        System.out.println(LIST_TRANSACTIONS + " to  return books ");
+        System.out.println(LIST_DONORS + " to  renew books ");
+        System.out.println(LIST_DONOR + " to  remove books");
+        System.out.println(REMOVE_DONOR + " to  place a hold on a book");
+        System.out.println(REMOVE_CREDIT_CARD + " to  remove a hold on a book");
+        System.out.println(SAVE + " to  process holds");
+        System.out.println(HELP + " to  print transactions");
         System.out.println(SAVE + " to  save data");
         System.out.println(HELP + " for help");
     }
@@ -246,7 +244,7 @@ public class UserInterface {
      * books.
      *
      */
-    public void returnBooks() {
+    public void listTransactions() {
         int result;
         do {
             String bookID = getToken("Enter book id");
@@ -282,7 +280,7 @@ public class UserInterface {
      * books.
      *
      */
-    public void removeBooks() {
+    public void listDonor() {
         int result;
         do {
             String bookID = getToken("Enter book id");
@@ -318,7 +316,7 @@ public class UserInterface {
      * hold.
      *
      */
-    public void placeHold() {
+    public void removeDonor() {
         String memberID = getToken("Enter member id");
         String bookID = getToken("Enter book id");
         int duration = getNumber("Enter duration of hold");
@@ -347,7 +345,7 @@ public class UserInterface {
      * hold.
      *
      */
-    public void removeHold() {
+    public void removeCreditCard() {
         String memberID = getToken("Enter member id");
         String bookID = getToken("Enter book id");
         int result = library.removeHold(memberID, bookID);
@@ -364,28 +362,6 @@ public class UserInterface {
             default:
                 System.out.println("An error has occurred");
         }
-    }
-
-    /**
-     * Method to be called for processing books. Prompts the user for the
-     * appropriate values and uses the appropriate Library method for processing
-     * books.
-     *
-     */
-    public void processHolds() {
-        Member result;
-        do {
-            String bookID = getToken("Enter book id");
-            result = library.processHold(bookID);
-            if (result != null) {
-                System.out.println(result);
-            } else {
-                System.out.println("No valid holds left");
-            }
-            if (!yesOrNo("Process more books?")) {
-                break;
-            }
-        } while (true);
     }
 
     /**
@@ -453,35 +429,29 @@ public class UserInterface {
         help();
         while ((command = getCommand()) != EXIT) {
             switch (command) {
-                case ADD_MEMBER:
-                    addMember();
+                case ADD_DONOR:
+                    addDonor();
                     break;
-                case ADD_BOOKS:
+                case ADD_CREDIT_CARD:
                     addBooks();
                     break;
-                case ISSUE_BOOKS:
-                    issueBooks();
+                case PROCESS_DONATIONS:
+                    processDonations();
                     break;
-                case RETURN_BOOKS:
-                    returnBooks();
+                case LIST_TRANSACTIONS:
+                    listTransactions();
                     break;
-                case REMOVE_BOOKS:
-                    removeBooks();
+                case LIST_DONOR:
+                    listDonor();
                     break;
-                case RENEW_BOOKS:
-                    renewBooks();
+                case LIST_DONORS:
+                    listDonors();
                     break;
-                case PLACE_HOLD:
-                    placeHold();
+                case REMOVE_DONOR:
+                    removeDonor();
                     break;
-                case REMOVE_HOLD:
-                    removeHold();
-                    break;
-                case PROCESS_HOLD:
-                    processHolds();
-                    break;
-                case GET_TRANSACTIONS:
-                    getTransactions();
+                case REMOVE_CREDIT_CARD:
+                    removeCreditCard();
                     break;
                 case SAVE:
                     save();
