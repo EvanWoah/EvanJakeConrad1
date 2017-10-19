@@ -11,6 +11,6 @@ public class CreditCard implements Serializable{
         this.creditCardNumber = ccNumber;
     }
 
-    public getCreditCardId() {return this.creditCardId}
+    public int getCreditCardId() {return this.creditCardId;}
 
 }
