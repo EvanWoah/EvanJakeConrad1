@@ -30,16 +30,10 @@ public class TransactionsControl implements Serializable{
     }
 
 
-    public void addTransaction(int donorId, String creditCardNumber, int donationAmount) {
+    public String addTransaction(int donorId, String creditCardNumber, int donationAmount) {
         Transaction transaction = new Transaction(donorId, creditCardNumber, donationAmount);
         transactions.add(transaction);
-    }
-
-    public Iterator getTransactions() {
-        if (transactionsControl.iterator() == null) {
-            return (null);
-        }
-        return transactionsControl.iterator();
+        return transaction.getTransactionID();
     }
 
 

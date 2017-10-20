@@ -220,7 +220,8 @@ public class UserInterface {
         int donorID = getNumber("Enter donor id");
         String creditCardNumber = getToken("Enter card to process:\n " + database.getCreditCards(donorID));
         int donationAmount = database.getDonationAmount(creditCardNumber);
-        boolean yes = yesOrNo("Submit donation of " + database.processDonation(donorID, creditCardNumber, donationAmount)+ "?");
+        String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
+        System.out.print("Donation amount: " + "Transaction ID: ");
 
     }
 
@@ -293,8 +294,8 @@ public class UserInterface {
      *
      */
     public void removeCreditCard() {
-        int donorID =   Integer.parseInt(getToken("Enter donor id"));
-        int ccNumber = Integer.parseInt(getToken("Enter credit card number"));
+        int donorID =   getNumber("Enter donor id");
+        String ccNumber = getToken("Enter credit card number");
         int result = database.removeCreditCard(donorID, ccNumber);
         switch (result) {
             case Database.CREDIT_CARD_NOT_FOUND:
@@ -412,7 +413,7 @@ public class UserInterface {
 
     private void addCreditCard() {
         int donorID = getNumber("Enter donor id");
-        int creditCardNumber = getNumber("Enter credit card number");
+        String creditCardNumber = getToken("Enter credit card number");
         int donationAmount = getNumber("Enter even dollar donation amount as integer");
         database.addCreditCard(donorID, creditCardNumber, donationAmount);
     }

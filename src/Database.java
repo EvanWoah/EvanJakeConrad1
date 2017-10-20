@@ -206,8 +206,12 @@ public class Database implements Serializable {
        return cccontrol.getCreditCards();
     }
 
-    public void processDonation(int donorID, String creditCardNumber, int donationAmount ) {
-        transactionControl.addTransaction(donorID, creditCardNumber, donationAmount);
+    public Iterator getTransactions(){
+        return transactionControl.getTransactions();
+    }
+
+    public String processDonation(int donorID, String creditCardNumber, int donationAmount ) {
+        return transactionControl.addTransaction(donorID, creditCardNumber, donationAmount);
     }
 
     public int getDonationAmount(String creditCard) {
