@@ -224,8 +224,14 @@ public class UserInterface {
         }
         String creditCardNumber = getToken("Enter card to process");
         int donationAmount = database.getDonationAmount(creditCardNumber);
-        String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
-        System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
+        switch (donationAmount){
+            case -1:
+                System.out.println("No matching card found");
+                break;
+            default:
+                String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
+                System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
+        }
     }
 
     /**
@@ -233,14 +239,27 @@ public class UserInterface {
      *
      */
     public void listTransactions() {
-        int donorID = getNumber("Enter donor id");
-        Calendar date = getDate("Enter date mm/dd/yy");
-        Iterator result = database.getTransactions(donorID, date);
+        Iterator result = database.getTransactions();
         while (result.hasNext()) {
             Transaction transaction = (Transaction) result.next();
             System.out.println(transaction.toString() + "\n");
         }
         System.out.println("\n  There are no more transactions \n");
+    }
+
+    public void listDonorsTransactionsOnDay(){
+        int donorID = getNumber("Enter donor id");
+        Calendar date = getDate("Enter date mm/dd/yy");
+        Iterator result = database.getDonorsTransactions(donorID, date);
+        if (result == null) {
+            System.out.println("Invalid Donor ID");
+        } else {
+            while (result.hasNext()) {
+                Transaction transaction = (Transaction) result.next();
+                System.out.print(transaction.toString() + "\n");
+            }
+            System.out.println("\n  There are no more transactions \n");
+        }
     }
 
     /**
@@ -286,7 +305,8 @@ public class UserInterface {
                 System.out.println("Not a valid donor ID");
                 break;
             default:
-                System.out.println("An error has occurred");
+                database.removeTransactions(donorID);
+                System.out.println("Donor " +donorID+ " has been removed");
         }
     }
 
@@ -308,31 +328,10 @@ public class UserInterface {
                 System.out.println("Not a valid donor ID");
                 break;
             case Database.OPERATION_COMPLETED:
-                System.out.println("The hold has been removed");
+                System.out.println("The card has been removed");
                 break;
             default:
                 System.out.println("An error has occurred");
-        }
-    }
-
-    /**
-     * Method to be called for displaying transactions. Prompts the user for the
-     * appropriate values and uses the appropriate Library method for displaying
-     * transactions.
-     *
-     */
-    public void getTransactions() {
-        int donorID = getNumber("Enter donor id");
-        Calendar date = getDate("Please enter the date for which you want records as mm/dd/yy");
-        Iterator result = database.getTransactions(donorID, date);
-        if (result == null) {
-            System.out.println("Invalid Donor ID");
-        } else {
-            while (result.hasNext()) {
-                Transaction transaction = (Transaction) result.next();
-                System.out.println(transaction.toString() + "\n");
-            }
-            System.out.println("\n  There are no more transactions \n");
         }
     }
 

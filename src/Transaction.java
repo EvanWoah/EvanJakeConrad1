@@ -51,9 +51,10 @@ public class Transaction implements Serializable {
         this.donationAmount = donationAmount;
         this.date = new GregorianCalendar();
         this.transactionID = String.valueOf(donorIDOfDonation).concat("t").concat(String.valueOf(transactionCount));
-        this.title = "Donor: " + donorIDOfDonation +
-                "\n Donation Amount: " + donationAmount +
-                "\n On: " + "Date: " + getDate();
+        this.title = "TransactionID: " + transactionID +
+                "\n-> Donor: " + donorIDOfDonation +
+                ", Donation Amount: " + donationAmount +
+                ", Date: " + getDate();
     }
 
     /**

@@ -48,7 +48,7 @@ import java.util.List;
 
 public class Database implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final int CREDIT_CARD_NOT_FOUND = 1;
+    public static final int CREDIT_CARD_NOT_FOUND = -1;
     public static final int DONOR_NOT_FOUND = 2;
     public static final int BOOK_HAS_HOLD = 3;
     public static final int BOOK_ISSUED = 4;
@@ -138,12 +138,16 @@ public class Database implements Serializable {
      *            date of issue
      * @return iterator to the collection
      */
-    public Iterator getTransactions(int donorId, Calendar date) {
+    public Iterator getDonorsTransactions(int donorId, Calendar date) {
         Donor donor = donorControl.search(donorId);
         if (donor == null) {
             return (null);
         }
         return donor.getTransactions(date);
+    }
+
+    public Iterator getTransactions(){
+        return transactionControl.getTransactions();
     }
 
     /**
@@ -219,7 +223,16 @@ public class Database implements Serializable {
         return transactionControl.search(transactionID);
     }
 
-    public int getDonationAmount(String creditCard) {
-        return cccontrol.search(creditCard).getDonationAmount();
+    public int getDonationAmount(String creditCardNumber) {
+        CreditCard creditCard = cccontrol.search(creditCardNumber);
+        if (creditCard == null) {
+            return (CREDIT_CARD_NOT_FOUND);
+        }
+        return creditCard.getDonationAmount();
+    }
+
+
+    public void removeTransactions(int donorID) {
+        transactionControl.removeTransactions(donorID);
     }
 }

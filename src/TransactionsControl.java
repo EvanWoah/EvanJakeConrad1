@@ -35,5 +35,22 @@ public class TransactionsControl implements Serializable{
         return transaction.getTransactionID();
     }
 
+    public Iterator getTransactions(){
+        try
+        {
+            return transactions.iterator();
+        }catch (Exception e){
+            return null;
+        }
+    }
 
+
+    public void removeTransactions(int donorID) {
+        for (Object transactionObject : transactions){
+            Transaction transaction = (Transaction) transactionObject;
+            if (transaction.getTransactionID().contains(String.valueOf(donorID))){
+                transactions.remove(transaction);
+            }
+        }
+    }
 }
