@@ -34,6 +34,8 @@
  * The authors do not make any claims regarding the correctness of the code in this module
  * and are not responsible for any loss or damage resulting from its use.
  */
+import sun.awt.image.ImageWatched;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,6 +44,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 
 public class Database implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -181,6 +184,10 @@ public class Database implements Serializable {
         }
     }
 
+    public String processDonation(int donorID, String creditCardNumber, int donationAmount ) {
+        return transactionControl.addTransaction(donorID, creditCardNumber, donationAmount);
+    }
+
     public Donor addDonor(String name, String phone) {
         try{
             Donor newDonor = new Donor(name, phone);
@@ -188,10 +195,6 @@ public class Database implements Serializable {
             return newDonor;
         }catch(Exception e){return null;}
 
-    }
-
-    public Iterator getDonors() {
-        return donorList.getDonors();
     }
 
     public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
@@ -202,16 +205,16 @@ public class Database implements Serializable {
         return donorList.search(donorId);
     }
 
-    public Iterator getCreditCards(int donorID) {
-       return cccontrol.getCreditCards();
+    public List getCreditCards(int donorID) {
+       return cccontrol.getCreditCards(donorID);
+    }
+
+    public Iterator getDonors() {
+        return donorList.getDonors();
     }
 
     public Transaction getTransaction(String transactionID){
         return transactionControl.search(transactionID);
-    }
-
-    public String processDonation(int donorID, String creditCardNumber, int donationAmount ) {
-        return transactionControl.addTransaction(donorID, creditCardNumber, donationAmount);
     }
 
     public int getDonationAmount(String creditCard) {

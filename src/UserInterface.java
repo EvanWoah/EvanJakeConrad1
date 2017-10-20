@@ -218,11 +218,13 @@ public class UserInterface {
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
-        String creditCardNumber = getToken("Enter card to process:\n " + database.getCreditCards(donorID));
+        while(database.getCreditCards(donorID).listIterator().hasNext()){
+            System.out.print(database.getCreditCards(donorID).listIterator().next());
+        }
+        String creditCardNumber = getToken("Enter card to process");
         int donationAmount = database.getDonationAmount(creditCardNumber);
         String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
         System.out.print("Donation amount: " + "Transaction ID: ");
-
     }
 
     /**

@@ -43,10 +43,14 @@ public class CCControl implements Serializable{
         ccNumbers.add(cc);
     }
 
-    public Iterator getCreditCards() {
-        if (ccNumbers.iterator() == null) {
-            return (null);
+    public List getCreditCards(int donorID) {
+        List ccList = new LinkedList();
+        for (Iterator iterator = ccNumbers.iterator(); iterator.hasNext();) {
+            CreditCard cc = (CreditCard) iterator.next();
+            if (cc.getDonorId()==(donorID)) {
+                ccList.add(cc);
+            }
         }
-        return ccNumbers.iterator();
+        return ccList;
     }
 }
