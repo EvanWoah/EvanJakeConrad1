@@ -19,17 +19,17 @@ public class CCControl implements Serializable{
         }
     }
 
-    public CreditCard search(int ccNumber) {
+    public CreditCard search(String ccNumber) {
         for (Iterator iterator = ccNumbers.iterator(); iterator.hasNext();) {
             CreditCard cc = (CreditCard) iterator.next();
-            if (cc.getCreditCardId() == (ccNumber)) {
+            if (cc.getCreditCardId().equals(ccNumber)) {
                 return cc;
             }
         }
         return null;
     }
 
-    public boolean removeCreditCard(int ccNumber) {
+    public boolean removeCreditCard(String ccNumber) {
         CreditCard cc = search(ccNumber);
         if (cc == null) {
             return false;
@@ -38,8 +38,15 @@ public class CCControl implements Serializable{
         }
     }
 
-    public void addCreditCard(int donorId, int creditCardNumber, int donationAmount) {
+    public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
         CreditCard cc = new CreditCard(donorId, creditCardNumber, donationAmount);
         ccNumbers.add(cc);
+    }
+
+    public Iterator getCreditCards() {
+        if (ccNumbers.iterator() == null) {
+            return (null);
+        }
+        return ccNumbers.iterator();
     }
 }

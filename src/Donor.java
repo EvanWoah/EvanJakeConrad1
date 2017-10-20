@@ -46,15 +46,6 @@ public class Donor implements Serializable {
         this.donorID = 10000+UserInterface.getDonorID();
     }
 
-    public boolean donate(double donationAmount) {
-        try{
-            new Transaction(donationAmount, this);
-            return true;
-        }catch(Exception e){
-            return false;
-        }
-    }
-
     /**
      * Gets an iterator to a collection of selected ransactions
      *

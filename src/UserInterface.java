@@ -217,6 +217,10 @@ public class UserInterface {
      * TODO
      */
     public void processDonations() {
+        int donorID = getNumber("Enter donor id");
+        String creditCardNumber = getToken("Enter card to process:\n " + database.getCreditCards(donorID));
+        int donationAmount = database.getDonationAmount(creditCardNumber);
+        boolean yes = yesOrNo("Submit donation of " + database.processDonation(donorID, creditCardNumber, donationAmount)+ "?");
 
     }
 

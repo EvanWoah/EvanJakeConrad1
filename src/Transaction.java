@@ -31,7 +31,9 @@ import java.util.GregorianCalendar;
 public class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
     private double donationAmount;
-    private Donor donorOfDonation;
+    private int donorIDOfDonation;
+    private String transactionID;
+    private int transactionCount = 0;
     private String title;
     private Calendar date;
 
@@ -43,11 +45,13 @@ public class Transaction implements Serializable {
      *            The amount donated
      *
      */
-    public Transaction(double donationAmount, Donor donorOfDonation) {
-        this.donorOfDonation = donorOfDonation;
+    public Transaction(int donorIDOfDonation, String creditCard, int donationAmount) {
+        transactionCount=transactionCount+1;
+        this.donorIDOfDonation = donorIDOfDonation;
         this.donationAmount = donationAmount;
         this.date = new GregorianCalendar();
-        this.title = "Donor: " + donorOfDonation.getName() +
+        this.transactionID = String.valueOf(donorIDOfDonation).concat("t").concat(String.valueOf(transactionCount));
+        this.title = "Donor: " + donorIDOfDonation +
                 "\n Donation Amount: " + donationAmount +
                 "\n On: " + "Date";
     }
@@ -91,5 +95,9 @@ public class Transaction implements Serializable {
     @Override
     public String toString() {
         return title;
+    }
+
+    public String getTransactionID() {
+        return transactionID;
     }
 }

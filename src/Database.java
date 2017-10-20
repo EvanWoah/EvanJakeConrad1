@@ -56,6 +56,7 @@ public class Database implements Serializable {
     public static final int NO_SUCH_DONOR = 9;
     private CCControl cccontrol;
     private DonorList donorList;
+    private TransactionsControl transactionControl;
     private static Database database;
 
     /**
@@ -65,6 +66,7 @@ public class Database implements Serializable {
     private Database() {
         cccontrol = CCControl.instance();
         donorList = DonorList.instance();
+        transactionControl = TransactionsControl.instance();
     }
 
     /**
@@ -100,7 +102,7 @@ public class Database implements Serializable {
      *            book id
      * @return result of the operation
      */
-    public int removeCreditCard(int donorId, int ccNumber) {
+    public int removeCreditCard(int donorId, String ccNumber) {
         Donor donor = donorList.search(donorId);
         if (donor == null) {
             return (NO_SUCH_DONOR);
@@ -192,7 +194,23 @@ public class Database implements Serializable {
         return donorList.getDonors();
     }
 
-    public void addCreditCard(int donorId, int creditCardNumber, int donationAmount) {
+    public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
         cccontrol.addCreditCard(donorId, creditCardNumber, donationAmount);
+    }
+
+    public Donor getDonor(int donorId) {
+        return donorList.search(donorId);
+    }
+
+    public Iterator getCreditCards(int donorID) {
+       return cccontrol.getCreditCards();
+    }
+
+    public void processDonation(int donorID, String creditCardNumber, int donationAmount ) {
+        transactionControl.addTransaction(donorID, creditCardNumber, donationAmount);
+    }
+
+    public int getDonationAmount(String creditCard) {
+        return cccontrol.search(creditCard).getDonationAmount();
     }
 }
