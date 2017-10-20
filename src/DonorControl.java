@@ -29,10 +29,10 @@ import java.util.List;
  * @author Brahma Dathan and Sarnath Ramnath
  *
  */
-public class DonorList implements Serializable {
+public class DonorControl implements Serializable {
     private static final long serialVersionUID = 1L;
     private List<Donor> donors = new LinkedList();
-    private static DonorList donorList;
+    private static DonorControl donorControl;
     public static int DONOR_ID_COUNT = 0;
 
 
@@ -40,7 +40,7 @@ public class DonorList implements Serializable {
      * Private constructor for singleton pattern
      * 
      */
-    private DonorList() {
+    private DonorControl() {
     }
 
     /**
@@ -48,11 +48,11 @@ public class DonorList implements Serializable {
      *
      * @return the singleton object
      */
-    public static DonorList instance() {
-        if (donorList == null) {
-            return (donorList = new DonorList());
+    public static DonorControl instance() {
+        if (donorControl == null) {
+            return (donorControl = new DonorControl());
         } else {
-            return donorList;
+            return donorControl;
         }
     }
 

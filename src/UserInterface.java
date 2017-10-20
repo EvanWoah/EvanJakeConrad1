@@ -251,7 +251,7 @@ public class UserInterface {
         Iterator result = database.getDonors();
         while (result.hasNext()) {
             Donor donor = (Donor) result.next();
-            System.out.println(result + "\n");
+            System.out.println(donor.toString() + "\n");
         }
         System.out.println("\n  There are no more donors \n");
     }

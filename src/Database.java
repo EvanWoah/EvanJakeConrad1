@@ -58,7 +58,7 @@ public class Database implements Serializable {
     public static final int OPERATION_FAILED = 8;
     public static final int NO_SUCH_DONOR = 9;
     private CCControl cccontrol;
-    private DonorList donorList;
+    private DonorControl donorControl;
     private TransactionsControl transactionControl;
     private static Database database;
 
@@ -68,7 +68,7 @@ public class Database implements Serializable {
      */
     private Database() {
         cccontrol = CCControl.instance();
-        donorList = DonorList.instance();
+        donorControl = DonorControl.instance();
         transactionControl = TransactionsControl.instance();
     }
 
@@ -93,7 +93,7 @@ public class Database implements Serializable {
      * @return true iff the member is in the member list collection
      */
     public Donor searchDonorList(int donorId) {
-        return donorList.search(donorId);
+        return donorControl.search(donorId);
     }
 
     /**
@@ -106,7 +106,7 @@ public class Database implements Serializable {
      * @return result of the operation
      */
     public int removeCreditCard(int donorId, String ccNumber) {
-        Donor donor = donorList.search(donorId);
+        Donor donor = donorControl.search(donorId);
         if (donor == null) {
             return (NO_SUCH_DONOR);
         }
@@ -121,11 +121,11 @@ public class Database implements Serializable {
      * Removes all out-of-date holds
      */
     public int removeDonor(int donorId) {
-        Donor donor = donorList.search(donorId);
+        Donor donor = donorControl.search(donorId);
         if (donor == null) {
             return (NO_SUCH_DONOR);
         }
-        return donorList.removeDonor(donorId) ? OPERATION_COMPLETED : NO_SUCH_DONOR;
+        return donorControl.removeDonor(donorId) ? OPERATION_COMPLETED : NO_SUCH_DONOR;
     }
 
     /**
@@ -139,7 +139,7 @@ public class Database implements Serializable {
      * @return iterator to the collection
      */
     public Iterator getTransactions(int donorId, Calendar date) {
-        Donor donor = donorList.search(donorId);
+        Donor donor = donorControl.search(donorId);
         if (donor == null) {
             return (null);
         }
@@ -191,7 +191,7 @@ public class Database implements Serializable {
     public Donor addDonor(String name, String phone) {
         try{
             Donor newDonor = new Donor(name, phone);
-            donorList.insertDonor(newDonor);
+            donorControl.insertDonor(newDonor);
             return newDonor;
         }catch(Exception e){return null;}
 
@@ -202,7 +202,7 @@ public class Database implements Serializable {
     }
 
     public Donor getDonor(int donorId) {
-        return donorList.search(donorId);
+        return donorControl.search(donorId);
     }
 
     public List getCreditCards(int donorID) {
@@ -210,7 +210,7 @@ public class Database implements Serializable {
     }
 
     public Iterator getDonors() {
-        return donorList.getDonors();
+        return donorControl.getDonors();
     }
 
     public Transaction getTransaction(String transactionID){

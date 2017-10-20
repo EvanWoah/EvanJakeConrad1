@@ -43,7 +43,7 @@ public class Donor implements Serializable {
     public Donor(String name, String phoneNumber) {
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.donorID = 10000+DonorList.getDonorID();
+        this.donorID = 10000+DonorControl.getDonorID();
     }
 
     /**
