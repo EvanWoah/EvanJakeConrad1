@@ -11,11 +11,10 @@ public class CreditCard implements Serializable{
         this.donationAmount = donationAmount;
     }
 
-    public String getCreditCardId() {return this.creditCardNumber;}
+    public String getCreditCardId() {return creditCardNumber;}
     public int getDonorId(){return donorId;};
 
-    public int getDonationAmount() {
-        return donationAmount;
+    public String getDonationAmount() {
+        return String.valueOf(donationAmount);
     }
-
 }

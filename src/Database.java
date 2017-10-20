@@ -36,12 +36,7 @@
  */
 import sun.awt.image.ImageWatched;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
@@ -110,11 +105,11 @@ public class Database implements Serializable {
         if (donor == null) {
             return (NO_SUCH_DONOR);
         }
-        CreditCard creditCard = cccontrol.search(creditCardNumber);
+        CreditCard creditCard = cccontrol.search(donorId, creditCardNumber);
         if (creditCard == null) {
             return (CREDIT_CARD_NOT_FOUND);
         }
-        return cccontrol.removeCreditCard(creditCardNumber) ? OPERATION_COMPLETED : NO_CREDIT_CARD_FOUND;
+        return cccontrol.removeCreditCard(donorId, creditCardNumber) ? OPERATION_COMPLETED : NO_CREDIT_CARD_FOUND;
     }
 
     /*
@@ -205,6 +200,7 @@ public class Database implements Serializable {
 
     public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
         cccontrol.addCreditCard(donorId, creditCardNumber, donationAmount);
+        donorControl.addCreditCard(donorId, creditCardNumber);
     }
 
     public Donor getDonor(int donorId) {
@@ -212,7 +208,7 @@ public class Database implements Serializable {
     }
 
     public List getCreditCards(int donorID) {
-       return cccontrol.getCreditCards(donorID);
+        return donorControl.search(donorID).getCreditCards();
     }
 
     public Iterator getDonors() {
@@ -223,12 +219,16 @@ public class Database implements Serializable {
         return transactionControl.search(transactionID);
     }
 
-    public int getDonationAmount(String creditCardNumber) {
-        CreditCard creditCard = cccontrol.search(creditCardNumber);
+    /*
+    * returns negative value as not found error, as any positive value could be a donation amount.
+    *
+     */
+    public int getDonationAmount(int donorID, String creditCardNumber) {
+        CreditCard creditCard = cccontrol.search(donorID, creditCardNumber);
         if (creditCard == null) {
             return (CREDIT_CARD_NOT_FOUND);
         }
-        return creditCard.getDonationAmount();
+        return Integer.parseInt(creditCard.getDonationAmount());
     }
 
 

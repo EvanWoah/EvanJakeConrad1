@@ -27,10 +27,12 @@ import java.util.ListIterator;
 
 public class Donor implements Serializable {
     private static final long serialVersionUID = 1L;
+    private double donationSum;
     private String name;
     private int donorID;
     private String phoneNumber;
     private List transactions = new LinkedList();
+    private List creditCards = new LinkedList();
 
     /**
      * Represents a single donor
@@ -47,7 +49,7 @@ public class Donor implements Serializable {
     }
 
     /**
-     * Gets an iterator to a collection of selected ransactions
+     * Gets an iterator to a collection of selected transactions
      *
      * @param date
      *            the date for which the transactions have to be retrieved
@@ -124,22 +126,46 @@ public class Donor implements Serializable {
     }
 
     /**
-     * String form of the Donor
-     *
+     * String form of this Donor when listing a specific donor.
      */
     @Override
     public String toString() {
-        String string = "Donor name: " + name + ", id: " + donorID + ", phone number: " + phoneNumber;
-        string += ", donated: [";
-        string += "], transactions: [";
-        for (Object transactionObject : transactions) {
-            string += (Transaction) transactionObject;
+        String string = "Donor name: " + name +  ", phone number: " + phoneNumber;
+        string += ", Credit cards on file: [";
+        if (creditCards != null) {
+            for (Object creditCardObject : creditCards) {
+                CreditCard creditCard = (CreditCard) creditCardObject;
+                string += creditCard.getCreditCardId();
+                string += ": ";
+                string += creditCard.getDonationAmount();
+            }
         }
         string += "].";
         return string;
     }
 
+    /**
+     * When all donors are being listed, this string represents a donor.
+     * @return
+     */
+    public String stringForAllDonors(){
+        String string = "Donor name: " + name + ", id: " + donorID + ", phone number: " + phoneNumber;
+        return string;
+    }
+
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
+        donationSum += transaction.getDonationAmount();
+    }
+
+    public void addCreditCard(String creditCardNumber) {
+        if (creditCards.contains(creditCardNumber)){
+            return;
+        }
+        creditCards.add(creditCardNumber);
+    }
+
+    public List getCreditCards() {
+        return creditCards;
     }
 }

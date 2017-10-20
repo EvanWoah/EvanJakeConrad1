@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -217,13 +218,13 @@ public class UserInterface {
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
-        System.out.println("Cards Available");
+        System.out.println("Cards Available:");
         for (Object objectCredit : database.getCreditCards(donorID)) {
             CreditCard creditNumber = (CreditCard) objectCredit;
             System.out.print(creditNumber.getCreditCardId()+"\n");
         }
-        String creditCardNumber = getToken("Enter card to process");
-        int donationAmount = database.getDonationAmount(creditCardNumber);
+        String creditCardNumber = getToken("Enter card to process:");
+        int donationAmount = database.getDonationAmount(donorID, creditCardNumber);
         switch (donationAmount){
             case -1:
                 System.out.println("No matching card found");
@@ -270,7 +271,7 @@ public class UserInterface {
         Iterator result = database.getDonors();
         while (result.hasNext()) {
             Donor donor = (Donor) result.next();
-            System.out.println(donor.toString() + "\n");
+            System.out.println(donor.stringForAllDonors() + "\n");
         }
         System.out.println("\n  There are no more donors \n");
     }
@@ -410,6 +411,16 @@ public class UserInterface {
                     help();
                     break;
             }
+        }
+        exit();
+    }
+
+    private void exit() {
+        int command = getNumber("Enter 9 if you'd like to save before exiting, enter anything else to exit");
+        switch (command){
+            case SAVE:
+                save();
+                break;
         }
     }
 

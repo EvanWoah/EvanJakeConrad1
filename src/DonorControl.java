@@ -116,4 +116,12 @@ public class DonorControl implements Serializable {
         }
         return donors.iterator();
     }
+
+    public void addCreditCard(int donorID, String creditCardNumber) {
+        for (Donor donor: donors) {
+            if (donor.getDonorID()==(donorID)){
+                donor.addCreditCard(creditCardNumber);
+            }
+        }
+    }
 }

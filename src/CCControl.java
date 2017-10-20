@@ -1,11 +1,10 @@
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class CCControl implements Serializable{
     private static final long serialVersionUID = 1L;
-    private List ccNumbers = new LinkedList();
+    private List creditCardNumbers = new LinkedList();
     private static CCControl cccontrol;
 
     private CCControl() {
@@ -19,36 +18,36 @@ public class CCControl implements Serializable{
         }
     }
 
-    public CreditCard search(String ccNumber) {
-        for (Object creditCardObject : ccNumbers) {
+    public CreditCard search(int donorID, String ccNumber) {
+        for (Object creditCardObject : creditCardNumbers) {
             CreditCard creditCard = (CreditCard) creditCardObject;
-            if (creditCard.getCreditCardId().equals(ccNumber)) {
+            if (creditCard.getCreditCardId().equals(ccNumber) && creditCard.getDonorId()==donorID) {
                 return creditCard;
             }
         }
         return null;
     }
 
-    public boolean removeCreditCard(String ccNumber) {
-        CreditCard cc = search(ccNumber);
+    public boolean removeCreditCard(int donorID, String ccNumber) {
+        CreditCard cc = search(donorID, ccNumber);
         if (cc == null) {
             return false;
         } else {
-            return ccNumbers.remove(cc);
+            return creditCardNumbers.remove(cc);
         }
     }
 
     public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
         CreditCard cc = new CreditCard(donorId, creditCardNumber, donationAmount);
-        ccNumbers.add(cc);
+        creditCardNumbers.add(cc);
     }
 
     public List getCreditCards(int donorID) {
         List ccList = new LinkedList();
-        for (Iterator iterator = ccNumbers.iterator(); iterator.hasNext();) {
-            CreditCard cc = (CreditCard) iterator.next();
-            if (cc.getDonorId()==(donorID)) {
-                ccList.add(cc);
+        for (Object creditCardObject : creditCardNumbers) {
+            CreditCard creditCard = (CreditCard) creditCardObject;
+            if (creditCard.getDonorId()==(donorID)) {
+                ccList.add(creditCard);
             }
         }
         return ccList;
