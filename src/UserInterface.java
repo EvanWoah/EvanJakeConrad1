@@ -217,7 +217,7 @@ public class UserInterface {
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
-        System.out.println("Cards Available\n");
+        System.out.println("Cards Available");
         for (Object objectCredit : database.getCreditCards(donorID)) {
             CreditCard creditNumber = (CreditCard) objectCredit;
             System.out.print(creditNumber.getCreditCardId()+"\n");

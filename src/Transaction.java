@@ -53,7 +53,7 @@ public class Transaction implements Serializable {
         this.transactionID = String.valueOf(donorIDOfDonation).concat("t").concat(String.valueOf(transactionCount));
         this.title = "Donor: " + donorIDOfDonation +
                 "\n Donation Amount: " + donationAmount +
-                "\n On: " + "Date";
+                "\n On: " + "Date: " + getDate();
     }
 
     /**

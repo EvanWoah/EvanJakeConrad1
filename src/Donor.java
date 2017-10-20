@@ -129,13 +129,17 @@ public class Donor implements Serializable {
      */
     @Override
     public String toString() {
-        String string = "Donor name: " + name + " id " + donorID + "phone " + phoneNumber;
-        string += " donated: [";
-        string += "] transactions: [";
-        for (Iterator iterator = transactions.iterator(); iterator.hasNext();) {
-            string += (Transaction) iterator.next();
+        String string = "Donor name: " + name + ", id: " + donorID + ", phone number: " + phoneNumber;
+        string += ", donated: [";
+        string += "], transactions: [";
+        for (Object transactionObject : transactions) {
+            string += (Transaction) transactionObject;
         }
-        string += "]";
+        string += "].";
         return string;
+    }
+
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
     }
 }

@@ -20,10 +20,10 @@ public class CCControl implements Serializable{
     }
 
     public CreditCard search(String ccNumber) {
-        for (Iterator iterator = ccNumbers.iterator(); iterator.hasNext();) {
-            CreditCard cc = (CreditCard) iterator.next();
-            if (cc.getCreditCardId().equals(ccNumber)) {
-                return cc;
+        for (Object creditCardObject : ccNumbers) {
+            CreditCard creditCard = (CreditCard) creditCardObject;
+            if (creditCard.getCreditCardId().equals(ccNumber)) {
+                return creditCard;
             }
         }
         return null;

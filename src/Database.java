@@ -101,24 +101,24 @@ public class Database implements Serializable {
      *
      * @param donorId
      *            id of the donor
-     * @param ccNumber
+     * @param creditCardNumber
      *            book id
      * @return result of the operation
      */
-    public int removeCreditCard(int donorId, String ccNumber) {
+    public int removeCreditCard(int donorId, String creditCardNumber) {
         Donor donor = donorControl.search(donorId);
         if (donor == null) {
             return (NO_SUCH_DONOR);
         }
-        CreditCard creditCard = cccontrol.search(ccNumber);
+        CreditCard creditCard = cccontrol.search(creditCardNumber);
         if (creditCard == null) {
             return (CREDIT_CARD_NOT_FOUND);
         }
-        return cccontrol.removeCreditCard(ccNumber) ? OPERATION_COMPLETED : NO_CREDIT_CARD_FOUND;
+        return cccontrol.removeCreditCard(creditCardNumber) ? OPERATION_COMPLETED : NO_CREDIT_CARD_FOUND;
     }
 
     /*
-     * Removes all out-of-date holds
+     * Removes Donor
      */
     public int removeDonor(int donorId) {
         Donor donor = donorControl.search(donorId);
@@ -185,7 +185,9 @@ public class Database implements Serializable {
     }
 
     public String processDonation(int donorID, String creditCardNumber, int donationAmount ) {
-        return transactionControl.addTransaction(donorID, creditCardNumber, donationAmount);
+        Transaction transaction = new Transaction(donorID, creditCardNumber, donationAmount);
+        getDonor(donorID).addTransaction(transaction);
+        return transactionControl.addTransaction(transaction);
     }
 
     public Donor addDonor(String name, String phone) {
