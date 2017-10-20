@@ -33,6 +33,8 @@ public class DonorList implements Serializable {
     private static final long serialVersionUID = 1L;
     private List<Donor> donors = new LinkedList();
     private static DonorList donorList;
+    public static int DONOR_ID_COUNT = 0;
+
 
     /*
      * Private constructor for singleton pattern
@@ -70,6 +72,11 @@ public class DonorList implements Serializable {
             }
         }
         return null;
+    }
+
+    public static int getDonorID() {
+        DONOR_ID_COUNT=DONOR_ID_COUNT+1;
+        return DONOR_ID_COUNT;
     }
 
     /**

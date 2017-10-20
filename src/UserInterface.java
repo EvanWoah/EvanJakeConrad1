@@ -50,7 +50,6 @@ public class UserInterface {
     private static final int REMOVE_CREDIT_CARD = 8;
     private static final int SAVE = 9;
     private static final int HELP = 10;
-    public static int DONOR_ID_COUNT = 0;
 
     /**
      * Made private for singleton pattern. Conditionally looks for any saved
@@ -218,13 +217,14 @@ public class UserInterface {
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
-        while(database.getCreditCards(donorID).listIterator().hasNext()){
-            System.out.print(database.getCreditCards(donorID).listIterator().next());
+        for (Object objectCredit : database.getCreditCards(donorID)) {
+            CreditCard creditNumber = (CreditCard) objectCredit;
+            System.out.print(creditNumber.getCreditCardId()+"\n");
         }
         String creditCardNumber = getToken("Enter card to process");
         int donationAmount = database.getDonationAmount(creditCardNumber);
         String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
-        System.out.print("Donation amount: " + "Transaction ID: ");
+        System.out.print("Donation amount: " + donationAmount + "Transaction ID: " + transactionID +"\n");
     }
 
     /**
@@ -430,8 +430,5 @@ public class UserInterface {
         UserInterface.instance().process();
     }
 
-    public static int getDonorID() {
-        DONOR_ID_COUNT=DONOR_ID_COUNT+1;
-        return DONOR_ID_COUNT;
-    }
+
 }
