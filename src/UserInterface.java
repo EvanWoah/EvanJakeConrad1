@@ -217,6 +217,7 @@ public class UserInterface {
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
+        System.out.println("Cards Available\n");
         for (Object objectCredit : database.getCreditCards(donorID)) {
             CreditCard creditNumber = (CreditCard) objectCredit;
             System.out.print(creditNumber.getCreditCardId()+"\n");
@@ -224,7 +225,7 @@ public class UserInterface {
         String creditCardNumber = getToken("Enter card to process");
         int donationAmount = database.getDonationAmount(creditCardNumber);
         String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
-        System.out.print("Donation amount: " + donationAmount + "Transaction ID: " + transactionID +"\n");
+        System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
     }
 
     /**
