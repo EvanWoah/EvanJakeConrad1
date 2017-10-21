@@ -112,11 +112,19 @@ public class DonorControl implements Serializable {
      * Method to add credit cards
      * @param donorID Donor id
      * @param creditCardNumber Credit Card Number
-     */
-    public void addCreditCard(int donorID, String creditCardNumber) {
+    */
+    public void addCreditCard(int donorID, String creditCardNumber, int donationAmount) {
         for (Donor donor: donors) {
             if (donor.getDonorID()==(donorID)){
-                donor.addCreditCard(creditCardNumber);
+                donor.addCreditCard(creditCardNumber, donationAmount);
+            }
+        }
+    }
+
+    public void removeCreditCard(int donorID, String creditCardNumber) {
+        for (Donor donor: donors) {
+            if (donor.getDonorID()==(donorID)){
+                donor.removeCreditCard(creditCardNumber);
             }
         }
     }

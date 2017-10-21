@@ -203,20 +203,27 @@ public class UserInterface {
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
-        System.out.println("Cards Available:");
-        for (Object objectCredit : database.getCreditCards(donorID)) {
-            CreditCard creditNumber = (CreditCard) objectCredit;
-            System.out.print(creditNumber.getCreditCardId()+"\n");
-        }
-        String creditCardNumber = getToken("Enter card to process:");
-        int donationAmount = database.getDonationAmount(donorID, creditCardNumber);
-        switch (donationAmount){
-            case -1:
-                System.out.println("No matching card found");
-                break;
-            default:
-                String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
-                System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
+        Iterator result = database.getCreditCards(donorID);
+        if (result != null && result.hasNext()){
+            System.out.println("Cards Available:");
+            while (result.hasNext()) {
+                CreditCard creditCard = (CreditCard) result.next();
+                System.out.println(creditCard.getCreditCardId() + "\n");
+            }
+            String creditCardNumber = getToken("Enter card to process:");
+            int donationAmount = database.getDonationAmount(donorID, creditCardNumber);
+            switch (donationAmount){
+                case -1:
+                    System.out.println("No matching card found");
+                    break;
+                default:
+                    String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
+                    System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
+
+
+            }
+        }else{
+            System.out.print("No such donor or donor has no cards\n");
         }
     }
 
@@ -273,7 +280,12 @@ public class UserInterface {
         do {
             int donorID = getNumber("Enter donor id");
             resultDonor = database.searchDonorList(donorID);
-            System.out.println(resultDonor);
+            if (resultDonor != null){
+                System.out.println(resultDonor);
+
+            }else{
+                System.out.println("No such donor");
+            }
             if (!yesOrNo("Find another Donor?")) {
                 break;
             }
@@ -420,9 +432,15 @@ public class UserInterface {
      */
     private void addCreditCard() {
         int donorID = getNumber("Enter donor id");
-        String creditCardNumber = getToken("Enter credit card number");
-        int donationAmount = getNumber("Enter even dollar donation amount as integer");
-        database.addCreditCard(donorID, creditCardNumber, donationAmount);
+        if (database.getDonor(donorID) != null){
+            String creditCardNumber = getToken("Enter credit card number");
+            int donationAmount = getNumber("Enter even dollar donation amount as integer");
+            database.addCreditCard(donorID, creditCardNumber, donationAmount);
+            System.out.print("Credit card: " + creditCardNumber + ", donation amount: " + donationAmount + "added for donor " + donorID +"\n");
+        }else{
+            System.out.println("No such donor.\n");
+        }
+
     }
 
     /**

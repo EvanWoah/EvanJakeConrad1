@@ -3,6 +3,27 @@
  * @Copyright (c) 2017
  */
 
+
+
+/**
+ *
+ * @author Brahma Dathan and Sarnath Ramnath
+ * @Copyright (c) 2010
+
+ * Redistribution and use with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   - the use is for academic purpose only
+ *   - Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   - Neither the name of Brahma Dathan or Sarnath Ramnath
+ *     may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * The authors do not make any claims regarding the correctness of the code in this module
+ * and are not responsible for any loss or damage resulting from its use.
+ */
 import sun.awt.image.ImageWatched;
 
 import java.io.*;
@@ -78,6 +99,7 @@ public class Database implements Serializable {
         if (creditCard == null) {
             return (CREDIT_CARD_NOT_FOUND);
         }
+        donorControl.removeCreditCard(donorId, creditCardNumber);
         return cccontrol.removeCreditCard(donorId, creditCardNumber) ? OPERATION_COMPLETED : NO_CREDIT_CARD_FOUND;
     }
 
@@ -199,7 +221,7 @@ public class Database implements Serializable {
      */
     public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
         cccontrol.addCreditCard(donorId, creditCardNumber, donationAmount);
-        donorControl.addCreditCard(donorId, creditCardNumber);
+        donorControl.addCreditCard(donorId, creditCardNumber, donationAmount);
     }
 
     /**
@@ -216,8 +238,11 @@ public class Database implements Serializable {
      * @param donorID Donor id
      * @return List of credit cards for that donor
      */
-    public List getCreditCards(int donorID) {
-        return donorControl.search(donorID).getCreditCards();
+    public Iterator getCreditCards(int donorID) {
+        if (donorControl.search(donorID)!= null){
+            return donorControl.search(donorID).getCreditCards().iterator();
+        }
+        return null;
     }
 
     /**

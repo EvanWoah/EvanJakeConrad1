@@ -1,7 +1,25 @@
-
 /**
  * @author Conrad Thompson, Evan Wall, Jake Flodquist
  * @Copyright (c) 2017
+ */
+/**
+ *
+ * @author Brahma Dathan and Sarnath Ramnath
+ * @Copyright (c) 2010
+
+ * Redistribution and use with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   - the use is for academic purpose only
+ *   - Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   - Neither the name of Brahma Dathan or Sarnath Ramnath
+ *     may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * The authors do not make any claims regarding the correctness of the code in this module
+ * and are not responsible for any loss or damage resulting from its use.
  */
 import java.io.Serializable;
 import java.util.Calendar;
@@ -16,8 +34,8 @@ public class Donor implements Serializable {
     private String name;
     private int donorID;
     private String phoneNumber;
-    private List transactions = new LinkedList();
-    private List creditCards = new LinkedList();
+    private List<Transaction> transactions = new LinkedList();
+    private List<CreditCard> creditCards = new LinkedList();
 
     /**
      * Represents a single donor
@@ -115,15 +133,15 @@ public class Donor implements Serializable {
      */
     @Override
     public String toString() {
-        String string = "Donor name: " + name +  ", phone number: " + phoneNumber;
+        String string = "Donor name: " + name + ", DonorID: "+donorID+ ", phone number: " + phoneNumber;
         string += ", Credit cards on file: [";
-        if (creditCards != null) {
-            for (Object creditCardObject : creditCards) {
-                CreditCard creditCard = (CreditCard) creditCardObject;
-                string += creditCard.getCreditCardId();
-                string += ": ";
-                string += creditCard.getDonationAmount();
-            }
+        Iterator result = creditCards.iterator();
+        while (result.hasNext()) {
+            CreditCard creditCard = ((CreditCard)result.next());
+            string += creditCard.getCreditCardId();
+            string += ": $";
+            string += creditCard.getDonationAmount();
+            string += ".00, ";
         }
         string += "].";
         return string;
@@ -151,11 +169,12 @@ public class Donor implements Serializable {
      * Method to add a credit card
      * @param creditCardNumber Credit Card Number
      */
-    public void addCreditCard(String creditCardNumber) {
-        if (creditCards.contains(creditCardNumber)){
+    public void addCreditCard(String creditCardNumber, int donationAmount) {
+        CreditCard creditCard = new CreditCard(getDonorID(), creditCardNumber, donationAmount);
+        if (creditCards.contains(creditCard)){
             return;
         }
-        creditCards.add(creditCardNumber);
+        creditCards.add(creditCard);
     }
 
     /**
@@ -163,6 +182,21 @@ public class Donor implements Serializable {
      * @return List of credit cards
      */
     public List getCreditCards() {
-        return creditCards;
+        if (creditCards!=null){
+            return creditCards;
+        }
+        return null;
+    }
+
+    public void removeCreditCard(String creditCardNumber) {
+        Iterator result = creditCards.iterator();
+        if (result != null){
+            while (result.hasNext()){
+                CreditCard resultCreditCard = (CreditCard) result.next();
+                if (resultCreditCard.getCreditCardId().equals(creditCardNumber)){
+                    creditCards.remove(resultCreditCard);
+                }
+            }
+        }
     }
 }

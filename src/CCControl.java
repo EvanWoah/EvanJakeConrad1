@@ -68,8 +68,8 @@ public class CCControl implements Serializable{
      * @param donationAmount Donation Amount
      */
     public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
-        CreditCard cc = new CreditCard(donorId, creditCardNumber, donationAmount);
-        creditCardNumbers.add(cc);
+        CreditCard creditCard = new CreditCard(donorId, creditCardNumber, donationAmount);
+        creditCardNumbers.add(creditCard);
     }
 
     /**
