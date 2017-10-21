@@ -1,39 +1,8 @@
 /**
- * Created by evanwall on 9/21/17.
+ * @author Conrad Thompson, Evan Wall, Jake Flodquist
+ * @Copyright (c) 2017
  */
-//public class Database {
-//
-//    public static Database instance() {
-//    }
-//
-//    public Donor addDonor(String name, String address, String phone) {
-//    }
-//
-//    public static Database retrieve() {
-//    }
-//}
 
-
-
-/**
- *
- * @author Brahma Dathan and Sarnath Ramnath
- * @Copyright (c) 2010
-
- * Redistribution and use with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   - the use is for academic purpose only
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   - Neither the name of Brahma Dathan or Sarnath Ramnath
- *     may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * The authors do not make any claims regarding the correctness of the code in this module
- * and are not responsible for any loss or damage resulting from its use.
- */
 import sun.awt.image.ImageWatched;
 
 import java.io.*;
@@ -81,7 +50,7 @@ public class Database implements Serializable {
     }
 
     /**
-     * Searches for a given member
+     * Searches for a given donor
      *
      * @param donorId
      *            id of the member
@@ -124,7 +93,7 @@ public class Database implements Serializable {
     }
 
     /**
-     * Returns an iterator to the transactions for a specific member on a
+     * Returns an iterator to the transactions for a specific donor on a
      * certain date
      *
      * @param donorId
@@ -141,12 +110,18 @@ public class Database implements Serializable {
         return donor.getTransactions(date);
     }
 
+    /**
+     * Returns an iterator to the transactions for a specific donor on a
+     * certain date
+     *
+     * @return iterator to the collection
+     */
     public Iterator getTransactions(){
         return transactionControl.getTransactions();
     }
 
     /**
-     * Retrieves a deserialized version of the library from disk
+     * Retrieves a deserialized version of the database from disk
      *
      * @return a Library object
      */
@@ -166,7 +141,7 @@ public class Database implements Serializable {
     }
 
     /**
-     * Serializes the Library object
+     * Serializes the database object
      *
      * @return true iff the data could be saved
      */
@@ -183,12 +158,29 @@ public class Database implements Serializable {
         }
     }
 
+    /**
+     * Function to process donations.
+     *
+     * @param donorID Donor Id
+     * @param creditCardNumber Credit Card Number
+     * @param donationAmount Donation Amount
+     *
+     * @return Transaction ID
+     */
     public String processDonation(int donorID, String creditCardNumber, int donationAmount ) {
         Transaction transaction = new Transaction(donorID, creditCardNumber, donationAmount);
         getDonor(donorID).addTransaction(transaction);
         return transactionControl.addTransaction(transaction);
     }
 
+    /**
+     * Function to Add a Donor
+     *
+     * @param name Donor Name
+     * @param phone Donor Phone Number
+     *
+     * @return Donor
+     */
     public Donor addDonor(String name, String phone) {
         try{
             Donor newDonor = new Donor(name, phone);
@@ -198,23 +190,49 @@ public class Database implements Serializable {
 
     }
 
+    /**
+     * Funtion to Add a Credit Card
+     *
+     * @param donorId Donor Id
+     * @param creditCardNumber Credit Card Number
+     * @param donationAmount Donation Amount
+     */
     public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
         cccontrol.addCreditCard(donorId, creditCardNumber, donationAmount);
         donorControl.addCreditCard(donorId, creditCardNumber);
     }
 
+    /**
+     * Function to get a Donor
+     * @param donorId Donor Id
+     * @return Donor
+     */
     public Donor getDonor(int donorId) {
         return donorControl.search(donorId);
     }
 
+    /**
+     * Function to get the credit cards for Donor
+     * @param donorID Donor id
+     * @return List of credit cards for that donor
+     */
     public List getCreditCards(int donorID) {
         return donorControl.search(donorID).getCreditCards();
     }
 
+    /**
+     * Function to get a list of donors
+     * @return Iterator of Donors
+     */
     public Iterator getDonors() {
         return donorControl.getDonors();
     }
 
+    /**
+     * Function to get the Transaction
+     * @param transactionID Transaction Id
+     * @return The Transaction
+     */
     public Transaction getTransaction(String transactionID){
         return transactionControl.search(transactionID);
     }
@@ -231,7 +249,10 @@ public class Database implements Serializable {
         return Integer.parseInt(creditCard.getDonationAmount());
     }
 
-
+    /**
+     * Method to remove transactions
+     * @param donorID Donor Id
+     */
     public void removeTransactions(int donorID) {
         transactionControl.removeTransactions(donorID);
     }

@@ -1,22 +1,6 @@
-
 /**
- *
- * @author Brahma Dathan and Sarnath Ramnath
- * @Copyright (c) 2010
-
- * Redistribution and use with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   - the use is for academic purpose only
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   - Neither the name of Brahma Dathan or Sarnath Ramnath
- *     may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * The authors do not make any claims regarding the correctness of the code in this module
- * and are not responsible for any loss or damage resulting from its use.  
+ * @author Conrad Thompson, Evan Wall, Jake Flodquist
+ * @Copyright (c) 2017
  */
 import java.io.Serializable;
 import java.util.Iterator;
@@ -24,9 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The collection class for Member objects
- *
- * @author Brahma Dathan and Sarnath Ramnath
+ * The collection class for donor objects
  *
  */
 public class DonorControl implements Serializable {
@@ -57,7 +39,7 @@ public class DonorControl implements Serializable {
     }
 
     /**
-     * Checks whether a member with a given member id exists.
+     * Checks whether a donor with a given donor id exists.
      *
      * @param donorID
      *            the id of the member
@@ -74,6 +56,10 @@ public class DonorControl implements Serializable {
         return null;
     }
 
+    /**
+     * Method to get Donor Id
+     * @return Donor Id
+     */
     public static int getDonorID() {
         DONOR_ID_COUNT=DONOR_ID_COUNT+1;
         return DONOR_ID_COUNT;
@@ -91,6 +77,11 @@ public class DonorControl implements Serializable {
         return true;
     }
 
+    /**
+     * Method to remove a donor
+     * @param donorID Donor Id
+     * @return Boolean true if donor removed
+     */
     public Boolean removeDonor(int donorID) {
         for (Donor donor: donors) {
             if (donor.getDonorID()==(donorID)){
@@ -117,6 +108,11 @@ public class DonorControl implements Serializable {
         return donors.iterator();
     }
 
+    /**
+     * Method to add credit cards
+     * @param donorID Donor id
+     * @param creditCardNumber Credit Card Number
+     */
     public void addCreditCard(int donorID, String creditCardNumber) {
         for (Donor donor: donors) {
             if (donor.getDonorID()==(donorID)){

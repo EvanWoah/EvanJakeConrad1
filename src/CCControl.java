@@ -1,3 +1,8 @@
+/**
+ * @author Conrad Thompson, Evan Wall, Jake Flodquist
+ * @Copyright (c) 2017
+ */
+
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,9 +12,16 @@ public class CCControl implements Serializable{
     private List creditCardNumbers = new LinkedList();
     private static CCControl cccontrol;
 
+    /**
+     * Constructor
+     */
     private CCControl() {
     }
 
+    /**
+     * Instance method for CCControl
+     * @return CCControl
+     */
     public static CCControl instance() {
         if (cccontrol == null) {
             return (cccontrol = new CCControl());
@@ -18,6 +30,12 @@ public class CCControl implements Serializable{
         }
     }
 
+    /**
+     * Method to search for a credit card
+     * @param donorID Donor Id
+     * @param ccNumber Credit card number
+     * @return Credit Card
+     */
     public CreditCard search(int donorID, String ccNumber) {
         for (Object creditCardObject : creditCardNumbers) {
             CreditCard creditCard = (CreditCard) creditCardObject;
@@ -28,6 +46,12 @@ public class CCControl implements Serializable{
         return null;
     }
 
+    /**
+     * Method to remove Credit Card
+     * @param donorID Donor Id
+     * @param ccNumber Credit Card Number
+     * @return true if card removed, false otherwise
+     */
     public boolean removeCreditCard(int donorID, String ccNumber) {
         CreditCard cc = search(donorID, ccNumber);
         if (cc == null) {
@@ -37,11 +61,22 @@ public class CCControl implements Serializable{
         }
     }
 
+    /**
+     * Method to add a credit card
+     * @param donorId Donor Id
+     * @param creditCardNumber Credit Card Number
+     * @param donationAmount Donation Amount
+     */
     public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
         CreditCard cc = new CreditCard(donorId, creditCardNumber, donationAmount);
         creditCardNumbers.add(cc);
     }
 
+    /**
+     * Metho to get credit cards
+     * @param donorID Donor Id
+     * @return List of credit cards
+     */
     public List getCreditCards(int donorID) {
         List ccList = new LinkedList();
         for (Object creditCardObject : creditCardNumbers) {

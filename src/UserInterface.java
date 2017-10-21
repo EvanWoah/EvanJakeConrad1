@@ -1,22 +1,7 @@
 
 /**
- *
- * @author Brahma Dathan and Sarnath Ramnath
- * @Copyright (c) 2010
-
- * Redistribution and use with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   - the use is for academic purpose only
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   - Neither the name of Brahma Dathan or Sarnath Ramnath
- *     may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * The authors do not make any claims regarding the correctness of the code in this module
- * and are not responsible for any loss or damage resulting from its use.  
+ * @author Conrad Thompson, Evan Wall, Jake Flodquist
+ * @Copyright (c) 2017
  */
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,7 +16,7 @@ import java.util.StringTokenizer;
 
 /**
  *
- * This class implements the user interface for the Library project. The
+ * This class implements the user interface for the Donation project. The
  * commands are encoded as integers using a number of static final variables. A
  * number of utility methods exist to make it easier to parse the input.
  *
@@ -196,7 +181,7 @@ public class UserInterface {
 
     /**
      * Method to be called for adding a donor. Prompts the user for the
-     * appropriate values and uses the appropriate Library method for adding the
+     * appropriate values and uses the appropriate Database method for adding the
      * donor.
      *
      */
@@ -214,7 +199,7 @@ public class UserInterface {
     }
 
     /**
-     * TODO
+     * Function to process donations.
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
@@ -248,6 +233,9 @@ public class UserInterface {
         System.out.println("\n  There are no more transactions \n");
     }
 
+    /**
+     * Method to be called for displaying Donors Transactions.
+     */
     public void listDonorsTransactionsOnDay(){
         int donorID = getNumber("Enter donor id");
         Calendar date = getDate("Enter date mm/dd/yy");
@@ -293,9 +281,9 @@ public class UserInterface {
     }
 
     /**
-     * Method to be called for placing a hold. Prompts the user for the
-     * appropriate values and uses the appropriate Library method for placing a
-     * hold.
+     * Method to be called for removing a donor. Prompts the user for the
+     * appropriate values and uses the appropriate Database method for removing
+     * a donor.
      *
      */
     public void removeDonor() {
@@ -312,9 +300,9 @@ public class UserInterface {
     }
 
     /**
-     * Method to be called for removing a holds. Prompts the user for the
-     * appropriate values and uses the appropriate Library method for removing a
-     * hold.
+     * Method to be called for removing a credit card. Prompts the user for the
+     * appropriate values and uses the appropriate Database method for removing a
+     * credit card.
      *
      */
     public void removeCreditCard() {
@@ -337,8 +325,8 @@ public class UserInterface {
     }
 
     /**
-     * Method to be called for saving the Library object. Uses the appropriate
-     * Library method for saving.
+     * Method to be called for saving the Database object. Uses the appropriate
+     * Database method for saving.
      *
      */
     private void save() {
@@ -351,7 +339,7 @@ public class UserInterface {
 
     /**
      * Method to be called for retrieving saved data. Uses the appropriate
-     * Library method for retrieval.
+     * Database method for retrieval.
      *
      */
     private void retrieve() {
@@ -415,6 +403,9 @@ public class UserInterface {
         exit();
     }
 
+    /**
+     * Method to exit the system.
+     */
     private void exit() {
         int command = getNumber("Enter 9 if you'd like to save before exiting, enter anything else to exit");
         switch (command){
@@ -424,6 +415,9 @@ public class UserInterface {
         }
     }
 
+    /**
+     * Method to add a Credit Card.
+     */
     private void addCreditCard() {
         int donorID = getNumber("Enter donor id");
         String creditCardNumber = getToken("Enter credit card number");

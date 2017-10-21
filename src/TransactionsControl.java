@@ -1,3 +1,7 @@
+/**
+ * @author Conrad Thompson, Evan Wall, Jake Flodquist
+ * @Copyright (c) 2017
+ */
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -8,9 +12,16 @@ public class TransactionsControl implements Serializable{
     private List transactions = new LinkedList();
     private static TransactionsControl transactionsControl;
 
+    /**
+     * Constructor
+     */
     private TransactionsControl() {
     }
 
+    /**
+     * Instance method for Transactions Control
+     * @return Transaction Control Object
+     */
     public static TransactionsControl instance() {
         if (transactionsControl == null) {
             return (transactionsControl = new TransactionsControl());
@@ -19,6 +30,11 @@ public class TransactionsControl implements Serializable{
         }
     }
 
+    /**
+     * Method to search for transactions
+     * @param transactionID Transaction Id
+     * @return Transaction, or null
+     */
     public Transaction search(String transactionID) {
         for (Iterator iterator = transactions.iterator(); iterator.hasNext();) {
             Transaction transaction = (Transaction) iterator.next();
@@ -29,12 +45,20 @@ public class TransactionsControl implements Serializable{
         return null;
     }
 
-
+    /**
+     * Function to add transactions
+     * @param transaction Transaction
+     * @return Transaction ID
+     */
     public String addTransaction(Transaction transaction) {
         transactions.add(transaction);
         return transaction.getTransactionID();
     }
 
+    /**
+     * Method to get transactions
+     * @return Iterator of transactions
+     */
     public Iterator getTransactions(){
         try
         {
@@ -44,7 +68,10 @@ public class TransactionsControl implements Serializable{
         }
     }
 
-
+    /**
+     * Method to Remove Transactions
+     * @param donorID Donor Id
+     */
     public void removeTransactions(int donorID) {
         for (Object transactionObject : transactions){
             Transaction transaction = (Transaction) transactionObject;
