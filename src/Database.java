@@ -31,6 +31,9 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * The class that performs actions for manipulating data
+ */
 public class Database implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final int CREDIT_CARD_NOT_FOUND = -1;

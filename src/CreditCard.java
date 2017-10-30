@@ -4,6 +4,9 @@
  */
 import java.io.Serializable;
 
+/**
+ * Represents a Single Credit Card
+ */
 public class CreditCard implements Serializable{
     private int donorId;
     private String creditCardNumber;

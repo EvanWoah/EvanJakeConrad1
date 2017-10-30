@@ -7,6 +7,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The collection class for transaction objects
+ *
+ */
 public class TransactionsControl implements Serializable{
     private static final long serialVersionUID = 1L;
     private List transactions = new LinkedList();
