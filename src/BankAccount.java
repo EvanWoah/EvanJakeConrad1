@@ -5,29 +5,29 @@
 import java.io.Serializable;
 
 /**
- * Represents a Single Credit Card
+ * Represents a Single Bank Account
  */
-public class CreditCard extends PaymentType implements Serializable{
-    private String creditCardNumber;
+public class BankAccount extends PaymentType implements Serializable{
+    private String bankAccountNumber;
 
     /**
-     * Constructor to create a new Credit Card
-     * @param donorId Donor associated with the credit card
-     * @param ccNumber Credit Card Number
+     * Constructor to create a new Bank Account
+     * @param donorId Donor associated with the bank account number
+     * @param baNumber Bank Account Number
      * @param donationAmount Donation Amount
      */
-    public CreditCard(int donorId, String ccNumber, int donationAmount) {
+    public BankAccount(int donorId, String baNumber, int donationAmount) {
         this.donorId = donorId;
-        this.creditCardNumber = ccNumber;
+        this.bankAccountNumber = baNumber;
         this.donationAmount = donationAmount;
     }
 
     /**
-     * Function to get the creditCard Number
+     * Function to get the bankAccountNumber
      *
-     * @return Credit Card Number
+     * @return Bank Account Number
      */
-    public String getCreditCardId() {return creditCardNumber;}
+    public String getBankAccountId() {return bankAccountNumber;}
 
     /**
      * Function to get the donor id
