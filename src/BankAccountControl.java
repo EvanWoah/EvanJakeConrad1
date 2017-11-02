@@ -78,7 +78,7 @@ public class BankAccountControl implements Serializable{
     }
 
     /**
-     * Metho to get bank accounts
+     * Method to get bank accounts
      * @param donorID Donor Id
      * @return List of bank accounts
      */

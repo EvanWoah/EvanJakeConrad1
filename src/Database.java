@@ -37,6 +37,7 @@ import java.util.List;
 public class Database implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final int CREDIT_CARD_NOT_FOUND = -1;
+    public static final int BANK_ACCOUNT_NOT_FOUND = -2;
     public static final int DONOR_NOT_FOUND = 2;
     public static final int BOOK_HAS_HOLD = 3;
     public static final int BOOK_ISSUED = 4;
@@ -46,6 +47,7 @@ public class Database implements Serializable {
     public static final int OPERATION_FAILED = 8;
     public static final int NO_SUCH_DONOR = 9;
     private CCControl cccontrol;
+    private BankAccountControl bankAccountControl;
     private DonorControl donorControl;
     private TransactionsControl transactionControl;
     private static Database database;
@@ -84,38 +86,6 @@ public class Database implements Serializable {
         return donorControl.search(donorId);
     }
 
-    /**
-     * Removes a credit card from the database
-     *
-     * @param donorId
-     *            id of the donor
-     * @param creditCardNumber
-     *            book id
-     * @return result of the operation
-     */
-    public int removeCreditCard(int donorId, String creditCardNumber) {
-        Donor donor = donorControl.search(donorId);
-        if (donor == null) {
-            return (NO_SUCH_DONOR);
-        }
-        CreditCard creditCard = cccontrol.search(donorId, creditCardNumber);
-        if (creditCard == null) {
-            return (CREDIT_CARD_NOT_FOUND);
-        }
-        donorControl.removeCreditCard(donorId, creditCardNumber);
-        return cccontrol.removeCreditCard(donorId, creditCardNumber) ? OPERATION_COMPLETED : NO_CREDIT_CARD_FOUND;
-    }
-
-    /*
-     * Removes Donor
-     */
-    public int removeDonor(int donorId) {
-        Donor donor = donorControl.search(donorId);
-        if (donor == null) {
-            return (NO_SUCH_DONOR);
-        }
-        return donorControl.removeDonor(donorId) ? OPERATION_COMPLETED : NO_SUCH_DONOR;
-    }
 
     /**
      * Returns an iterator to the transactions for a specific donor on a
@@ -156,11 +126,8 @@ public class Database implements Serializable {
             ObjectInputStream input = new ObjectInputStream(file);
             database = (Database) input.readObject();
             return database;
-        } catch (IOException ioe) {
+        } catch (IOException | ClassNotFoundException ioe) {
             ioe.printStackTrace();
-            return null;
-        } catch (ClassNotFoundException cnfe) {
-            cnfe.printStackTrace();
             return null;
         }
     }
@@ -277,11 +244,56 @@ public class Database implements Serializable {
         return Integer.parseInt(creditCard.getDonationAmount());
     }
 
+    /*
+     * Removes Donor
+     */
+    public int removeDonor(int donorId) {
+        Donor donor = donorControl.search(donorId);
+        if (donor == null) {
+            return (NO_SUCH_DONOR);
+        }
+        return donorControl.removeDonor(donorId) ? OPERATION_COMPLETED : NO_SUCH_DONOR;
+    }
+
     /**
      * Method to remove transactions
      * @param donorID Donor Id
      */
     public void removeTransactions(int donorID) {
         transactionControl.removeTransactions(donorID);
+    }
+
+
+    //TODO: Can removeCreditCard and removeBankAccount be one method?
+    /**
+     * Removes a credit card from the database
+     */
+    public int removeCreditCard(int donorId, String creditCardNumber) {
+        Donor donor = donorControl.search(donorId);
+        if (donor == null) {
+            return (NO_SUCH_DONOR);
+        }
+        CreditCard creditCard = cccontrol.search(donorId, creditCardNumber);
+        if (creditCard == null) {
+            return (CREDIT_CARD_NOT_FOUND);
+        }
+        donorControl.removeCreditCard(donorId, creditCardNumber);
+        return cccontrol.removeCreditCard(donorId, creditCardNumber) ? OPERATION_COMPLETED : NO_CREDIT_CARD_FOUND;
+    }
+
+    /**
+     * Removes a bank account from the database
+     */
+    public int removeBankAccount(int donorId, String bankAccountNumber) {
+        Donor donor = donorControl.search(donorId);
+        if (donor == null) {
+            return (NO_SUCH_DONOR);
+        }
+        BankAccount bankAccount = bankAccountControl.search(donorId, bankAccountNumber);
+        if (bankAccount == null) {
+            return (CREDIT_CARD_NOT_FOUND);
+        }
+        donorControl.removeCreditCard(donorId, bankAccountNumber);
+        return cccontrol.removeCreditCard(donorId, bankAccountNumber) ? OPERATION_COMPLETED : BANK_ACCOUNT_NOT_FOUND;
     }
 }
