@@ -8,6 +8,6 @@ import java.io.Serializable;
  * Represents a Single Payment Type
  */
 public class PaymentType implements Serializable {
-    private int donorId;
-    private int donationAmount;
+    protected int donorId;
+    protected int donationAmount;
 }

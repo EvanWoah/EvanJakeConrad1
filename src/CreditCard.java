@@ -9,9 +9,6 @@ import java.io.Serializable;
  */
 public class CreditCard extends PaymentType implements Serializable{
     private String creditCardNumber;
-    private int donorId;
-    private int donationAmount;
-
     /**
      * Constructor to create a new Credit Card
      * @param donorId Donor associated with the credit card
@@ -19,9 +16,9 @@ public class CreditCard extends PaymentType implements Serializable{
      * @param donationAmount Donation Amount
      */
     public CreditCard(int donorId, String ccNumber, int donationAmount) {
-        this.donorId = donorId;
+        super.donorId = donorId;
         this.creditCardNumber = ccNumber;
-        this.donationAmount = donationAmount;
+        super.donationAmount = donationAmount;
     }
 
     /**

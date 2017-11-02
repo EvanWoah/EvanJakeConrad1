@@ -9,19 +9,17 @@ import java.io.Serializable;
  */
 public class BankAccount extends PaymentType implements Serializable{
     private String bankAccountNumber;
-    private int donorId;
-    private int donationAmount;
 
     /**
      * Constructor to create a new Bank Account
      * @param donorId Donor associated with the bank account number
-     * @param baNumber Bank Account Number
+     * @param bankAccountNumber Bank Account Number
      * @param donationAmount Donation Amount
      */
-    public BankAccount(int donorId, String baNumber, int donationAmount) {
-        this.donorId = donorId;
-        this.bankAccountNumber = baNumber;
-        this.donationAmount = donationAmount;
+    public BankAccount(int donorId, String bankAccountNumber, int donationAmount) {
+        super.donorId = donorId;
+        this.bankAccountNumber = bankAccountNumber;
+        super.donationAmount = donationAmount;
     }
 
     /**
