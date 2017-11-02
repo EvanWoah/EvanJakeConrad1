@@ -419,8 +419,8 @@ public class UserInterface {
      * Method to exit the system.
      */
     private void exit() {
-        int command = getNumber("Enter 9 if you'd like to save before exiting, enter anything else to exit");
-        switch (command){
+        String command = getToken("Enter 9 if you'd like to save before exiting, enter anything else to exit");
+        switch (Integer.parseInt(command)){
             case SAVE:
                 save();
                 break;
