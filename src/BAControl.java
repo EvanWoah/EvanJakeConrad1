@@ -11,39 +11,40 @@ import java.util.List;
  * The collection class for Bank Account objects
  *
  */
-public class BAControl implements Serializable{
+public class BankAccountControl implements Serializable{
     private static final long serialVersionUID = 1L;
     private List bankAccountNumbers = new LinkedList();
-    private static BAControl bacontrol;
+    private static BankAccountControl bankAccountControl;
+
 
     /**
      * Constructor
      */
-    private BAControl() {
+    private BankAccountControl() {
     }
 
     /**
      * Instance method for BAControl
      * @return BAControl
      */
-    public static BAControl instance() {
-        if (cccontrol == null) {
-            return (cccontrol = new CCControl());
+    public static BankAccountControl instance() {
+        if (bankAccountControl == null) {
+            return (bankAccountControl = new BankAccountControl());
         } else {
-            return cccontrol;
+            return bankAccountControl;
         }
     }
 
     /**
      * Method to search for a bank account
      * @param donorID Donor Id
-     * @param baNumber Bank Account number
+     * @param bankAccountNumber Bank Account number
      * @return Bank Account
      */
-    public BankAccount search(int donorID, String baNumber) {
+    public BankAccount search(int donorID, String bankAccountNumber) {
         for (Object bankAccountObject : bankAccountNumbers) {
             BankAccount bankAccount = (BankAccount) bankAccountObject;
-            if (bankAccount.getBankAccountId().equals(baNumber) && bankAccount.getDonorId()==donorID) {
+            if (bankAccount.getBankAccountId().equals(bankAccountNumber) && bankAccount.getDonorId()==donorID) {
                 return bankAccount;
             }
         }
@@ -53,11 +54,11 @@ public class BAControl implements Serializable{
     /**
      * Method to remove Bank Account
      * @param donorID Donor Id
-     * @param baNumber Bank Account Number
+     * @param bankAccountNumber Bank Account Number
      * @return true if bank account removed, false otherwise
      */
-    public boolean removeBankAccount(int donorID, String baNumber) {
-        BankAccount ba = search(donorID, baNumber);
+    public boolean removeBankAccount(int donorID, String bankAccountNumber) {
+        BankAccount ba = search(donorID, bankAccountNumber);
         if (ba == null) {
             return false;
         } else {
@@ -82,13 +83,13 @@ public class BAControl implements Serializable{
      * @return List of bank accounts
      */
     public List getBankAccounts(int donorID) {
-        List baList = new LinkedList();
+        List bankAccountList = new LinkedList();
         for (Object bankAccountObject : bankAccountNumbers) {
-            BankAccoumt bankAccount = (BankAccount) bankAccountObject;
-            if (bankAccount.getDonorId()==(donorID)) {
-                baList.add(bankAccount);
+            BankAccount bankAccount = (BankAccount) bankAccountObject;
+            if (bankAccount.getDonorId() == (donorID)) {
+                bankAccountList.add(bankAccount);
             }
         }
-        return baList;
+        return bankAccountList;
     }
 }
