@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 public class BankAccount extends PaymentType implements Serializable{
     private String bankAccountNumber;
+    private int donorId;
+    private int donationAmount;
 
     /**
      * Constructor to create a new Bank Account

@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 public class CreditCard extends PaymentType implements Serializable{
     private String creditCardNumber;
+    private int donorId;
+    private int donationAmount;
 
     /**
      * Constructor to create a new Credit Card
