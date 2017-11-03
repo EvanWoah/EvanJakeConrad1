@@ -27,12 +27,13 @@ public class UserInterface {
     private static Database database;
     private static final int EXIT = 0;
     private static final int ADD_DONOR = 1;
-    private static final int ADD_CREDIT_CARD = 2;
+    private static final int ADD_PAYMENT_METHOD = 2;
     private static final int PROCESS_DONATIONS = 3;
     private static final int LIST_TRANSACTIONS = 4;
     private static final int LIST_DONORS = 5;
     private static final int LIST_DONOR = 6;
     private static final int REMOVE_DONOR = 7;
+    private static final int REMOVE_PAYMENT_METHOD = 8;
     private static final int REMOVE_CREDIT_CARD = 8;
     private static final int REMOVE_BANK_ACCOUNT = 9;
     private static final int ADD_EXPENSES = 10;
@@ -42,6 +43,12 @@ public class UserInterface {
     private static final int SAVE = 14;
     private static final int HELP = 15;
 
+
+    /**
+     * Payment Types
+     */
+    private static final int CREDIT_CARD = 0;
+    private static final int BANK_ACCOUNT = 1;
 
     /**
      * Made private for singleton pattern. Conditionally looks for any saved
@@ -175,12 +182,13 @@ public class UserInterface {
         System.out.println("Enter a number between 0 and 15 as explained below:");
         System.out.println(EXIT + " to Exit\n");
         System.out.println(ADD_DONOR + " to  add a donor");
-        System.out.println(ADD_CREDIT_CARD + " to  add a credit card");
+        System.out.println(ADD_PAYMENT_METHOD + " to  add a payment method");
         System.out.println(PROCESS_DONATIONS + " to  process donations");
         System.out.println(LIST_TRANSACTIONS + " to  list transactions ");
         System.out.println(LIST_DONORS + " to  list all donors ");
         System.out.println(LIST_DONOR + " to  list a specific donor");
         System.out.println(REMOVE_DONOR + " to  remove a donor");
+        System.out.println(REMOVE_PAYMENT_METHOD + " to  remove a payment method");
         System.out.println(REMOVE_CREDIT_CARD + " to  remove a credit card");
         System.out.println(REMOVE_BANK_ACCOUNT + " to  remove a bank account");
         System.out.println(ADD_EXPENSES + " to  add an expense");
@@ -210,22 +218,6 @@ public class UserInterface {
         }while(yesOrNo("Add another donor?"));
     }
 
-
-    /**
-     * Method to add a Credit Card.
-     */
-    private void addCreditCard() {
-        int donorID = getNumber("Enter donor id");
-        if (database.getDonor(donorID) != null){
-            String creditCardNumber = getToken("Enter credit card number");
-            int donationAmount = getNumber("Enter even dollar donation amount as integer");
-            database.addCreditCard(donorID, creditCardNumber, donationAmount);
-            System.out.print("Credit card: " + creditCardNumber + ", donation amount: " + donationAmount + " added for donor " + donorID +"\n");
-        }else{
-            System.out.println("No such donor.\n");
-        }
-    }
-    
     /**
      * Function to process donations.
      */
@@ -321,52 +313,42 @@ public class UserInterface {
         }
     }
 
-    /// TODO: Can removeCreditCard and removeBankAccount be one method?
     /**
      * Method to be called for removing a credit card. Prompts the user for the
      * appropriate values and uses the appropriate Database method for removing a
      * credit card.
      */
-    public void removeCreditCard() {
-        int donorID =   getNumber("Enter donor id");
-        String ccNumber = getToken("Enter credit card number");
-        int result = database.removeCreditCard(donorID, ccNumber);
-        switch (result) {
-            case Database.CREDIT_CARD_NOT_FOUND:
-                System.out.println("No such Credit Card");
-                break;
-            case Database.NO_SUCH_DONOR:
-                System.out.println("Not a valid donor ID");
-                break;
-            case Database.OPERATION_COMPLETED:
-                System.out.println("The card has been removed");
-                break;
-            default:
-                System.out.println("An error has occurred");
-        }
-    }
-
-    /**
-     * Method to be called for removing a bank account. Prompts the user for the
-     * appropriate values and uses the appropriate Database method for removing a
-     * bank account.
-     */
-    private void removeBankAccount() {
-        int donorID =   getNumber("Enter donor id");
-        String bankAccountNumber = getToken("Enter bank account number");
-        int result = database.removeBankAccount(donorID, bankAccountNumber);
-        switch (result) {
-            case Database.BANK_ACCOUNT_NOT_FOUND:
-                System.out.println("No such bank account");
-                break;
-            case Database.NO_SUCH_DONOR:
-                System.out.println("Not a valid donor ID");
-                break;
-            case Database.OPERATION_COMPLETED:
-                System.out.println("The card has been removed");
-                break;
-            default:
-                System.out.println("An error has occurred");
+    public void removePaymentMethod() {
+        int command = getNumber("Enter Either 0 For Credit Card or 1 For Bank Account");
+        int donorID;
+        switch (command) {
+            case 0:
+                donorID = getNumber("Enter donor id");
+                String ccNumber = getToken("Enter credit card number");
+                int result = database.removeCreditCard(donorID, ccNumber);
+                switch (result) {
+                    case Database.CREDIT_CARD_NOT_FOUND:
+                        System.out.println("No such Credit Card");
+                        break;
+                    case Database.NO_SUCH_DONOR:
+                        System.out.println("Not a valid donor ID");
+                        break;
+                    case Database.OPERATION_COMPLETED:
+                        System.out.println("The card has been removed");
+                        break;
+                    default:
+                        System.out.println("An error has occurred");
+                }
+            case 1:
+                donorID = getNumber("Enter donor id");
+                if (database.getDonor(donorID) != null){
+                    String bankAccountNumber = getToken("Enter bank account number");
+                    int donationAmount = getNumber("Enter even dollar donation amount as integer");
+                    database.addBankAccount(donorID, bankAccountNumber, donationAmount);
+                    System.out.print("Bank Account: " + bankAccountNumber + ", donation amount: " + donationAmount + "added for donor " + donorID +"\n");
+                }else{
+                    System.out.println("No such donor.\n");
+                }
         }
     }
 
@@ -429,8 +411,8 @@ public class UserInterface {
                 case ADD_DONOR:
                     addDonor();
                     break;
-                case ADD_CREDIT_CARD:
-                    addCreditCard();
+                case ADD_PAYMENT_METHOD:
+                    addPaymentMethod();
                     break;
                 case PROCESS_DONATIONS:
                     processDonations();
@@ -447,11 +429,8 @@ public class UserInterface {
                 case REMOVE_DONOR:
                     removeDonor();
                     break;
-                case REMOVE_CREDIT_CARD:
-                    removeCreditCard();
-                    break;
-                case REMOVE_BANK_ACCOUNT:
-                    removeBankAccount();
+                case REMOVE_PAYMENT_METHOD:
+                    removePaymentMethod();
                     break;
                 case ADD_EXPENSES:
                     addExpenses();
@@ -480,11 +459,41 @@ public class UserInterface {
      * Method to exit the system.
      */
     private void exit() {
-        String command = getToken("Enter 9 if you'd like to save before exiting, enter anything else to exit");
-        switch (Integer.parseInt(command)){
+        int command = getNumber("Enter 9 if you'd like to save before exiting, enter any other number to exit");
+        switch (command){
             case SAVE:
                 save();
                 break;
+        }
+    }
+
+    /**
+     * Method to add a Credit Card.
+     */
+    private void addPaymentMethod() {
+        int command = getNumber("Enter Either 0 For Credit Card or 1 For Bank Account");
+        int donorID;
+        switch (command) {
+            case 0:
+                donorID = getNumber("Enter donor id");
+                if (database.getDonor(donorID) != null){
+                    String creditCardNumber = getToken("Enter credit card number");
+                    int donationAmount = getNumber("Enter even dollar donation amount as integer");
+                    database.addCreditCard(donorID, creditCardNumber, donationAmount);
+                    System.out.print("Credit card: " + creditCardNumber + ", donation amount: " + donationAmount + "added for donor " + donorID +"\n");
+                }else{
+                    System.out.println("No such donor.\n");
+                }
+            case 1:
+                donorID = getNumber("Enter donor id");
+                if (database.getDonor(donorID) != null){
+                    String bankAccountNumber = getToken("Enter bank account number");
+                    int donationAmount = getNumber("Enter even dollar donation amount as integer");
+                    database.addBankAccount(donorID, bankAccountNumber, donationAmount);
+                    System.out.print("Bank Account: " + bankAccountNumber + ", donation amount: " + donationAmount + "added for donor " + donorID +"\n");
+                }else{
+                    System.out.println("No such donor.\n");
+                }
         }
     }
 

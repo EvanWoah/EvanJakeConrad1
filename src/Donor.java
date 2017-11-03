@@ -20,6 +20,7 @@ public class Donor implements Serializable {
     private String phoneNumber;
     private List<Transaction> transactions = new LinkedList();
     private List<CreditCard> creditCards = new LinkedList();
+    private List<BankAccount> bankAccounts = new LinkedList();
 
     /**
      * Represents a single donor
@@ -127,6 +128,16 @@ public class Donor implements Serializable {
             string += creditCard.getDonationAmount();
             string += ".00, ";
         }
+        string += "]";
+        string += ", Bank Accounts on file: [";
+        result = bankAccounts.iterator();
+        while (result.hasNext()) {
+            BankAccount bankAccount = ((BankAccount) result.next());
+            string += bankAccount.getBankAccountId();
+            string += ": $";
+            string += bankAccount.getDonationAmount();
+            string += ".00, ";
+        }
         string += "].";
         return string;
     }
@@ -161,6 +172,14 @@ public class Donor implements Serializable {
         creditCards.add(creditCard);
     }
 
+    public void addBankAccount(String bankAccountNumber, int donationAmount) {
+        BankAccount bankAccount = new BankAccount(getDonorID(), bankAccountNumber, donationAmount);
+        if (creditCards.contains(bankAccount)){
+            return;
+        }
+        bankAccounts.add(bankAccount);
+    }
+
     /**
      * Method to get credit cards
      * @return List of credit cards
@@ -179,6 +198,18 @@ public class Donor implements Serializable {
                 CreditCard resultCreditCard = (CreditCard) result.next();
                 if (resultCreditCard.getCreditCardId().equals(creditCardNumber)){
                     creditCards.remove(resultCreditCard);
+                }
+            }
+        }
+    }
+
+    public void removeBankAccount(String bankAccountNumber) {
+        Iterator result = bankAccounts.iterator();
+        if (result != null){
+            while (result.hasNext()){
+                BankAccount resultBankAccount = (BankAccount) result.next();
+                if (resultBankAccount.getBankAccountId().equals(bankAccountNumber)){
+                    bankAccounts.remove(resultBankAccount);
                 }
             }
         }

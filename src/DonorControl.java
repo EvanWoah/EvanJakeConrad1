@@ -121,10 +121,26 @@ public class DonorControl implements Serializable {
         }
     }
 
+    public void addBankAccount(int donorID, String bankAccountNumber, int donationAmount) {
+        for (Donor donor: donors) {
+            if (donor.getDonorID()==(donorID)){
+                donor.addBankAccount(bankAccountNumber, donationAmount);
+            }
+        }
+    }
+
     public void removeCreditCard(int donorID, String creditCardNumber) {
         for (Donor donor: donors) {
             if (donor.getDonorID()==(donorID)){
                 donor.removeCreditCard(creditCardNumber);
+            }
+        }
+    }
+
+    public void removeBankAccount(int donorID, String bankAccountNumber) {
+        for (Donor donor: donors) {
+            if (donor.getDonorID()==(donorID)){
+                donor.removeBankAccount(bankAccountNumber);
             }
         }
     }
