@@ -191,6 +191,13 @@ public class Donor implements Serializable {
         return null;
     }
 
+    public List getBankAccounts() {
+        if (bankAccounts!=null){
+            return bankAccounts;
+        }
+        return null;
+    }
+
     public void removeCreditCard(String creditCardNumber) {
         Iterator result = creditCards.iterator();
         if (result != null){

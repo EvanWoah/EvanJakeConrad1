@@ -45,8 +45,8 @@ public class Database implements Serializable {
     public static final int OPERATION_COMPLETED = 7;
     public static final int OPERATION_FAILED = 8;
     public static final int NO_SUCH_DONOR = 9;
-    private static final int BANK_ACCOUNT_NOT_FOUND = 10;
-    private static final int NO_BANK_ACCOUNT_FOUND = 11;
+    public static final int BANK_ACCOUNT_NOT_FOUND = 10;
+    public static final int NO_BANK_ACCOUNT_FOUND = 11;
     private CCControl cccontrol;
     private BankAccountControl bankAccountControl;
     private DonorControl donorControl;
@@ -274,6 +274,13 @@ public class Database implements Serializable {
         return null;
     }
 
+    public Iterator getBankAccounts(int donorID) {
+        if (donorControl.search(donorID)!= null){
+            return donorControl.search(donorID).getBankAccounts().iterator();
+        }
+        return null;
+    }
+
     /**
      * Function to get a list of donors
      * @return Iterator of Donors
@@ -309,5 +316,19 @@ public class Database implements Serializable {
      */
     public void removeTransactions(int donorID) {
         transactionControl.removeTransactions(donorID);
+    }
+
+    public int getDonationAmountBankAccount(int donorID, String bankAccountNumber) {
+        BankAccount bankAccount = bankAccountControl.search(donorID, bankAccountNumber);
+        if (bankAccount == null) {
+            return (BANK_ACCOUNT_NOT_FOUND);
+        }
+        return Integer.parseInt(bankAccount.getDonationAmount());
+    }
+
+    public String processDonationBankAccount(int donorID, String bankAccountNumber, int donationAmount) {
+        Transaction transaction = new Transaction(donorID, bankAccountNumber, donationAmount);
+        getDonor(donorID).addTransaction(transaction);
+        return transactionControl.addTransaction(transaction);
     }
 }

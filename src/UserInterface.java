@@ -239,11 +239,27 @@ public class UserInterface {
                 default:
                     String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
                     System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
-
-
             }
         }else{
             System.out.print("No such donor or donor has no cards\n");
+        }
+        Iterator resultBankAccount = database.getBankAccounts(donorID);
+        if (result != null && result.hasNext()){
+            System.out.println("Bank Accounts Available:");
+            while (result.hasNext()) {
+                BankAccount bankAccount = (BankAccount) result.next();
+                System.out.println(bankAccount.getBankAccountId() + "\n");
+            }
+            String bankAccountNumber = getToken("Enter bank account to process: ");
+            int donationAmount = database.getDonationAmountBankAccount(donorID, bankAccountNumber);
+            switch (donationAmount){
+                case -1:
+                    System.out.println("No matching bank account found");
+                    break;
+                default:
+                    String transactionID = database.processDonationBankAccount(donorID, bankAccountNumber, donationAmount);
+                    System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
+            }
         }
     }
 
@@ -321,11 +337,12 @@ public class UserInterface {
     public void removePaymentMethod() {
         int command = getNumber("Enter Either 0 For Credit Card or 1 For Bank Account");
         int donorID;
+        int result;
         switch (command) {
             case 0:
                 donorID = getNumber("Enter donor id");
                 String ccNumber = getToken("Enter credit card number");
-                int result = database.removeCreditCard(donorID, ccNumber);
+                result = database.removeCreditCard(donorID, ccNumber);
                 switch (result) {
                     case Database.CREDIT_CARD_NOT_FOUND:
                         System.out.println("No such Credit Card");
@@ -341,13 +358,20 @@ public class UserInterface {
                 }
             case 1:
                 donorID = getNumber("Enter donor id");
-                if (database.getDonor(donorID) != null){
-                    String bankAccountNumber = getToken("Enter bank account number");
-                    int donationAmount = getNumber("Enter even dollar donation amount as integer");
-                    database.addBankAccount(donorID, bankAccountNumber, donationAmount);
-                    System.out.print("Bank Account: " + bankAccountNumber + ", donation amount: " + donationAmount + "added for donor " + donorID +"\n");
-                }else{
-                    System.out.println("No such donor.\n");
+                String bankAccountNumber = getToken("Enter bank account number");
+                result = database.removeBankAccount(donorID, bankAccountNumber);
+                switch (result) {
+                    case Database.BANK_ACCOUNT_NOT_FOUND:
+                        System.out.println("No such Bank Account");
+                        break;
+                    case Database.NO_SUCH_DONOR:
+                        System.out.println("Not a valid donor ID");
+                        break;
+                    case Database.OPERATION_COMPLETED:
+                        System.out.println("The Bank Account has been removed");
+                        break;
+                    default:
+                        System.out.println("An error has occurred");
                 }
         }
     }

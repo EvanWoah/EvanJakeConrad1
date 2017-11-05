@@ -15,6 +15,7 @@ public class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
     private double donationAmount;
     private String creditCardNumber;
+    private String bankAccountNumber;
     private int donorIDOfDonation;
     private String transactionID;
     private int transactionCount = 0;
