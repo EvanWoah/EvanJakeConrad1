@@ -383,6 +383,7 @@ public class UserInterface {
     }
 
     private void listPaymentMethodInfo() {
+
     }
 
     private void listExpenses() {
@@ -508,6 +509,7 @@ public class UserInterface {
                 }else{
                     System.out.println("No such donor.\n");
                 }
+                break;
             case 1:
                 donorID = getNumber("Enter donor id");
                 if (database.getDonor(donorID) != null){
@@ -518,6 +520,7 @@ public class UserInterface {
                 }else{
                     System.out.println("No such donor.\n");
                 }
+                break;
         }
     }
 
