@@ -223,6 +223,7 @@ public class UserInterface {
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
+//        int command = getToken("Enter ");
         Iterator result = database.getCreditCards(donorID);
         if (result != null && result.hasNext()){
             System.out.println("Cards Available:");
@@ -240,14 +241,15 @@ public class UserInterface {
                     String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
                     System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
             }
-        }else{
+        }
+        else{
             System.out.print("No such donor or donor has no cards\n");
         }
         Iterator resultBankAccount = database.getBankAccounts(donorID);
-        if (result != null && result.hasNext()){
+        if (resultBankAccount != null && resultBankAccount.hasNext()){
             System.out.println("Bank Accounts Available:");
-            while (result.hasNext()) {
-                BankAccount bankAccount = (BankAccount) result.next();
+            while (resultBankAccount.hasNext()) {
+                BankAccount bankAccount = (BankAccount) resultBankAccount.next();
                 System.out.println(bankAccount.getBankAccountId() + "\n");
             }
             String bankAccountNumber = getToken("Enter bank account to process: ");
@@ -324,7 +326,6 @@ public class UserInterface {
                 System.out.println("Not a valid donor ID");
                 break;
             default:
-                database.removeTransactions(donorID);
                 System.out.println("Donor " +donorID+ " has been removed");
         }
     }
@@ -505,7 +506,7 @@ public class UserInterface {
                     String creditCardNumber = getToken("Enter credit card number");
                     int donationAmount = getNumber("Enter even dollar donation amount as integer");
                     database.addCreditCard(donorID, creditCardNumber, donationAmount);
-                    System.out.print("Credit card: " + creditCardNumber + ", donation amount: " + donationAmount + "added for donor " + donorID +"\n");
+                    System.out.print("Credit card: " + creditCardNumber + ", donation amount: " + donationAmount + " added for donor " + donorID +"\n");
                 }else{
                     System.out.println("No such donor.\n");
                 }
