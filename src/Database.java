@@ -212,7 +212,7 @@ public class Database implements Serializable {
      * @return Transaction ID
      */
     public String processDonation(int donorID, String creditCardNumber, int donationAmount ) {
-        Transaction transaction = new Transaction(donorID, creditCardNumber, donationAmount);
+        Transaction transaction = new Transaction(donorID, creditCardNumber, donationAmount, "creditCard");
         getDonor(donorID).addTransaction(transaction);
         return transactionControl.addTransaction(transaction);
     }
@@ -332,7 +332,7 @@ public class Database implements Serializable {
     }
 
     public String processDonationBankAccount(int donorID, String bankAccountNumber, int donationAmount) {
-        Transaction transaction = new Transaction(donorID, bankAccountNumber, donationAmount);
+        Transaction transaction = new Transaction(donorID, bankAccountNumber, donationAmount, "bankAccount");
         getDonor(donorID).addTransaction(transaction);
         return transactionControl.addTransaction(transaction);
     }

@@ -16,6 +16,7 @@ public class Transaction implements Serializable {
     private double donationAmount;
     private String creditCardNumber;
     private String bankAccountNumber;
+    private String paymentType;
     private int donorIDOfDonation;
     private String transactionID;
     private int transactionCount = 0;
@@ -30,17 +31,26 @@ public class Transaction implements Serializable {
      *            The amount donated
      *
      */
-    public Transaction(int donorIDOfDonation, String creditCardNumber, int donationAmount) {
+    public Transaction(int donorIDOfDonation, String paymentTypeNumber, int donationAmount, String paymentType) {
         transactionCount=transactionCount+1;
-        this.creditCardNumber = creditCardNumber;
         this.donorIDOfDonation = donorIDOfDonation;
         this.donationAmount = donationAmount;
         this.date = new GregorianCalendar();
         this.transactionID = String.valueOf(donorIDOfDonation).concat("t").concat(String.valueOf(transactionCount));
-        this.title = "TransactionID: " + transactionID +
+        if (paymentType.equals("creditCard")) {
+            this.creditCardNumber = paymentTypeNumber;
+            this.title = "TransactionID: " + transactionID +
                 "\n-> Card Number: " + creditCardNumber +
                 ", Donation Amount: " + donationAmount +
                 ", Date: " + getDate();
+        }
+        else {
+            this.bankAccountNumber = paymentTypeNumber;
+            this.title = "TransactionID: " + transactionID +
+                    "\n-> Account Number: " + bankAccountNumber +
+                    ", Donation Amount: " + donationAmount +
+                    ", Date: " + getDate();
+        }
     }
 
     /**

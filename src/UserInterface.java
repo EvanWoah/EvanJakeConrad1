@@ -242,9 +242,6 @@ public class UserInterface {
                     System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
             }
         }
-        else{
-            System.out.print("No such donor or donor has no cards\n");
-        }
         Iterator resultBankAccount = database.getBankAccounts(donorID);
         if (resultBankAccount != null && resultBankAccount.hasNext()){
             System.out.println("Bank Accounts Available:");
@@ -262,6 +259,9 @@ public class UserInterface {
                     String transactionID = database.processDonationBankAccount(donorID, bankAccountNumber, donationAmount);
                     System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
             }
+        }
+        else {
+            System.out.println("No such donor or donor has no cards or bank accounts\n");
         }
     }
 
