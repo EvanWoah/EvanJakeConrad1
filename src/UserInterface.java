@@ -188,7 +188,6 @@ public class UserInterface {
         System.out.println(LIST_DONORS + " to  list all donors ");
         System.out.println(LIST_DONOR + " to  list a specific donor");
         System.out.println(REMOVE_DONOR + " to  remove a donor");
-        System.out.println(REMOVE_PAYMENT_METHOD + " to  remove a payment method");
         System.out.println(REMOVE_CREDIT_CARD + " to  remove a credit card");
         System.out.println(REMOVE_BANK_ACCOUNT + " to  remove a bank account");
         System.out.println(ADD_EXPENSES + " to  add an expense");
@@ -219,50 +218,63 @@ public class UserInterface {
     }
 
     /**
-     * Function to process donations. TODO only supports credit cards right now
+     * Function to process donations.
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
-//        int command = getToken("Enter ");
-        Iterator result = database.getCreditCards(donorID);
-        if (result != null && result.hasNext()){
-            System.out.println("Cards Available:");
-            while (result.hasNext()) {
-                CreditCard creditCard = (CreditCard) result.next();
-                System.out.println(creditCard.getCreditCardId() + "\n");
-            }
-            String creditCardNumber = getToken("Enter card to process:");
-            int donationAmount = database.getDonationAmount(donorID, creditCardNumber);
-            //negative case number because otherwise it interprets donation amount as the case # TODO clean this up
-            switch (donationAmount){
-                case -1:
-                    System.out.println("No matching card found");
-                    break;
-                default:
-                    String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
-                    System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
-            }
-        }
+        int donationAmount;
+        int caseNumber = -1;
+        Iterator resultCard = database.getCreditCards(donorID);
         Iterator resultBankAccount = database.getBankAccounts(donorID);
-        if (resultBankAccount != null && resultBankAccount.hasNext()){
-            System.out.println("Bank Accounts Available:");
-            while (resultBankAccount.hasNext()) {
-                BankAccount bankAccount = (BankAccount) resultBankAccount.next();
-                System.out.println(bankAccount.getBankAccountId() + "\n");
-            }
-            String bankAccountNumber = getToken("Enter bank account to process: ");
-            int donationAmount = database.getDonationAmountBankAccount(donorID, bankAccountNumber);
-            switch (donationAmount){
-                case -1:
-                    System.out.println("No matching bank account found");
-                    break;
-                default:
-                    String transactionID = database.processDonationBankAccount(donorID, bankAccountNumber, donationAmount);
-                    System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
-            }
+        if (resultCard != null && resultCard.hasNext() && resultBankAccount != null && resultBankAccount.hasNext()){
+            caseNumber = 0;
         }
-        else {
-            System.out.println("No such donor or donor has no cards or bank accounts\n");
+        else if (resultCard != null && resultCard.hasNext()){
+            caseNumber = 1;
+        }
+        else if (resultBankAccount != null && resultBankAccount.hasNext()){
+            caseNumber = 2;
+        }
+        switch (caseNumber) {
+            case 0:
+                int creditCardOrBankAccount = getNumber("Process Credit Card: enter 1, Process bank account: enter 2:");
+            case 1:
+                System.out.println("Cards Available:");
+                while (resultCard.hasNext()) {
+                    CreditCard creditCard = (CreditCard) resultCard.next();
+                    System.out.println(creditCard.getCreditCardId() + "\n");
+                }
+                String creditCardNumber = getToken("Enter card to process:");
+                donationAmount = database.getDonationAmount(donorID, creditCardNumber);
+                //negative case number because otherwise it interprets donation amount as the case # TODO clean this up
+                switch (donationAmount){
+                    case -1:
+                        System.out.println("No matching card found");
+                        break;
+                    default:
+                        String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
+                        System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
+                }
+                break;
+            case 2:
+                System.out.println("Bank Accounts Available:");
+                while (resultBankAccount.hasNext()) {
+                    BankAccount bankAccount = (BankAccount) resultBankAccount.next();
+                    System.out.println(bankAccount.getBankAccountId() + "\n");
+                }
+                String bankAccountNumber = getToken("Enter bank account to process: ");
+                donationAmount = database.getDonationAmountBankAccount(donorID, bankAccountNumber);
+                switch (donationAmount){
+                    case -1:
+                        System.out.println("No matching bank account found");
+                        break;
+                    default:
+                        String transactionID = database.processDonationBankAccount(donorID, bankAccountNumber, donationAmount);
+                        System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
+                }
+                break;
+            default:
+                System.out.println("No such donor or donor has no cards or bank accounts\n");
         }
     }
 
@@ -431,6 +443,7 @@ public class UserInterface {
         while (expenseIterator.hasNext()) {
             System.out.print(expenseIterator.next().toString());
         }
+        System.out.println("\n  There are no more expenses \n");
     }
 
     /**
@@ -498,7 +511,10 @@ public class UserInterface {
                 case REMOVE_DONOR:
                     removeDonor();
                     break;
-                case REMOVE_PAYMENT_METHOD:
+                case REMOVE_CREDIT_CARD:
+                    removePaymentMethod();
+                    break;
+                case REMOVE_BANK_ACCOUNT:
                     removePaymentMethod();
                     break;
                 case ADD_EXPENSES:
@@ -560,7 +576,7 @@ public class UserInterface {
                     String bankAccountNumber = getToken("Enter bank account number");
                     int donationAmount = getNumber("Enter even dollar donation amount as integer");
                     database.addBankAccount(donorID, bankAccountNumber, donationAmount);
-                    System.out.print("Bank Account: " + bankAccountNumber + ", donation amount: " + donationAmount + "added for donor " + donorID +"\n");
+                    System.out.print("Bank Account: " + bankAccountNumber + ", donation amount: " + donationAmount + " added for donor " + donorID +"\n");
                 }else{
                     System.out.println("No such donor.\n");
                 }

@@ -63,6 +63,7 @@ public class Database implements Serializable {
         bankAccountControl = BankAccountControl.instance();
         donorControl = DonorControl.instance();
         transactionControl = TransactionsControl.instance();
+        expenseControl = ExpenseControl.instance();
     }
 
     /**
@@ -348,7 +349,6 @@ public class Database implements Serializable {
 
     // TODO create a data structure which can hold all of the data? IS this what we want, then a visitor visits said structure
     public Iterator getExpensesProcessed() {
-
-        return null;
+        return expenseControl.getAllExpensesProcessed();
     }
 }

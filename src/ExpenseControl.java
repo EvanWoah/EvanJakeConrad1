@@ -4,6 +4,7 @@
  */
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,7 +54,10 @@ public class ExpenseControl implements Serializable{
         expensesProcessed.add(expense);
     }
 
-    public List getAllExpensesProcessed() {
-        return expensesProcessed;
+    public Iterator getAllExpensesProcessed() {
+        if (expensesProcessed.iterator() == null) {
+            return (null);
+        }
+        return expensesProcessed.iterator();
     }
 }

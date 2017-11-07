@@ -58,11 +58,11 @@ public class BankAccountControl implements Serializable{
      * @return true if bank account removed, false otherwise
      */
     public boolean removeBankAccount(int donorID, String bankAccountNumber) {
-        BankAccount ba = search(donorID, bankAccountNumber);
-        if (ba == null) {
+        BankAccount bankAccount = search(donorID, bankAccountNumber);
+        if (bankAccount == null) {
             return false;
         } else {
-            return bankAccountNumbers.remove(ba);
+            return bankAccountNumbers.remove(bankAccount);
         }
     }
 
