@@ -14,7 +14,7 @@ import java.util.ListIterator;
  */
 public class Donor implements Serializable {
     private static final long serialVersionUID = 1L;
-    private double donationSum;
+    private int donationSum;
     private String name;
     private int donorID;
     private String phoneNumber;
@@ -196,6 +196,14 @@ public class Donor implements Serializable {
             return bankAccounts;
         }
         return null;
+    }
+
+    public int getDonationSum() {
+        return donationSum;
+    }
+
+    public void setDonationSum(int donationSum) {
+        this.donationSum = donationSum;
     }
 
     public void removeCreditCard(String creditCardNumber) {

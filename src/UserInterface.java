@@ -219,7 +219,7 @@ public class UserInterface {
     }
 
     /**
-     * Function to process donations.
+     * Function to process donations. TODO only supports credit cards right now
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
@@ -233,6 +233,7 @@ public class UserInterface {
             }
             String creditCardNumber = getToken("Enter card to process:");
             int donationAmount = database.getDonationAmount(donorID, creditCardNumber);
+            //negative case number because otherwise it interprets donation amount as the case # TODO clean this up
             switch (donationAmount){
                 case -1:
                     System.out.println("No matching card found");
@@ -378,12 +379,37 @@ public class UserInterface {
     }
 
     private void addExpenses() {
+        do {
+            String name = getToken("Enter expense name");
+            int amount = getNumber("Enter expense amount (int)");
+            Expense result;
+            result = database.addExpense(name, amount);
+            if (result == null) {
+                System.out.println("Could not add expense");
+            }
+            System.out.println(result);
+        }while(yesOrNo("Add another expense?"));
+
     }
 
     /**
      *
      */
     private void showOrganizationInfo() {
+        int totalAmountDonated = 0;
+        int totalAmountSpent = 0;
+        Iterator donatedResult = database.getDonors();
+        while (donatedResult.hasNext()) {
+            Donor donor = (Donor) donatedResult.next();
+            totalAmountDonated =+ donor.getDonationSum();
+        }
+        Iterator spentResult = database.getExpensesProcessed();
+        while (spentResult.hasNext()) {
+            Expense expense = (Expense) spentResult.next();
+            totalAmountSpent =+ expense.getExpenseAmount();
+        }
+        int balance = totalAmountDonated - totalAmountSpent;
+        System.out.println("Organization Info \nTotal amount donated: " + totalAmountDonated + "\nTotal amount spent (expenses): " + totalAmountSpent + "\nBalance: " + balance +".");
     }
 
     /**
@@ -399,8 +425,12 @@ public class UserInterface {
         System.out.println("\n  There are no more transactions \n");
     }
 
-
+//TODO handle null iterator
     private void listExpenses() {
+        Iterator expenseIterator = database.getExpensesProcessed();
+        while (expenseIterator.hasNext()) {
+            System.out.print(expenseIterator.next().toString());
+        }
     }
 
     /**

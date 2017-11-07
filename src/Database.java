@@ -5,7 +5,7 @@
 
 
 
-/**
+/** TODO all remove functions should be made into one function, all add functions should be made into one, all list functions should be made into one.
  *
  * @author Brahma Dathan and Sarnath Ramnath
  * @Copyright (c) 2010
@@ -51,6 +51,7 @@ public class Database implements Serializable {
     private BankAccountControl bankAccountControl;
     private DonorControl donorControl;
     private TransactionsControl transactionControl;
+    private  ExpenseControl expenseControl;
     private static Database database;
 
     /**
@@ -203,7 +204,7 @@ public class Database implements Serializable {
     }
 
     /**
-     * Function to process donations.
+     * Function to process donations. TODO support either credit card number or bank account
      *
      * @param donorID Donor Id
      * @param creditCardNumber Credit Card Number
@@ -232,6 +233,14 @@ public class Database implements Serializable {
             return newDonor;
         }catch(Exception e){return null;}
 
+    }
+
+    public Expense addExpense(String name, int amount) {
+        try{
+            Expense expense = new Expense(amount, name);
+            expenseControl.addExpense(amount, name);
+            return expense;
+        }catch(Exception e){return null;}
     }
 
     /**
@@ -335,5 +344,11 @@ public class Database implements Serializable {
         Transaction transaction = new Transaction(donorID, bankAccountNumber, donationAmount, "bankAccount");
         getDonor(donorID).addTransaction(transaction);
         return transactionControl.addTransaction(transaction);
+    }
+
+    // TODO create a data structure which can hold all of the data? IS this what we want, then a visitor visits said structure
+    public Iterator getExpensesProcessed() {
+
+        return null;
     }
 }
