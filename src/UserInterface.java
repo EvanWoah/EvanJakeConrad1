@@ -380,12 +380,25 @@ public class UserInterface {
     private void addExpenses() {
     }
 
+    /**
+     *
+     */
     private void showOrganizationInfo() {
     }
 
+    /**
+     * Method to print all transactions which are above the provided threshold
+     */
     private void listPaymentMethodInfo() {
-
+        int threshold = getNumber("Enter threshold amount as int");
+        Iterator result = database.getTransactionsAboveThreshold(threshold);
+        while (result.hasNext()) {
+            Transaction transaction = (Transaction) result.next();
+            System.out.println(transaction.toString() + "\n");
+        }
+        System.out.println("\n  There are no more transactions \n");
     }
+
 
     private void listExpenses() {
     }

@@ -73,6 +73,27 @@ public class TransactionsControl implements Serializable{
     }
 
     /**
+     * Method to get transactions above a certain amount
+     * @return Iterator of transactions
+     */
+    public Iterator getTransactionsAboveThreshold(int threshold) {
+        try
+        {
+            LinkedList transactionsAboveThreshold = new LinkedList();
+            Iterator allTransactions = transactions.iterator();
+            while (allTransactions.hasNext()){
+                Transaction transaction = (Transaction) allTransactions.next();
+                if (transaction.getDonationAmount() > threshold){
+                    transactionsAboveThreshold.add(transaction);
+                }
+            }
+            return transactionsAboveThreshold.iterator();
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    /**
      * Method to Remove Transactions
      * @param donorID Donor Id
      */

@@ -162,6 +162,11 @@ public class Database implements Serializable {
         return transactionControl.getTransactions();
     }
 
+
+    public Iterator getTransactionsAboveThreshold(int threshold){
+        return transactionControl.getTransactionsAboveThreshold(threshold);
+    }
+
     /**
      * Retrieves a deserialized version of the database from disk
      *
