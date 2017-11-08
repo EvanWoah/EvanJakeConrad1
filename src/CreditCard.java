@@ -35,12 +35,13 @@ public class CreditCard extends PaymentType implements Serializable{
      */
     public int getDonorId(){return donorId;};
 
-    /**
-     * Function to get the donation amount
-     *
-     * @return Donation Amount
-     */
-    public String getDonationAmount() {
-        return String.valueOf(donationAmount);
+
+    public String addedString() {
+        return "CreditCard{" +
+                "creditCardNumber='" + creditCardNumber + '\'' +
+                "donationAmount='" + super.donationAmount + '\'' +
+                "donorID='" + super.donorId + '\'' +
+
+                '}';
     }
 }

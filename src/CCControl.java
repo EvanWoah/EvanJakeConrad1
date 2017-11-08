@@ -56,12 +56,13 @@ public class CCControl implements Serializable{
      * @param ccNumber Credit Card Number
      * @return true if card removed, false otherwise
      */
-    public boolean removeCreditCard(int donorID, String ccNumber) {
+    public CreditCard removeCreditCard(int donorID, String ccNumber) {
         CreditCard cc = search(donorID, ccNumber);
         if (cc == null) {
-            return false;
+            return null;
         } else {
-            return creditCardNumbers.remove(cc);
+            creditCardNumbers.remove(cc);
+            return cc;
         }
     }
 
@@ -71,9 +72,10 @@ public class CCControl implements Serializable{
      * @param creditCardNumber Credit Card Number
      * @param donationAmount Donation Amount
      */
-    public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
+    public CreditCard addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
         CreditCard creditCard = new CreditCard(donorId, creditCardNumber, donationAmount);
         creditCardNumbers.add(creditCard);
+        return creditCard;
     }
 
     /**

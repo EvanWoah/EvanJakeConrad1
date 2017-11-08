@@ -36,12 +36,13 @@ public class BankAccount extends PaymentType implements Serializable{
      */
     public int getDonorId(){return donorId;};
 
-    /**
-     * Function to get the donation amount
-     *
-     * @return Donation Amount
-     */
-    public String getDonationAmount() {
-        return String.valueOf(donationAmount);
+
+    public String addedString() {
+        return "CreditCard{" +
+                "bankAccountNumber='" + bankAccountNumber + '\'' +
+                "donationAmount='" + super.donationAmount + '\'' +
+                "donorID='" + super.donorId + '\'' +
+
+                '}';
     }
 }

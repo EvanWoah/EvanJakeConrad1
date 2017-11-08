@@ -10,4 +10,12 @@ import java.io.Serializable;
 public class PaymentType implements Serializable {
     protected int donorId;
     protected int donationAmount;
+    /**
+     * Function to get the donation amount
+     *
+     * @return Donation Amount
+     */
+    public int getDonationAmount() {
+        return donationAmount;
+    }
 }

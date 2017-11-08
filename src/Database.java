@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class Database implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final int CREDIT_CARD_NOT_FOUND = -1;
+    public static final int PAYMENT_TYPE_NOT_FOUND = -1;
     public static final int DONOR_NOT_FOUND = 2;
     public static final int BOOK_HAS_HOLD = 3;
     public static final int BOOK_ISSUED = 4;
@@ -45,7 +45,6 @@ public class Database implements Serializable {
     public static final int OPERATION_COMPLETED = 7;
     public static final int OPERATION_FAILED = 8;
     public static final int NO_SUCH_DONOR = 9;
-    public static final int BANK_ACCOUNT_NOT_FOUND = 10;
     public static final int NO_BANK_ACCOUNT_FOUND = 11;
     private CCControl cccontrol;
     private BankAccountControl bankAccountControl;
@@ -99,41 +98,42 @@ public class Database implements Serializable {
      *            book id
      * @return result of the operation
      */
-    public int removeCreditCard(int donorId, String creditCardNumber) {
+    public CreditCard removeCreditCard(int donorId, String creditCardNumber) {
         Donor donor = donorControl.search(donorId);
         if (donor == null) {
-            return (NO_SUCH_DONOR);
+            return null;
         }
         CreditCard creditCard = cccontrol.search(donorId, creditCardNumber);
         if (creditCard == null) {
-            return (CREDIT_CARD_NOT_FOUND);
+            return null;
         }
         donorControl.removeCreditCard(donorId, creditCardNumber);
-        return cccontrol.removeCreditCard(donorId, creditCardNumber) ? OPERATION_COMPLETED : NO_CREDIT_CARD_FOUND;
+        return cccontrol.removeCreditCard(donorId, creditCardNumber);
     }
 
-    public int removeBankAccount(int donorId, String bankAccountNumber) {
+    public BankAccount removeBankAccount(int donorId, String bankAccountNumber) {
         Donor donor = donorControl.search(donorId);
         if (donor == null) {
-            return (NO_SUCH_DONOR);
+            return null;
         }
-        BankAccount bankAccount = bankAccountControl.search(donorId,bankAccountNumber);
+        BankAccount bankAccount = (BankAccount) bankAccountControl.search(donorId,bankAccountNumber);
         if (bankAccount == null) {
-            return (BANK_ACCOUNT_NOT_FOUND);
+            return null;
         }
         donorControl.removeBankAccount(donorId, bankAccountNumber);
-        return bankAccountControl.removeBankAccount(donorId, bankAccountNumber) ? OPERATION_COMPLETED : NO_BANK_ACCOUNT_FOUND;
+        return (BankAccount) bankAccountControl.removeBankAccount(donorId, bankAccountNumber);
     }
 
     /*
-     * Removes Donor
+     * Removes Donor //TODO, can this be simplified
      */
-    public int removeDonor(int donorId) {
+    public Donor removeDonor(int donorId) {
         Donor donor = donorControl.search(donorId);
         if (donor == null) {
-            return (NO_SUCH_DONOR);
+            return null;
         }
-        return donorControl.removeDonor(donorId) ? OPERATION_COMPLETED : NO_SUCH_DONOR;
+        if (donorControl.removeDonor(donorId)) return donor;
+        else return null;
     }
 
     /**
@@ -205,21 +205,6 @@ public class Database implements Serializable {
     }
 
     /**
-     * Function to process donations. TODO support either credit card number or bank account
-     *
-     * @param donorID Donor Id
-     * @param creditCardNumber Credit Card Number
-     * @param donationAmount Donation Amount
-     *
-     * @return Transaction ID
-     */
-    public String processDonation(int donorID, String creditCardNumber, int donationAmount ) {
-        Transaction transaction = new Transaction(donorID, creditCardNumber, donationAmount, "creditCard");
-        getDonor(donorID).addTransaction(transaction);
-        return transactionControl.addTransaction(transaction);
-    }
-
-    /**
      * Function to Add a Donor
      *
      * @param name Donor Name
@@ -251,9 +236,11 @@ public class Database implements Serializable {
      * @param creditCardNumber Credit Card Number
      * @param donationAmount Donation Amount
      */
-    public void addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
-        cccontrol.addCreditCard(donorId, creditCardNumber, donationAmount);
-        donorControl.addCreditCard(donorId, creditCardNumber, donationAmount);
+    public CreditCard addCreditCard(int donorId, String creditCardNumber, int donationAmount) {
+        try{
+            donorControl.addCreditCard(donorId, creditCardNumber, donationAmount);
+            return cccontrol.addCreditCard(donorId, creditCardNumber, donationAmount);
+        }catch(Exception e){return null;}
     }
 
     /**
@@ -263,9 +250,12 @@ public class Database implements Serializable {
      * @param bankAccountNumber Bank Account Number
      * @param donationAmount Donation Amount
      */
-    public void addBankAccount(int donorId, String bankAccountNumber, int donationAmount) {
-        bankAccountControl.addBankAccount(donorId, bankAccountNumber, donationAmount);
-        donorControl.addBankAccount(donorId, bankAccountNumber, donationAmount);
+    public BankAccount addBankAccount(int donorId, String bankAccountNumber, int donationAmount) {
+        try{
+            donorControl.addBankAccount(donorId, bankAccountNumber, donationAmount);
+            return bankAccountControl.addBankAccount(donorId, bankAccountNumber, donationAmount);
+        }catch(Exception e){return null;}
+
     }
 
     /**
@@ -313,18 +303,6 @@ public class Database implements Serializable {
         return transactionControl.search(transactionID);
     }
 
-    /*
-    * returns negative value as not found error, as any positive value could be a donation amount.
-    *
-     */
-    public int getDonationAmount(int donorID, String creditCardNumber) {
-        CreditCard creditCard = cccontrol.search(donorID, creditCardNumber);
-        if (creditCard == null) {
-            return (CREDIT_CARD_NOT_FOUND);
-        }
-        return Integer.parseInt(creditCard.getDonationAmount());
-    }
-
     /**
      * Method to remove transactions
      * @param donorID Donor Id
@@ -333,16 +311,38 @@ public class Database implements Serializable {
         transactionControl.removeTransactions(donorID);
     }
 
-    public int getDonationAmountBankAccount(int donorID, String bankAccountNumber) {
-        BankAccount bankAccount = bankAccountControl.search(donorID, bankAccountNumber);
-        if (bankAccount == null) {
-            return (BANK_ACCOUNT_NOT_FOUND);
+    /*
+    * returns negative value as not found error, as any positive value could be a donation amount.
+    *
+     */
+    public int getDonationAmount(int donorID, String number, int creditOrBankObject) {
+        PaymentType searchObject = null;
+        switch(creditOrBankObject){ // 2 == credit card, 3 == bank account
+            case 2:
+                searchObject = cccontrol.search(donorID, number);
+                break;
+            case 3:
+                searchObject = bankAccountControl.search(donorID, number);
+                break;
         }
-        return Integer.parseInt(bankAccount.getDonationAmount());
+        if (searchObject == null) {
+            return PAYMENT_TYPE_NOT_FOUND;
+        }
+        return searchObject.getDonationAmount();
+
     }
 
-    public String processDonationBankAccount(int donorID, String bankAccountNumber, int donationAmount) {
-        Transaction transaction = new Transaction(donorID, bankAccountNumber, donationAmount, "bankAccount");
+    /**
+     * Function to process donations.
+     *
+     * @param donorID Donor Id
+     * @param number payment type number
+     * @param donationAmount Donation Amount
+     *
+     * @return Transaction ID
+     */
+    public String processDonation(int donorID, String number, int donationAmount, String paymentType ) {
+        Transaction transaction = new Transaction(donorID, number, donationAmount, paymentType);
         getDonor(donorID).addTransaction(transaction);
         return transactionControl.addTransaction(transaction);
     }

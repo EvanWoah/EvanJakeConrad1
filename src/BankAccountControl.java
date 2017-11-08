@@ -41,7 +41,7 @@ public class BankAccountControl implements Serializable{
      * @param bankAccountNumber Bank Account number
      * @return Bank Account
      */
-    public BankAccount search(int donorID, String bankAccountNumber) {
+    public PaymentType search(int donorID, String bankAccountNumber) {
         for (Object bankAccountObject : bankAccountNumbers) {
             BankAccount bankAccount = (BankAccount) bankAccountObject;
             if (bankAccount.getBankAccountId().equals(bankAccountNumber) && bankAccount.getDonorId()==donorID) {
@@ -57,12 +57,13 @@ public class BankAccountControl implements Serializable{
      * @param bankAccountNumber Bank Account Number
      * @return true if bank account removed, false otherwise
      */
-    public boolean removeBankAccount(int donorID, String bankAccountNumber) {
-        BankAccount bankAccount = search(donorID, bankAccountNumber);
+    public Object removeBankAccount(int donorID, String bankAccountNumber) {
+        Object bankAccount = search(donorID, bankAccountNumber);
         if (bankAccount == null) {
-            return false;
+            return null;
         } else {
-            return bankAccountNumbers.remove(bankAccount);
+            bankAccountNumbers.remove(bankAccount);
+            return bankAccount;
         }
     }
 
@@ -72,9 +73,10 @@ public class BankAccountControl implements Serializable{
      * @param bankAccountNumber Bank Account Number
      * @param donationAmount Donation Amount
      */
-    public void addBankAccount(int donorId, String bankAccountNumber, int donationAmount) {
+    public BankAccount addBankAccount(int donorId, String bankAccountNumber, int donationAmount) {
         BankAccount bankAccount = new BankAccount(donorId, bankAccountNumber, donationAmount);
         bankAccountNumbers.add(bankAccount);
+        return bankAccount;
     }
 
     /**

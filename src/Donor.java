@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Represents a Single Donor
@@ -113,40 +112,12 @@ public class Donor implements Serializable {
         return this.donorID == (incomingDonorID);
     }
 
-    /**
-     * String form of this Donor when listing a specific donor.
-     */
-    @Override
-    public String toString() {
-        String string = "Donor name: " + name + ", DonorID: "+donorID+ ", phone number: " + phoneNumber;
-        string += ", Credit cards on file: [";
-        Iterator result = creditCards.iterator();
-        while (result.hasNext()) {
-            CreditCard creditCard = ((CreditCard)result.next());
-            string += creditCard.getCreditCardId();
-            string += ": $";
-            string += creditCard.getDonationAmount();
-            string += ".00, ";
-        }
-        string += "]";
-        string += ", Bank Accounts on file: [";
-        result = bankAccounts.iterator();
-        while (result.hasNext()) {
-            BankAccount bankAccount = ((BankAccount) result.next());
-            string += bankAccount.getBankAccountId();
-            string += ": $";
-            string += bankAccount.getDonationAmount();
-            string += ".00, ";
-        }
-        string += "].";
-        return string;
-    }
 
     /**
      * When all donors are being listed, this string represents a donor.
      * @return
      */
-    public String stringForAllDonors(){
+    public String toString(){
         String string = "Donor name: " + name + ", id: " + donorID + ", phone number: " + phoneNumber;
         return string;
     }
@@ -228,5 +199,34 @@ public class Donor implements Serializable {
                 }
             }
         }
+    }
+
+    /**
+     * String form of this Donor when listing a specific donor.
+     */
+    public String stringForOneDonor() {
+        String string = "Donor name: " + name + ", DonorID: "+donorID+ ", phone number: " + phoneNumber;
+        string += ", Credit cards on file: [";
+        Iterator result = creditCards.iterator();
+        while (result.hasNext()) {
+            CreditCard creditCard = ((CreditCard)result.next());
+            string += creditCard.getCreditCardId();
+            string += ": $";
+            string += creditCard.getDonationAmount();
+            string += ".00, ";
+        }
+        string += "]";
+        string += ", Bank Accounts on file: [";
+        result = bankAccounts.iterator();
+        while (result.hasNext()) {
+            BankAccount bankAccount = ((BankAccount) result.next());
+            string += bankAccount.getBankAccountId();
+            string += ": $";
+            string += bankAccount.getDonationAmount();
+            string += ".00, ";
+        }
+        string += "].";
+        return string;
+
     }
 }

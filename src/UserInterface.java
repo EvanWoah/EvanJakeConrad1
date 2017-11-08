@@ -43,10 +43,16 @@ public class UserInterface {
     private static final int HELP = 15;
 
     /**
-     * Payment Types
+     * Object Types
      */
-    private static final int CREDIT_CARD = 0;
-    private static final int BANK_ACCOUNT = 1;
+    private static final int DONOR_OBJECT = 0;
+    private static final int PAYMENT_OBJECT = 1;
+    private static final int CREDIT_CARD_OBJECT = 2;
+    private static final int BANK_ACCOUNT_OBJECT = 3;
+    private static final int EXPENSE_OBJECT = 4;
+    private static final int TRANSACTION_OBJECT = 5;
+    private static final int ALL_DONORS_OBJECT = 6;
+    private static final int PAYMENT_METHOD_INFO = 7;
 
     /**
      * Made private for singleton pattern. Conditionally looks for any saved
@@ -196,253 +202,153 @@ public class UserInterface {
         System.out.println(HELP + " to  list this again");
     }
 
-    /**
-     * Method to be called for adding a donor. Prompts the user for the
-     * appropriate values and uses the appropriate Database method for adding the
-     * donor.
-     *
-     */
-    public void addDonor() {
-        do {
-            String name = getToken("Enter donor name");
-            String phone = getToken("Enter phone");
-            Donor result;
-            result = database.addDonor(name, phone);
-            if (result == null) {
-                System.out.println("Could not add donor");
-            }
-            System.out.println(result);
-        }while(yesOrNo("Add another donor?"));
-    }
+//    /**
+//     * Method to be called for adding a donor. Prompts the user for the
+//     * appropriate values and uses the appropriate Database method for adding the
+//     * donor.
+//     *
+//     */
+//    public void addDonor() {
+//        do {
+//            String name = getToken("Enter donor name");
+//            String phone = getToken("Enter phone");
+//            Donor result;
+//            result = database.addDonor(name, phone);
+//            if (result == null) {
+//                System.out.println("Could not add donor");
+//            }
+//            System.out.println(result);
+//        }while(yesOrNo("Add another donor?"));
+//    }
 
-    /**
-     * Function to process donations. //TODO get working
-     */
-    public void processDonations() {
-        int donorID = getNumber("Enter donor id");
-        int donationAmount;
-        int caseNumber = -1;
-        Iterator resultCard = database.getCreditCards(donorID);
-        Iterator resultBankAccount = database.getBankAccounts(donorID);
-        if (resultCard != null && resultCard.hasNext() && resultBankAccount != null && resultBankAccount.hasNext()){
-            caseNumber = 0;
-        }
-        else if (resultCard != null && resultCard.hasNext()){
-            caseNumber = 1;
-        }
-        else if (resultBankAccount != null && resultBankAccount.hasNext()){
-            caseNumber = 2;
-        }
-        switch (caseNumber) {
-            case 0:
-                int creditCardOrBankAccount = getNumber("Process Credit Card: enter 1, Process bank account: enter 2:");
 
-            case 1:
-                System.out.println("Cards Available:");
-                while (resultCard.hasNext()) {
-                    CreditCard creditCard = (CreditCard) resultCard.next();
-                    System.out.println(creditCard.getCreditCardId() + "\n");
-                }
-                String creditCardNumber = getToken("Enter card to process:");
-                donationAmount = database.getDonationAmount(donorID, creditCardNumber);
-                //negative case number because otherwise it interprets donation amount as the case # TODO clean this up
-                switch (donationAmount){
-                    case -1:
-                        System.out.println("No matching card found");
-                        break;
-                    default:
-                        String transactionID = database.processDonation(donorID, creditCardNumber, donationAmount);
-                        System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
-                }
-                break;
-            case 2:
-                System.out.println("Bank Accounts Available:");
-                while (resultBankAccount.hasNext()) {
-                    BankAccount bankAccount = (BankAccount) resultBankAccount.next();
-                    System.out.println(bankAccount.getBankAccountId() + "\n");
-                }
-                String bankAccountNumber = getToken("Enter bank account to process: ");
-                donationAmount = database.getDonationAmountBankAccount(donorID, bankAccountNumber);
-                switch (donationAmount){
-                    case -1:
-                        System.out.println("No matching bank account found");
-                        break;
-                    default:
-                        String transactionID = database.processDonationBankAccount(donorID, bankAccountNumber, donationAmount);
-                        System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID +"\n");
-                }
-                break;
-            default:
-                System.out.println("No such donor or donor has no cards or bank accounts\n");
-        }
-    }
+//    /**
+//     * Method to be called for displaying all transactions.
+//     *
+//     */
+//    public void listTransactions() {
+//        Iterator result = database.getTransactions();
+//        while (result.hasNext()) {
+//            Transaction transaction = (Transaction) result.next();
+//            System.out.println(transaction.toString() + "\n");
+//        }
+//        System.out.println("\n  There are no more transactions \n");
+//    }
 
-    /**
-     * Method to be called for displaying all transactions.
-     *
-     */
-    public void listTransactions() {
-        Iterator result = database.getTransactions();
-        while (result.hasNext()) {
-            Transaction transaction = (Transaction) result.next();
-            System.out.println(transaction.toString() + "\n");
-        }
-        System.out.println("\n  There are no more transactions \n");
-    }
+//    /**
+//     * Method to be called displaying all donors.
+//     *
+//     */
+//    public void listDonors() {
+//        Iterator result = database.getDonors();
+//        while (result.hasNext()) {
+//            Donor donor = (Donor) result.next();
+//            System.out.println(donor.toString() + "\n");
+//        }
+//        System.out.println("\n  There are no more donors \n");
+//    }
 
-    /**
-     * Method to be called displaying all donors.
-     *
-     */
-    public void listDonors() {
-        Iterator result = database.getDonors();
-        while (result.hasNext()) {
-            Donor donor = (Donor) result.next();
-            System.out.println(donor.stringForAllDonors() + "\n");
-        }
-        System.out.println("\n  There are no more donors \n");
-    }
+    //   /**
+     //     * Method to print all transactions which are above the provided threshold
+     //     */
+//    private void listPaymentMethodInfo() {
+//        int threshold = getNumber("Enter threshold amount as int");
+//        Iterator result = database.getTransactionsAboveThreshold(threshold);
+//        while (result.hasNext()) {
+//            Transaction transaction = (Transaction) result.next();
+//            System.out.println(transaction.toString() + "\n");
+//        }
+//        System.out.println("\n  There are no more transactions \n");
+//    }
 
-    /**
-     * Method to be called displaying a single donor.
-     *
-     */
-    private void listDonor() {
-        Donor resultDonor;
-        do {
-            int donorID = getNumber("Enter donor id");
-            resultDonor = database.searchDonorList(donorID);
-            if (resultDonor != null){
-                System.out.println(resultDonor);
 
-            }else{
-                System.out.println("No such donor");
-            }
-            if (!yesOrNo("Find another Donor?")) {
-                break;
-            }
-        } while (true);
-    }
+//    /**
+//     * Method to be called for removing a donor. Prompts the user for the
+//     * appropriate values and uses the appropriate Database method for removing
+//     * a donor.
+//     *
+//     */
+//    public void removeDonor() {
+//        int donorID = Integer.parseInt(getToken("Enter donor id"));
+//        int result =  database.removeDonor(donorID);
+//        switch (result) {
+//            case Database.NO_SUCH_DONOR:
+//                System.out.println("Not a valid donor ID");
+//                break;
+//            default:
+//                System.out.println("Donor " +donorID+ " has been removed");
+//        }
+//    }
 
-    /**
-     * Method to be called for removing a donor. Prompts the user for the
-     * appropriate values and uses the appropriate Database method for removing
-     * a donor.
-     *
-     */
-    public void removeDonor() {
-        int donorID = Integer.parseInt(getToken("Enter donor id"));
-        int result =  database.removeDonor(donorID);
-        switch (result) {
-            case Database.NO_SUCH_DONOR:
-                System.out.println("Not a valid donor ID");
-                break;
-            default:
-                System.out.println("Donor " +donorID+ " has been removed");
-        }
-    }
+//    /**
+//     * Method to be called for removing a credit card. Prompts the user for the
+//     * appropriate values and uses the appropriate Database method for removing a
+//     * credit card.
+//     */
+//    public void removePaymentMethod(int incomingCase) {
+//        int donorID;
+//        int result;
+//        switch (incomingCase) {
+//            case 1:
+//                donorID = getNumber("Enter donor id");
+//                String ccNumber = getToken("Enter credit card number");
+//                result = database.removeCreditCard(donorID, ccNumber);
+//                switch (result) {
+//                    case Database.CREDIT_CARD_NOT_FOUND:
+//                        System.out.println("No such Credit Card");
+//                        break;
+//                    case Database.NO_SUCH_DONOR:
+//                        System.out.println("Not a valid donor ID");
+//                        break;
+//                    case Database.OPERATION_COMPLETED:
+//                        System.out.println("The card has been removed");
+//                        break;
+//                    default:
+//                        System.out.println("An error has occurred");
+//                }
+//            case 2:
+//                donorID = getNumber("Enter donor id");
+//                String bankAccountNumber = getToken("Enter bank account number");
+//                result = database.removeBankAccount(donorID, bankAccountNumber);
+//                switch (result) {
+//                    case Database.BANK_ACCOUNT_NOT_FOUND:
+//                        System.out.println("No such Bank Account");
+//                        break;
+//                    case Database.NO_SUCH_DONOR:
+//                        System.out.println("Not a valid donor ID");
+//                        break;
+//                    case Database.OPERATION_COMPLETED:
+//                        System.out.println("The Bank Account has been removed");
+//                        break;
+//                    default:
+//                        System.out.println("An error has occurred");
+//                }
+//        }
+//    }
 
-    /**
-     * Method to be called for removing a credit card. Prompts the user for the
-     * appropriate values and uses the appropriate Database method for removing a
-     * credit card.
-     */
-    public void removePaymentMethod(int incomingCase) {
-        int donorID;
-        int result;
-        switch (incomingCase) {
-            case 0:
-                donorID = getNumber("Enter donor id");
-                String ccNumber = getToken("Enter credit card number");
-                result = database.removeCreditCard(donorID, ccNumber);
-                switch (result) {
-                    case Database.CREDIT_CARD_NOT_FOUND:
-                        System.out.println("No such Credit Card");
-                        break;
-                    case Database.NO_SUCH_DONOR:
-                        System.out.println("Not a valid donor ID");
-                        break;
-                    case Database.OPERATION_COMPLETED:
-                        System.out.println("The card has been removed");
-                        break;
-                    default:
-                        System.out.println("An error has occurred");
-                }
-            case 1:
-                donorID = getNumber("Enter donor id");
-                String bankAccountNumber = getToken("Enter bank account number");
-                result = database.removeBankAccount(donorID, bankAccountNumber);
-                switch (result) {
-                    case Database.BANK_ACCOUNT_NOT_FOUND:
-                        System.out.println("No such Bank Account");
-                        break;
-                    case Database.NO_SUCH_DONOR:
-                        System.out.println("Not a valid donor ID");
-                        break;
-                    case Database.OPERATION_COMPLETED:
-                        System.out.println("The Bank Account has been removed");
-                        break;
-                    default:
-                        System.out.println("An error has occurred");
-                }
-        }
-    }
+//    private void addExpenses() {
+//        do {
+//            String name = getToken("Enter expense name");
+//            int amount = getNumber("Enter expense amount (int)");
+//            Expense result;
+//            result = database.addExpense(name, amount);
+//            if (result == null) {
+//                System.out.println("Could not add expense");
+//            }
+//            System.out.println(result);
+//        }while(yesOrNo("Add another expense?"));
+//
+//    }
 
-    private void addExpenses() {
-        do {
-            String name = getToken("Enter expense name");
-            int amount = getNumber("Enter expense amount (int)");
-            Expense result;
-            result = database.addExpense(name, amount);
-            if (result == null) {
-                System.out.println("Could not add expense");
-            }
-            System.out.println(result);
-        }while(yesOrNo("Add another expense?"));
 
-    }
-
-    /**
-     *
-     */
-    private void showOrganizationInfo() {
-        int totalAmountDonated = 0;
-        int totalAmountSpent = 0;
-        Iterator donatedResult = database.getDonors();
-        while (donatedResult.hasNext()) {
-            Donor donor = (Donor) donatedResult.next();
-            totalAmountDonated =+ donor.getDonationSum();
-        }
-        Iterator spentResult = database.getExpensesProcessed();
-        while (spentResult.hasNext()) {
-            Expense expense = (Expense) spentResult.next();
-            totalAmountSpent =+ expense.getExpenseAmount();
-        }
-        int balance = totalAmountDonated - totalAmountSpent;
-        System.out.println("Organization Info \nTotal amount donated: " + totalAmountDonated + "\nTotal amount spent (expenses): " + totalAmountSpent + "\nBalance: " + balance +".");
-    }
-
-    /**
-     * Method to print all transactions which are above the provided threshold
-     */
-    private void listPaymentMethodInfo() {
-        int threshold = getNumber("Enter threshold amount as int");
-        Iterator result = database.getTransactionsAboveThreshold(threshold);
-        while (result.hasNext()) {
-            Transaction transaction = (Transaction) result.next();
-            System.out.println(transaction.toString() + "\n");
-        }
-        System.out.println("\n  There are no more transactions \n");
-    }
-
-//TODO handle null iterator
-    private void listExpenses() {
-        Iterator expenseIterator = database.getExpensesProcessed();
-        while (expenseIterator.hasNext()) {
-            System.out.print(expenseIterator.next().toString());
-        }
-        System.out.println("\n  There are no more expenses \n");
-    }
+////TODO handle null iterator
+//    private void listExpenses() {
+//        Iterator expenseIterator = database.getExpensesProcessed();
+//        while (expenseIterator.hasNext()) {
+//            System.out.print(expenseIterator.next().toString());
+//        }
+//        System.out.println("\n  There are no more expenses \n");
+//    }
 
     /**
      * Method to be called for saving the Database object. Uses the appropriate
@@ -484,66 +390,59 @@ public class UserInterface {
      *
      */
     public void process() {
-        int DONOR_OBJECT = 0;
-        int PAYMENT_OBJECT = 1;
-        int CREDIT_CARD_OBJECT = 2;
-        int BANK_ACCOUNT_OBJECT = 3;
-        int EXPENSE_OBJECT = 4;
-        int TRANSACTION_OBJECT = 5;
-        int ALL_DONORS_OBJECT = 6;
+
         int command;
         help();
         while ((command = getCommand()) != EXIT) {
             switch (command) {
                 case ADD_DONOR:
-             //       addObject(DONOR_OBJECT);
-                    addDonor();
+                    addObject(DONOR_OBJECT);
+              //      addDonor();
                     break;
                 case ADD_PAYMENT_METHOD:
-             //       addObject(PAYMENT_OBJECT);
-                    addPaymentMethod();
+                    addObject(PAYMENT_OBJECT);
+                //    addPaymentMethod();
                     break;
                 case PROCESS_DONATIONS:
-              //      processDonations();
+                    processDonations();
                     break;
                 case LIST_TRANSACTIONS:
-               //     listObject(TRANSACTION_OBJECT);
-                    listTransactions();
+                    listObject(TRANSACTION_OBJECT);
+               //     listTransactions();
                     break;
                 case LIST_DONOR:
-              //      listObject(DONOR_OBJECT);
                     listDonor();
                     break;
                 case LIST_DONORS:
-               //     listObject(ALL_DONORS_OBJECT);
-                    listDonors();
+                    listObject(ALL_DONORS_OBJECT);
+               //     listDonors();
                     break;
                 case REMOVE_DONOR:
-              //      removeObject(DONOR_OBJECT);
-                    removeDonor();
+                    removeObject(DONOR_OBJECT);
+                //    removeDonor();
                     break;
                 case REMOVE_CREDIT_CARD:
-              //      removeObject(CREDIT_CARD_OBJECT);
-                    removePaymentMethod(1);
+                    removeObject(CREDIT_CARD_OBJECT);
+                //    removePaymentMethod(1);
                     break;
                 case REMOVE_BANK_ACCOUNT:
-               //     removeObject(BANK_ACCOUNT_OBJECT);
-                    removePaymentMethod(2);
+                    removeObject(BANK_ACCOUNT_OBJECT);
+                //    removePaymentMethod(2);
                     break;
                 case ADD_EXPENSES:
-                //    addObject(EXPENSE_OBJECT);
-                    addExpenses();
+                    addObject(EXPENSE_OBJECT);
+                //    addExpenses();
                     break;
                 case ORGANIZATION_INFO:
-               //     showOrganizationInfo();
+                    showOrganizationInfo();
                     break;
                 case LIST_PAYMENT_METHOD_INFO:
-               //     listObject(PAYMENT_OBJECT);
-                    listPaymentMethodInfo();
+                    listObject(PAYMENT_METHOD_INFO);
+               //     listPaymentMethodInfo();
                     break;
                 case LIST_EXPENSES:
-                //    listObject(EXPENSE_OBJECT);
-                    listExpenses();
+                    listObject(EXPENSE_OBJECT);
+               //     listExpenses();
                     break;
                 case SAVE:
                     save();
@@ -556,14 +455,222 @@ public class UserInterface {
         exit();
     }
 
-    private void removeObject(int objectType) {
-    }
-
-    private void listObject(int objectType) {
-    }
-
     private void addObject(int objectType) {
+        String name;
+        String phoneNumber;
+        int amount;
+        int donorID;
+        Object result = "";
+        String objectTypeString = "";
+        do {
+            switch (objectType) {
+                case DONOR_OBJECT:
+                    objectTypeString = "donor";
+                    name = getToken("Enter donor name");
+                    phoneNumber = getToken("Enter phone");
+                    result = database.addDonor(name, phoneNumber);
+                    break;
+                case PAYMENT_OBJECT:
+                    objectTypeString = "payment type";
+                    result = addPaymentMethod();
+                    break;
+                case EXPENSE_OBJECT:
+                    objectTypeString = "expense";
+                    name = getToken("Enter expense name");
+                    amount = getNumber("Enter expense amount (int)");
+                    result = database.addExpense(name, amount);
+                    break;
+            }
+            if (result == null) {
+                System.out.println("Could not add " + objectTypeString + ".");
+            }else{
+                System.out.println(result);
+            }
+        }while(yesOrNo("Add another " + objectTypeString + "?"));
     }
+
+
+    /**
+     * Method to add a Payment Method TODO could be refactored to less lines if we queue questions differently
+     */
+    private Object addPaymentMethod() {
+        int donationAmount;
+        int donorID = getNumber("Enter donor id");
+        if (database.getDonor(donorID) != null) {
+            int command = getNumber("Enter Either 0 For Credit Card or 1 For Bank Account");
+            switch (command) {
+                case 0:
+                    String creditCardNumber = getToken("Enter credit card number");
+                    donationAmount = getNumber("Enter dollar donation amount as integer");
+                    return database.addCreditCard(donorID, creditCardNumber, donationAmount).addedString();
+                case 1:
+                    String bankAccountNumber = getToken("Enter bank account number");
+                    donationAmount = getNumber("Enter dollar donation amount as integer");
+                    return database.addBankAccount(donorID, bankAccountNumber, donationAmount).addedString();
+            }
+        }else {
+            System.out.println("No such donor.\n");
+        }
+        return null;
+    }
+
+
+    /**
+     * Method to be called displaying a single donor.
+     *
+     */
+    private void listDonor() {
+        Donor resultDonor;
+        do {
+            int donorID = getNumber("Enter donor id");
+            resultDonor = database.searchDonorList(donorID);
+            if (resultDonor != null){
+                System.out.println(resultDonor.stringForOneDonor());
+
+            }else{
+                System.out.println("No such donor");
+            }
+            if (!yesOrNo("Find another Donor?")) {
+                break;
+            }
+        } while (true);
+    }
+
+    //TODO surround in list again yesOrNo();
+    private void listObject(int objectType) {
+        Iterator result;
+        int queryInt;
+        String caseObjectName = "objects (ERROR) ERROR ERROR!!!";
+        switch (objectType){
+            case PAYMENT_METHOD_INFO:
+                int threshold = getNumber("Enter threshold amount as int");
+                result = database.getTransactionsAboveThreshold(threshold);
+                caseObjectName = "transactions";
+                break;
+            case EXPENSE_OBJECT:
+                result = database.getExpensesProcessed();
+                caseObjectName = "expenses";
+                break;
+            case TRANSACTION_OBJECT:
+                result = database.getTransactions();
+                caseObjectName = "transactions";
+                break;
+            case  ALL_DONORS_OBJECT:
+                result = database.getDonors();
+                caseObjectName = "donors";
+                break;
+            default:
+                result = null;
+        }
+        while (result != null && result.hasNext()) {
+            System.out.println(result.next().toString() + "\n");
+        }
+        System.out.println("\n  There are no more " + caseObjectName + ".\n");
+    }
+
+    //will go farther than should if invalid donor entered for removal of payment type
+    private void removeObject(int objectType) {
+        String objectTypeString = "";
+        Object result = "null";
+        do{
+            int donorID = Integer.parseInt(getToken("Enter donor id"));
+            switch (objectType) {
+                case DONOR_OBJECT:
+                    objectTypeString = "donor";
+                    result = database.removeDonor(donorID);
+                    break;
+                case CREDIT_CARD_OBJECT:
+                    objectTypeString = "credit card";
+                    String ccNumber = getToken("Enter credit card number");
+                    result = database.removeCreditCard(donorID, ccNumber);
+                    break;
+                case BANK_ACCOUNT_OBJECT:
+                    objectTypeString = "bank account";
+                    String bankAccountNumber = getToken("Enter bank account number");
+                    result = database.removeBankAccount(donorID, bankAccountNumber);
+                    break;
+            }
+            if (result.equals("null") || result.equals(null)){ //This is problematic. Try removing or adding, weve got problems.
+                System.out.println("Invalid " + objectTypeString + ".");
+            }else{
+                System.out.println("The " + objectTypeString + " has been removed");
+            }
+        }while(yesOrNo("Remove another " + objectTypeString + "?"));
+    }
+
+    /**
+     *
+     */
+    private void showOrganizationInfo() {
+        int totalAmountDonated = 0;
+        int totalAmountSpent = 0;
+        Iterator donatedResult = database.getDonors();
+        while (donatedResult.hasNext()) {
+            Donor donor = (Donor) donatedResult.next();
+            totalAmountDonated =+ donor.getDonationSum();
+        }
+        Iterator spentResult = database.getExpensesProcessed();
+        while (spentResult.hasNext()) {
+            Expense expense = (Expense) spentResult.next();
+            totalAmountSpent =+ expense.getExpenseAmount();
+        }
+        int balance = totalAmountDonated - totalAmountSpent;
+        System.out.println("Organization Info \nTotal amount donated: " + totalAmountDonated + "\nTotal amount spent (expenses): " + totalAmountSpent + "\nBalance: " + balance +".");
+    }
+
+    /**
+     * Function to process donations. //TODO get working, refactor
+     */
+    public void processDonations() {
+        String creditOrBankString = "";
+        String number;
+        String transactionID;
+        int donorID = getNumber("Enter donor id");
+        int donationAmount;
+        int caseNumber = -1;
+        Iterator resultCard = database.getCreditCards(donorID);
+        Iterator resultBankAccount = database.getBankAccounts(donorID);
+        if (resultCard != null && resultCard.hasNext() && resultBankAccount != null && resultBankAccount.hasNext()) { //if the donor has bank accounts and credit cards
+            caseNumber = getNumber("Process Credit Card: enter 1, Process bank account: enter 2:");
+        } else if (resultCard != null && resultCard.hasNext()) {
+            caseNumber = CREDIT_CARD_OBJECT;
+        } else if (resultBankAccount != null && resultBankAccount.hasNext()) {
+            caseNumber = BANK_ACCOUNT_OBJECT;
+        }
+        System.out.println(creditOrBankString + "s Available:");
+        switch (caseNumber) {
+            case CREDIT_CARD_OBJECT:
+                creditOrBankString = "Credit Card";
+                while (resultCard.hasNext()) {
+                    CreditCard creditCard = (CreditCard) resultCard.next();
+                    System.out.println(creditCard.getCreditCardId() + "\n");
+                }
+                break;
+            case BANK_ACCOUNT_OBJECT:
+                creditOrBankString = "Bank Account";
+                while (resultBankAccount.hasNext()) {
+                    BankAccount bankAccount = (BankAccount) resultBankAccount.next();
+                    System.out.println(bankAccount.getBankAccountId() + "\n");
+                }
+                break;
+            default:
+                System.out.println("None available\n");
+                return;
+        }
+
+        number = getToken("Enter " + creditOrBankString + " to process: ");
+        donationAmount = database.getDonationAmount(donorID, number, caseNumber);
+        switch (donationAmount) {
+            case Database.PAYMENT_TYPE_NOT_FOUND:
+                System.out.println("No matching " + creditOrBankString + " found");
+                break;
+            default:
+                transactionID = database.processDonation(donorID, number, donationAmount, creditOrBankString);
+                System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID + "\n");
+        }
+    }
+
+
 
     /**
      * Method to exit the system.
@@ -574,33 +681,6 @@ public class UserInterface {
             case SAVE:
                 save();
                 break;
-        }
-    }
-
-    /**
-     * Method to add a Payment Method TODO could be refactored to less liunes if we queue questions differently
-     */
-    private void addPaymentMethod() {
-        int donationAmount;
-        int donorID = getNumber("Enter donor id");
-        if (database.getDonor(donorID) != null) {
-            int command = getNumber("Enter Either 0 For Credit Card or 1 For Bank Account");
-            switch (command) {
-                case 0:
-                    String creditCardNumber = getToken("Enter credit card number");
-                    donationAmount = getNumber("Enter dollar donation amount as integer");
-                    database.addCreditCard(donorID, creditCardNumber, donationAmount);
-                    System.out.print("Credit card: " + creditCardNumber + ", donation amount: " + donationAmount + " added for donor " + donorID + "\n");
-                    break;
-                case 1:
-                    String bankAccountNumber = getToken("Enter bank account number");
-                    donationAmount = getNumber("Enter dollar donation amount as integer");
-                    database.addBankAccount(donorID, bankAccountNumber, donationAmount);
-                    System.out.print("Bank Account: " + bankAccountNumber + ", donation amount: " + donationAmount + " added for donor " + donorID + "\n");
-                    break;
-            }
-        }else {
-            System.out.println("No such donor.\n");
         }
     }
 

@@ -37,7 +37,7 @@ public class Transaction implements Serializable {
         this.donationAmount = donationAmount;
         this.date = new GregorianCalendar();
         this.transactionID = String.valueOf(donorIDOfDonation).concat("t").concat(String.valueOf(transactionCount));
-        if (paymentType.equals("creditCard")) {
+        if (paymentType.equals("Credit Card")) {
             this.creditCardNumber = paymentTypeNumber;
             this.title = "TransactionID: " + transactionID +
                 "\n-> Card Number: " + creditCardNumber +
