@@ -347,11 +347,10 @@ public class UserInterface {
      * appropriate values and uses the appropriate Database method for removing a
      * credit card.
      */
-    public void removePaymentMethod() {
-        int command = getNumber("Enter Either 0 For Credit Card or 1 For Bank Account");
+    public void removePaymentMethod(int incomingCase) {
         int donorID;
         int result;
-        switch (command) {
+        switch (incomingCase) {
             case 0:
                 donorID = getNumber("Enter donor id");
                 String ccNumber = getToken("Enter credit card number");
@@ -511,10 +510,10 @@ public class UserInterface {
                     removeDonor();
                     break;
                 case REMOVE_CREDIT_CARD:
-                    removePaymentMethod();
+                    removePaymentMethod(1);
                     break;
                 case REMOVE_BANK_ACCOUNT:
-                    removePaymentMethod();
+                    removePaymentMethod(2);
                     break;
                 case ADD_EXPENSES:
                     addExpenses();
