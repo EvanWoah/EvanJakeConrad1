@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 /**
- *
+ * //TODO Wrap each method in a whileYesOrdNO() loop right? Maybe Reprint what the user jsut requested "8 entered, add payment info"
  * This class implements the user interface for the Donation project. The
  * commands are encoded as integers using a number of static final variables. A
  * number of utility methods exist to make it easier to parse the input.
@@ -33,7 +33,6 @@ public class UserInterface {
     private static final int LIST_DONORS = 5;
     private static final int LIST_DONOR = 6;
     private static final int REMOVE_DONOR = 7;
-    private static final int REMOVE_PAYMENT_METHOD = 8;
     private static final int REMOVE_CREDIT_CARD = 8;
     private static final int REMOVE_BANK_ACCOUNT = 9;
     private static final int ADD_EXPENSES = 10;
@@ -42,7 +41,6 @@ public class UserInterface {
     private static final int LIST_EXPENSES = 13;
     private static final int SAVE = 14;
     private static final int HELP = 15;
-
 
     /**
      * Payment Types
@@ -218,7 +216,7 @@ public class UserInterface {
     }
 
     /**
-     * Function to process donations.
+     * Function to process donations. //TODO get working
      */
     public void processDonations() {
         int donorID = getNumber("Enter donor id");
@@ -238,6 +236,7 @@ public class UserInterface {
         switch (caseNumber) {
             case 0:
                 int creditCardOrBankAccount = getNumber("Process Credit Card: enter 1, Process bank account: enter 2:");
+
             case 1:
                 System.out.println("Cards Available:");
                 while (resultCard.hasNext()) {
@@ -553,34 +552,29 @@ public class UserInterface {
     }
 
     /**
-     * Method to add a Credit Card.
+     * Method to add a Payment Method TODO could be refactored to less liunes if we queue questions differently
      */
     private void addPaymentMethod() {
-        int command = getNumber("Enter Either 0 For Credit Card or 1 For Bank Account");
-        int donorID;
-        switch (command) {
-            case 0:
-                donorID = getNumber("Enter donor id");
-                if (database.getDonor(donorID) != null){
+        int donationAmount;
+        int donorID = getNumber("Enter donor id");
+        if (database.getDonor(donorID) != null) {
+            int command = getNumber("Enter Either 0 For Credit Card or 1 For Bank Account");
+            switch (command) {
+                case 0:
                     String creditCardNumber = getToken("Enter credit card number");
-                    int donationAmount = getNumber("Enter even dollar donation amount as integer");
+                    donationAmount = getNumber("Enter dollar donation amount as integer");
                     database.addCreditCard(donorID, creditCardNumber, donationAmount);
-                    System.out.print("Credit card: " + creditCardNumber + ", donation amount: " + donationAmount + " added for donor " + donorID +"\n");
-                }else{
-                    System.out.println("No such donor.\n");
-                }
-                break;
-            case 1:
-                donorID = getNumber("Enter donor id");
-                if (database.getDonor(donorID) != null){
+                    System.out.print("Credit card: " + creditCardNumber + ", donation amount: " + donationAmount + " added for donor " + donorID + "\n");
+                    break;
+                case 1:
                     String bankAccountNumber = getToken("Enter bank account number");
-                    int donationAmount = getNumber("Enter even dollar donation amount as integer");
+                    donationAmount = getNumber("Enter dollar donation amount as integer");
                     database.addBankAccount(donorID, bankAccountNumber, donationAmount);
-                    System.out.print("Bank Account: " + bankAccountNumber + ", donation amount: " + donationAmount + " added for donor " + donorID +"\n");
-                }else{
-                    System.out.println("No such donor.\n");
-                }
-                break;
+                    System.out.print("Bank Account: " + bankAccountNumber + ", donation amount: " + donationAmount + " added for donor " + donorID + "\n");
+                    break;
+            }
+        }else {
+            System.out.println("No such donor.\n");
         }
     }
 

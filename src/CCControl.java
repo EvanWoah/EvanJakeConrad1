@@ -82,13 +82,13 @@ public class CCControl implements Serializable{
      * @return List of credit cards
      */
     public List getCreditCards(int donorID) {
-        List ccList = new LinkedList();
+        List creditCardList = new LinkedList();
         for (Object creditCardObject : creditCardNumbers) {
             CreditCard creditCard = (CreditCard) creditCardObject;
             if (creditCard.getDonorId()==(donorID)) {
-                ccList.add(creditCard);
+                creditCardList.add(creditCard);
             }
         }
-        return ccList;
+        return creditCardList;
     }
 }
