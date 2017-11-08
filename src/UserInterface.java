@@ -484,47 +484,65 @@ public class UserInterface {
      *
      */
     public void process() {
+        int DONOR_OBJECT = 0;
+        int PAYMENT_OBJECT = 1;
+        int CREDIT_CARD_OBJECT = 2;
+        int BANK_ACCOUNT_OBJECT = 3;
+        int EXPENSE_OBJECT = 4;
+        int TRANSACTION_OBJECT = 5;
+        int ALL_DONORS_OBJECT = 6;
         int command;
         help();
         while ((command = getCommand()) != EXIT) {
             switch (command) {
                 case ADD_DONOR:
+             //       addObject(DONOR_OBJECT);
                     addDonor();
                     break;
                 case ADD_PAYMENT_METHOD:
+             //       addObject(PAYMENT_OBJECT);
                     addPaymentMethod();
                     break;
                 case PROCESS_DONATIONS:
-                    processDonations();
+              //      processDonations();
                     break;
                 case LIST_TRANSACTIONS:
+               //     listObject(TRANSACTION_OBJECT);
                     listTransactions();
                     break;
                 case LIST_DONOR:
+              //      listObject(DONOR_OBJECT);
                     listDonor();
                     break;
                 case LIST_DONORS:
+               //     listObject(ALL_DONORS_OBJECT);
                     listDonors();
                     break;
                 case REMOVE_DONOR:
+              //      removeObject(DONOR_OBJECT);
                     removeDonor();
                     break;
                 case REMOVE_CREDIT_CARD:
+              //      removeObject(CREDIT_CARD_OBJECT);
                     removePaymentMethod(1);
                     break;
                 case REMOVE_BANK_ACCOUNT:
+               //     removeObject(BANK_ACCOUNT_OBJECT);
                     removePaymentMethod(2);
                     break;
                 case ADD_EXPENSES:
+                //    addObject(EXPENSE_OBJECT);
                     addExpenses();
                     break;
                 case ORGANIZATION_INFO:
-                    showOrganizationInfo();
+               //     showOrganizationInfo();
                     break;
                 case LIST_PAYMENT_METHOD_INFO:
+               //     listObject(PAYMENT_OBJECT);
                     listPaymentMethodInfo();
                     break;
                 case LIST_EXPENSES:
+                //    listObject(EXPENSE_OBJECT);
                     listExpenses();
                     break;
                 case SAVE:
@@ -536,6 +554,15 @@ public class UserInterface {
             }
         }
         exit();
+    }
+
+    private void removeObject(int objectType) {
+    }
+
+    private void listObject(int objectType) {
+    }
+
+    private void addObject(int objectType) {
     }
 
     /**
