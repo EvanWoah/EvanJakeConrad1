@@ -498,6 +498,12 @@ public class UserInterface {
         int donorID = getNumber("Enter donor id");
         if (database.getDonor(donorID) != null) {
             int command = getNumber("Enter Either 0 For Credit Card or 1 For Bank Account");
+            while (command != 0 || command != 1) {
+                System.out.println("Entered value was neither 0 or 1. Please try again.");
+                command = getNumber("Enter Either 0 For Credit Card or 1 For Bank Account");
+                if (command == 0 || command == 1)
+                    break;
+            }
             switch (command) {
                 case 0:
                     String creditCardNumber = getToken("Enter credit card number");
