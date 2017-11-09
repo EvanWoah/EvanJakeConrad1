@@ -571,9 +571,15 @@ public class UserInterface {
     //will go farther than should if invalid donor entered for removal of payment type
     private void removeObject(int objectType) {
         String objectTypeString = "";
-        Object result = "null";
+        Object result = null;
+        Object validDonor = null;
         do{
             int donorID = Integer.parseInt(getToken("Enter donor id"));
+            validDonor = database.getDonor(donorID);
+            if (validDonor == null){
+                System.out.println("Invalid donor");
+                return;
+            }
             switch (objectType) {
                 case DONOR_OBJECT:
                     objectTypeString = "donor";
@@ -590,7 +596,7 @@ public class UserInterface {
                     result = database.removeBankAccount(donorID, bankAccountNumber);
                     break;
             }
-            if (result.equals("null") || result.equals(null)){ //This is problematic. Try removing or adding, weve got problems.
+            if (result == null){ //This is problematic. Try removing or adding, weve got problems.
                 System.out.println("Invalid " + objectTypeString + ".");
             }else{
                 System.out.println("The " + objectTypeString + " has been removed");
@@ -676,7 +682,7 @@ public class UserInterface {
      * Method to exit the system.
      */
     private void exit() {
-        int command = getNumber("Enter 9 if you'd like to save before exiting, enter any other number to exit");
+        int command = getNumber("Enter 14 if you'd like to save before exiting, enter any other number to exit");
         switch (command){
             case SAVE:
                 save();

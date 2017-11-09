@@ -81,7 +81,7 @@ public class Transaction implements Serializable {
      *
      * @return date with month, date, and year
      */
-    public String getDate() {
+    public String getDate() { //todo, this is giving us october dates.
         return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
     }
 
