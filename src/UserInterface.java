@@ -645,6 +645,14 @@ public class UserInterface {
         Iterator resultCard = database.getCreditCards(donorID);
         Iterator resultBankAccount = database.getBankAccounts(donorID);
         if (resultCard != null && resultCard.hasNext() && resultBankAccount != null && resultBankAccount.hasNext()) { //if the donor has bank accounts and credit cards
+            while (true) {
+                caseNumber = getNumber("Process Credit Card: enter 1, Process bank account: enter 2:");
+                if ((caseNumber == 0) || (caseNumber == 1)) {
+                    break;
+                }
+                else
+                    System.out.println("Entered value was neither 0 or 1. Please try again.");
+            }
             caseNumber = getNumber("Process Credit Card: enter 1, Process bank account: enter 2:");
         } else if (resultCard != null && resultCard.hasNext()) {
             caseNumber = CREDIT_CARD_OBJECT;
