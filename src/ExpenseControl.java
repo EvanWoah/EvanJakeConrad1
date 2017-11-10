@@ -35,7 +35,7 @@ public class ExpenseControl implements Serializable{
         }
     }
 
-    /** /TODO is it possible I should use an iterator here, instead of a for loop
+    /**
      * Method to search for an expense
      * @param
      */

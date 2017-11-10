@@ -25,6 +25,11 @@ public class TransactionsControl implements Serializable{
     private TransactionsControl() {
     }
 
+    /**
+     * This is responsible for creating a transaction object. Basically an external constructor.
+     * This allows us to increment transactionCount
+     * without it being static, therefore it is serializeable.
+     */
     public Transaction newTransaction(int donorIDOfDonation, String paymentTypeNumber, int donationAmount, String paymentType) {
         Transaction transaction = new Transaction();
         transactionCount = transactionCount + 1;

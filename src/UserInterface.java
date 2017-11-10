@@ -15,11 +15,9 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 /**
- * //TODO Wrap each method in a whileYesOrdNO() loop right? Maybe Reprint what the user jsut requested "8 entered, add payment info"
  * This class implements the user interface for the Donation project. The
  * commands are encoded as integers using a number of static final variables. A
  * number of utility methods exist to make it easier to parse the input.
- *
  */
 public class UserInterface {
     private static UserInterface userInterface;
@@ -180,7 +178,6 @@ public class UserInterface {
 
     /**
      * Displays the help screen
-     *
      */
     public void help() {
         System.out.println("Enter a number between 0 and 15 as explained below:");
@@ -202,158 +199,9 @@ public class UserInterface {
         System.out.println(HELP + " to  list this again");
     }
 
-//    /**
-//     * Method to be called for adding a donor. Prompts the user for the
-//     * appropriate values and uses the appropriate Database method for adding the
-//     * donor.
-//     *
-//     */
-//    public void addDonor() {
-//        do {
-//            String name = getToken("Enter donor name");
-//            String phone = getToken("Enter phone");
-//            Donor result;
-//            result = database.addDonor(name, phone);
-//            if (result == null) {
-//                System.out.println("Could not add donor");
-//            }
-//            System.out.println(result);
-//        }while(yesOrNo("Add another donor?"));
-//    }
-
-
-//    /**
-//     * Method to be called for displaying all transactions.
-//     *
-//     */
-//    public void listTransactions() {
-//        Iterator result = database.getTransactions();
-//        while (result.hasNext()) {
-//            Transaction transaction = (Transaction) result.next();
-//            System.out.println(transaction.toString() + "\n");
-//        }
-//        System.out.println("\n  There are no more transactions \n");
-//    }
-
-//    /**
-//     * Method to be called displaying all donors.
-//     *
-//     */
-//    public void listDonors() {
-//        Iterator result = database.getDonors();
-//        while (result.hasNext()) {
-//            Donor donor = (Donor) result.next();
-//            System.out.println(donor.toString() + "\n");
-//        }
-//        System.out.println("\n  There are no more donors \n");
-//    }
-
-    //   /**
-     //     * Method to print all transactions which are above the provided threshold
-     //     */
-//    private void listPaymentMethodInfo() {
-//        int threshold = getNumber("Enter threshold amount as int");
-//        Iterator result = database.getTransactionsAboveThreshold(threshold);
-//        while (result.hasNext()) {
-//            Transaction transaction = (Transaction) result.next();
-//            System.out.println(transaction.toString() + "\n");
-//        }
-//        System.out.println("\n  There are no more transactions \n");
-//    }
-
-
-//    /**
-//     * Method to be called for removing a donor. Prompts the user for the
-//     * appropriate values and uses the appropriate Database method for removing
-//     * a donor.
-//     *
-//     */
-//    public void removeDonor() {
-//        int donorID = Integer.parseInt(getToken("Enter donor id"));
-//        int result =  database.removeDonor(donorID);
-//        switch (result) {
-//            case Database.NO_SUCH_DONOR:
-//                System.out.println("Not a valid donor ID");
-//                break;
-//            default:
-//                System.out.println("Donor " +donorID+ " has been removed");
-//        }
-//    }
-
-//    /**
-//     * Method to be called for removing a credit card. Prompts the user for the
-//     * appropriate values and uses the appropriate Database method for removing a
-//     * credit card.
-//     */
-//    public void removePaymentMethod(int incomingCase) {
-//        int donorID;
-//        int result;
-//        switch (incomingCase) {
-//            case 1:
-//                donorID = getNumber("Enter donor id");
-//                String ccNumber = getToken("Enter credit card number");
-//                result = database.removeCreditCard(donorID, ccNumber);
-//                switch (result) {
-//                    case Database.CREDIT_CARD_NOT_FOUND:
-//                        System.out.println("No such Credit Card");
-//                        break;
-//                    case Database.NO_SUCH_DONOR:
-//                        System.out.println("Not a valid donor ID");
-//                        break;
-//                    case Database.OPERATION_COMPLETED:
-//                        System.out.println("The card has been removed");
-//                        break;
-//                    default:
-//                        System.out.println("An error has occurred");
-//                }
-//            case 2:
-//                donorID = getNumber("Enter donor id");
-//                String bankAccountNumber = getToken("Enter bank account number");
-//                result = database.removeBankAccount(donorID, bankAccountNumber);
-//                switch (result) {
-//                    case Database.BANK_ACCOUNT_NOT_FOUND:
-//                        System.out.println("No such Bank Account");
-//                        break;
-//                    case Database.NO_SUCH_DONOR:
-//                        System.out.println("Not a valid donor ID");
-//                        break;
-//                    case Database.OPERATION_COMPLETED:
-//                        System.out.println("The Bank Account has been removed");
-//                        break;
-//                    default:
-//                        System.out.println("An error has occurred");
-//                }
-//        }
-//    }
-
-//    private void addExpenses() {
-//        do {
-//            String name = getToken("Enter expense name");
-//            int amount = getNumber("Enter expense amount (int)");
-//            Expense result;
-//            result = database.addExpense(name, amount);
-//            if (result == null) {
-//                System.out.println("Could not add expense");
-//            }
-//            System.out.println(result);
-//        }while(yesOrNo("Add another expense?"));
-//
-//    }
-
-
-////TODO handle null iterator
-//    private void listExpenses() {
-//        Iterator expenseIterator = database.getExpensesProcessed();
-//        while (expenseIterator.hasNext()) {
-//            System.out.print(expenseIterator.next().toString());
-//        }
-//        System.out.println("\n  There are no more expenses \n");
-//    }
-
     /**
      * Method to be called for saving the Database object. Uses the appropriate
      * Database method for saving.
-     *
      */
     private void save() {
         if (database.save()) {
@@ -366,7 +214,6 @@ public class UserInterface {
     /**
      * Method to be called for retrieving saved data. Uses the appropriate
      * Database method for retrieval.
-     *
      */
     private void retrieve() {
         try {
@@ -387,7 +234,6 @@ public class UserInterface {
     /**
      * Orchestrates the whole process. Calls the appropriate method for the
      * different functionalities.
-     *
      */
     public void process() {
 
@@ -397,52 +243,42 @@ public class UserInterface {
             switch (command) {
                 case ADD_DONOR:
                     addObject(DONOR_OBJECT);
-              //      addDonor();
                     break;
                 case ADD_PAYMENT_METHOD:
                     addObject(PAYMENT_OBJECT);
-                //    addPaymentMethod();
                     break;
                 case PROCESS_DONATIONS:
                     processDonations();
                     break;
                 case LIST_TRANSACTIONS:
                     listObject(TRANSACTION_OBJECT);
-               //     listTransactions();
                     break;
                 case LIST_DONOR:
                     listDonor();
                     break;
                 case LIST_DONORS:
                     listObject(ALL_DONORS_OBJECT);
-               //     listDonors();
                     break;
                 case REMOVE_DONOR:
                     removeObject(DONOR_OBJECT);
-                //    removeDonor();
                     break;
                 case REMOVE_CREDIT_CARD:
                     removeObject(CREDIT_CARD_OBJECT);
-                //    removePaymentMethod(1);
                     break;
                 case REMOVE_BANK_ACCOUNT:
                     removeObject(BANK_ACCOUNT_OBJECT);
-                //    removePaymentMethod(2);
                     break;
                 case ADD_EXPENSES:
                     addObject(EXPENSE_OBJECT);
-                //    addExpenses();
                     break;
                 case ORGANIZATION_INFO:
                     showOrganizationInfo();
                     break;
                 case LIST_PAYMENT_METHOD_INFO:
                     listObject(PAYMENT_METHOD_INFO);
-               //     listPaymentMethodInfo();
                     break;
                 case LIST_EXPENSES:
                     listObject(EXPENSE_OBJECT);
-               //     listExpenses();
                     break;
                 case SAVE:
                     save();
@@ -455,6 +291,11 @@ public class UserInterface {
         exit();
     }
 
+
+    /**
+     * Method to add a donor, credit card, bank account, or expense.
+     * @param objectType
+     */
     private void addObject(int objectType) {
         String name;
         String phoneNumber;
@@ -491,7 +332,7 @@ public class UserInterface {
 
 
     /**
-     * Method to add a Payment Method TODO could be refactored to less lines if we queue questions differently
+     * Method to add a Payment Method, whether it be credit cards or bank accounts.
      */
     private Object addPaymentMethod() {
         int donationAmount;
@@ -525,7 +366,6 @@ public class UserInterface {
 
     /**
      * Method to be called displaying a single donor.
-     *
      */
     private void listDonor() {
         Donor resultDonor;
@@ -544,7 +384,10 @@ public class UserInterface {
         } while (true);
     }
 
-    //TODO surround in list again yesOrNo();
+    /**
+     * Prints information, including, all transactions, donors, expenses, or transactions above a given amount.
+     * @param objectType: what needs to be listed.
+     */
     private void listObject(int objectType) {
         Iterator result;
         String caseObjectName = "objects (ERROR) ERROR ERROR!!!";
@@ -575,7 +418,11 @@ public class UserInterface {
         System.out.println("\n  There are no more " + caseObjectName + ".\n");
     }
 
-    //will go farther than should if invalid donor entered for removal of payment type
+
+    /**
+     * Function to remove donors, bank accounts, and credit cards.
+     * @param objectType
+     */
     private void removeObject(int objectType) {
         String objectTypeString = "";
         Object result = null;
@@ -612,7 +459,7 @@ public class UserInterface {
     }
 
     /**
-     *
+     * Prints the current balance of the organization as well as donations and expenses.
      */
     private void showOrganizationInfo() {
         int totalAmountDonated = 0;
@@ -632,7 +479,7 @@ public class UserInterface {
     }
 
     /**
-     * Function to process donations. // TODO still really messy method. Create two new methods: print credit cards available, print bank accounts available.
+     * Function to process donations.
      */
     public void processDonations() {
         String creditOrBankString = "";
@@ -695,8 +542,6 @@ public class UserInterface {
                 System.out.print("Donation amount: $" + donationAmount + ".00, Transaction ID: " + transactionID + "\n");
         }
     }
-
-
 
     /**
      * Method to exit the system.

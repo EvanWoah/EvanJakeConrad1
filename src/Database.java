@@ -5,8 +5,7 @@
 
 
 
-/** TODO all remove functions should be made into one function, all add functions should be made into one, all list functions should be made into one.
- *
+/**
  * @author Brahma Dathan and Sarnath Ramnath
  * @Copyright (c) 2010
 
@@ -116,7 +115,7 @@ public class Database implements Serializable {
     }
 
     /*
-     * Removes Donor //TODO, can this be simplified
+     * Removes Donor
      */
     public Donor removeDonor(int donorId) {
         Donor donor = donorControl.search(donorId);
@@ -338,7 +337,10 @@ public class Database implements Serializable {
         return transactionControl.addTransaction(transaction);
     }
 
-    // TODO create a data structure which can hold all of the data? IS this what we want, then a visitor visits said structure
+    /**
+     * returns all expenses processed.
+     * @return
+     */
     public Iterator getExpensesProcessed() {
         return expenseControl.getAllExpensesProcessed();
     }

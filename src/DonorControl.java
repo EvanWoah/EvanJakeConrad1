@@ -17,7 +17,6 @@ public class DonorControl implements Serializable {
     private static DonorControl donorControl;
     private int DONOR_ID_COUNT = 0;
 
-    // TODO, static variables are not serialized.
     /*
      * Private constructor for singleton pattern
      * 
@@ -25,6 +24,14 @@ public class DonorControl implements Serializable {
     private DonorControl() {
     }
 
+    /***
+     * This is responsible for creating a donor object. Basically an external constructor.
+     * This allows us to increment DONOR_ID_COUNT
+     * without it being static, therefore it is serializeable.
+     * @param name
+     * @param phoneNumber
+     * @return
+     */
     public Donor newDonor(String name, String phoneNumber) {
         Donor donor = new Donor();
         donor.setName(name);
