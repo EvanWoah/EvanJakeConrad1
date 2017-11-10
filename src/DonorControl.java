@@ -15,7 +15,7 @@ public class DonorControl implements Serializable {
     private static final long serialVersionUID = 1L;
     private List<Donor> donors = new LinkedList();
     private static DonorControl donorControl;
-    private static int DONOR_ID_COUNT = 0;
+    private int DONOR_ID_COUNT = 0;
 
     // TODO, static variables are not serialized.
     /*
@@ -23,6 +23,14 @@ public class DonorControl implements Serializable {
      * 
      */
     private DonorControl() {
+    }
+
+    public Donor newDonor(String name, String phoneNumber) {
+        Donor donor = new Donor();
+        donor.setName(name);
+        donor.setPhone(phoneNumber);
+        donor.setDonorID(10000 + getDonorID());
+        return donor;
     }
 
     /**
@@ -60,7 +68,7 @@ public class DonorControl implements Serializable {
      * Method to get Donor Id
      * @return Donor Id
      */
-    public static int getDonorID() {
+    public int getDonorID() {
         DONOR_ID_COUNT=DONOR_ID_COUNT+1;
         return DONOR_ID_COUNT;
     }

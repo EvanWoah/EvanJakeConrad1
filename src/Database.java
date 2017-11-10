@@ -37,15 +37,6 @@ import java.util.List;
 public class Database implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final int PAYMENT_TYPE_NOT_FOUND = -1;
-    public static final int DONOR_NOT_FOUND = 2;
-    public static final int BOOK_HAS_HOLD = 3;
-    public static final int BOOK_ISSUED = 4;
-    public static final int HOLD_PLACED = 5;
-    public static final int NO_CREDIT_CARD_FOUND = 6;
-    public static final int OPERATION_COMPLETED = 7;
-    public static final int OPERATION_FAILED = 8;
-    public static final int NO_SUCH_DONOR = 9;
-    public static final int NO_BANK_ACCOUNT_FOUND = 11;
     private CCControl cccontrol;
     private BankAccountControl bankAccountControl;
     private DonorControl donorControl;
@@ -214,7 +205,7 @@ public class Database implements Serializable {
      */
     public Donor addDonor(String name, String phone) {
         try{
-            Donor newDonor = new Donor(name, phone);
+            Donor newDonor = donorControl.newDonor(name, phone);
             donorControl.insertDonor(newDonor);
             return newDonor;
         }catch(Exception e){return null;}
@@ -342,7 +333,7 @@ public class Database implements Serializable {
      * @return Transaction ID
      */
     public String processDonation(int donorID, String number, int donationAmount, String paymentType ) {
-        Transaction transaction = new Transaction(donorID, number, donationAmount, paymentType);
+        Transaction transaction = transactionControl.newTransaction(donorID, number, donationAmount, paymentType);
         getDonor(donorID).addTransaction(transaction);
         return transactionControl.addTransaction(transaction);
     }

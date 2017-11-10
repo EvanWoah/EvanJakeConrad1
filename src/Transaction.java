@@ -14,12 +14,10 @@ import java.util.GregorianCalendar;
 public class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
     private double donationAmount;
-    private String creditCardNumber;
-    private String bankAccountNumber;
+    private String paymentTypeNumber;
     private String paymentType;
     private int donorIDOfDonation;
     private String transactionID;
-    private static int transactionCount = 0;
     private String title;
     private Calendar date;
 
@@ -27,30 +25,9 @@ public class Transaction implements Serializable {
      * Creates the transaction with a given amount and Donor. The date is the
      * current date.
      *
-     * @param donationAmount
-     *            The amount donated
-     *
      */
-    public Transaction(int donorIDOfDonation, String paymentTypeNumber, int donationAmount, String paymentType) {
-        transactionCount=transactionCount+1;
-        this.donorIDOfDonation = donorIDOfDonation;
-        this.donationAmount = donationAmount;
-        this.date = new GregorianCalendar();
-        this.transactionID = String.valueOf(donorIDOfDonation).concat("t").concat(String.valueOf(transactionCount));
-        if (paymentType.equals("Credit Card")) {
-            this.creditCardNumber = paymentTypeNumber;
-            this.title = "TransactionID: " + transactionID +
-                "\n-> Card Number: " + creditCardNumber +
-                ", Donation Amount: " + donationAmount +
-                ", Date: " + getDate();
-        }
-        else {
-            this.bankAccountNumber = paymentTypeNumber;
-            this.title = "TransactionID: " + transactionID +
-                    "\n-> Account Number: " + bankAccountNumber +
-                    ", Donation Amount: " + donationAmount +
-                    ", Date: " + getDate();
-        }
+    public Transaction(){
+
     }
 
     /**
@@ -81,7 +58,7 @@ public class Transaction implements Serializable {
      *
      * @return date with month, date, and year
      */
-    public String getDate() { //todo, this is giving us october dates.
+    public String getDate() {
         return date.get(Calendar.MONTH) + "/" + date.get(Calendar.DATE) + "/" + date.get(Calendar.YEAR);
     }
 
@@ -100,5 +77,29 @@ public class Transaction implements Serializable {
      */
     public String getTransactionID() {
         return transactionID;
+    }
+
+    public void setDonorIDOfDonation(int donorIDOfDonation) {
+        this.donorIDOfDonation = donorIDOfDonation;
+    }
+
+    public void setDonationAmount(int donationAmount) {
+        this.donationAmount = donationAmount;
+    }
+
+    public void setDate(GregorianCalendar date) {
+        this.date = date;
+    }
+
+    public void setTransactionID(String transactionID) {
+        this.transactionID = transactionID;
+    }
+
+    public void setPaymentTypeNumber(String paymentTypeNumber) {
+        this.paymentTypeNumber = paymentTypeNumber;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

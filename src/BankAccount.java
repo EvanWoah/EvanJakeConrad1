@@ -38,7 +38,7 @@ public class BankAccount extends PaymentType implements Serializable{
 
 
     public String addedString() {
-        return "CreditCard{" +
+        return "BankAccount{" +
                 "bankAccountNumber='" + bankAccountNumber + '\'' +
                 "donationAmount='" + super.donationAmount + '\'' +
                 "donorID='" + super.donorId + '\'' +

@@ -23,16 +23,8 @@ public class Donor implements Serializable {
 
     /**
      * Represents a single donor
-     *
-     * @param name
-     *            name of the donor
-     * @param phoneNumber
-     *            phone number of the donor
      */
-    public Donor(String name, String phoneNumber) {
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.donorID = 10000+DonorControl.getDonorID();
+    public Donor() {
     }
 
     /**
@@ -145,7 +137,7 @@ public class Donor implements Serializable {
 
     public void addBankAccount(String bankAccountNumber, int donationAmount) {
         BankAccount bankAccount = new BankAccount(getDonorID(), bankAccountNumber, donationAmount);
-        if (creditCards.contains(bankAccount)){
+        if (bankAccounts.contains(bankAccount)){
             return;
         }
         bankAccounts.add(bankAccount);
@@ -228,5 +220,9 @@ public class Donor implements Serializable {
         string += "].";
         return string;
 
+    }
+
+    public void setDonorID(int donorID) {
+        this.donorID = donorID;
     }
 }

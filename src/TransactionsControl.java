@@ -3,6 +3,7 @@
  * @Copyright (c) 2017
  */
 import java.io.Serializable;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,11 +16,28 @@ public class TransactionsControl implements Serializable{
     private static final long serialVersionUID = 1L;
     private List transactions = new LinkedList();
     private static TransactionsControl transactionsControl;
+    private int transactionCount = 0;
+
 
     /**
      * Constructor
      */
     private TransactionsControl() {
+    }
+
+    public Transaction newTransaction(int donorIDOfDonation, String paymentTypeNumber, int donationAmount, String paymentType) {
+        Transaction transaction = new Transaction();
+        transactionCount = transactionCount + 1;
+        transaction.setDonorIDOfDonation(donorIDOfDonation);
+        transaction.setDonationAmount(donationAmount);
+        transaction.setDate(new GregorianCalendar());
+        transaction.setTransactionID(String.valueOf(donorIDOfDonation).concat("t").concat(String.valueOf(transactionCount)));
+        transaction.setPaymentTypeNumber(paymentTypeNumber);
+        transaction.setTitle("TransactionID: " + transaction.getTransactionID() +
+                "\n-> "+paymentType+" Number: " + paymentTypeNumber +
+                ", Donation Amount: " + donationAmount +
+                ", Date: " + transaction.getDate());
+        return transaction;
     }
 
     /**

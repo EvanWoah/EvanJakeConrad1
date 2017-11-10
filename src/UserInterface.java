@@ -547,7 +547,6 @@ public class UserInterface {
     //TODO surround in list again yesOrNo();
     private void listObject(int objectType) {
         Iterator result;
-        int queryInt;
         String caseObjectName = "objects (ERROR) ERROR ERROR!!!";
         switch (objectType){
             case PAYMENT_METHOD_INFO:
@@ -633,7 +632,7 @@ public class UserInterface {
     }
 
     /**
-     * Function to process donations. // TODO still really messy method.
+     * Function to process donations. // TODO still really messy method. Create two new methods: print credit cards available, print bank accounts available.
      */
     public void processDonations() {
         String creditOrBankString = "";
@@ -641,7 +640,7 @@ public class UserInterface {
         String transactionID;
         int donorID = getNumber("Enter donor id");
         int donationAmount;
-        int caseNumber = -1;
+        int caseNumber;
         Iterator resultCard = database.getCreditCards(donorID);
         Iterator resultBankAccount = database.getBankAccounts(donorID);
         if (resultCard != null && resultCard.hasNext() && resultBankAccount != null && resultBankAccount.hasNext()) { //if the donor has bank accounts and credit cards
@@ -649,12 +648,10 @@ public class UserInterface {
                 caseNumber = getNumber("Process Credit Card: enter 0, Process bank account: enter 1:");
                 if (caseNumber == 0) {
                     caseNumber = CREDIT_CARD_OBJECT;
-                    System.out.println("Credit Cards Available:");
                     break;
                 }
                 if (caseNumber == 1){
                     caseNumber = BANK_ACCOUNT_OBJECT;
-                    System.out.println("Bank Accounts Available:");
                     break;
                 }
                 else
@@ -666,10 +663,13 @@ public class UserInterface {
             caseNumber = BANK_ACCOUNT_OBJECT;
         }else{
             System.out.println(creditOrBankString + "No payment methods Available:");
+            return;
         }
+        // list payment method numbers
         switch (caseNumber) {
             case CREDIT_CARD_OBJECT:
                 creditOrBankString = "Credit Card";
+                System.out.println("Credit Cards Available:");
                 while (resultCard.hasNext()) {
                     CreditCard creditCard = (CreditCard) resultCard.next();
                     System.out.println(creditCard.getCreditCardId() + "\n");
@@ -677,14 +677,12 @@ public class UserInterface {
                 break;
             case BANK_ACCOUNT_OBJECT:
                 creditOrBankString = "Bank Account";
+                System.out.println("Bank Accounts Available:");
                 while (resultBankAccount.hasNext()) {
                     BankAccount bankAccount = (BankAccount) resultBankAccount.next();
                     System.out.println(bankAccount.getBankAccountId() + "\n");
                 }
                 break;
-            default:
-                System.out.println("None available\n");
-                return;
         }
         number = getToken("Enter " + creditOrBankString + " to process: ");
         donationAmount = database.getDonationAmount(donorID, number, caseNumber);
