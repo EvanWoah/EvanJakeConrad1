@@ -464,10 +464,10 @@ public class UserInterface {
     private void showOrganizationInfo() {
         int totalAmountDonated = 0;
         int totalAmountSpent = 0;
-        Iterator donatedResult = database.getDonors();
+        Iterator donatedResult = database.getTransactions();
         while (donatedResult.hasNext()) {
-            Donor donor = (Donor) donatedResult.next();
-            totalAmountDonated += donor.getDonationSum();
+            Transaction transaction = (Transaction) donatedResult.next();
+            totalAmountDonated += transaction.getDonationAmount();
         }
         Iterator spentResult = database.getExpensesProcessed();
         while (spentResult.hasNext()) {
