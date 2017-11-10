@@ -621,19 +621,19 @@ public class UserInterface {
         Iterator donatedResult = database.getDonors();
         while (donatedResult.hasNext()) {
             Donor donor = (Donor) donatedResult.next();
-            totalAmountDonated =+ donor.getDonationSum();
+            totalAmountDonated += donor.getDonationSum();
         }
         Iterator spentResult = database.getExpensesProcessed();
         while (spentResult.hasNext()) {
             Expense expense = (Expense) spentResult.next();
-            totalAmountSpent =+ expense.getExpenseAmount();
+            totalAmountSpent += expense.getExpenseAmount();
         }
         int balance = totalAmountDonated - totalAmountSpent;
         System.out.println("Organization Info \nTotal amount donated: " + totalAmountDonated + "\nTotal amount spent (expenses): " + totalAmountSpent + "\nBalance: " + balance +".");
     }
 
     /**
-     * Function to process donations. //TODO get working, refactor
+     * Function to process donations. // TODO still really messy method.
      */
     public void processDonations() {
         String creditOrBankString = "";
@@ -646,20 +646,27 @@ public class UserInterface {
         Iterator resultBankAccount = database.getBankAccounts(donorID);
         if (resultCard != null && resultCard.hasNext() && resultBankAccount != null && resultBankAccount.hasNext()) { //if the donor has bank accounts and credit cards
             while (true) {
-                caseNumber = getNumber("Process Credit Card: enter 1, Process bank account: enter 2:");
-                if ((caseNumber == 0) || (caseNumber == 1)) {
+                caseNumber = getNumber("Process Credit Card: enter 0, Process bank account: enter 1:");
+                if (caseNumber == 0) {
+                    caseNumber = CREDIT_CARD_OBJECT;
+                    System.out.println("Credit Cards Available:");
+                    break;
+                }
+                if (caseNumber == 1){
+                    caseNumber = BANK_ACCOUNT_OBJECT;
+                    System.out.println("Bank Accounts Available:");
                     break;
                 }
                 else
                     System.out.println("Entered value was neither 0 or 1. Please try again.");
             }
-            caseNumber = getNumber("Process Credit Card: enter 1, Process bank account: enter 2:");
         } else if (resultCard != null && resultCard.hasNext()) {
             caseNumber = CREDIT_CARD_OBJECT;
         } else if (resultBankAccount != null && resultBankAccount.hasNext()) {
             caseNumber = BANK_ACCOUNT_OBJECT;
+        }else{
+            System.out.println(creditOrBankString + "No payment methods Available:");
         }
-        System.out.println(creditOrBankString + "s Available:");
         switch (caseNumber) {
             case CREDIT_CARD_OBJECT:
                 creditOrBankString = "Credit Card";
@@ -679,7 +686,6 @@ public class UserInterface {
                 System.out.println("None available\n");
                 return;
         }
-
         number = getToken("Enter " + creditOrBankString + " to process: ");
         donationAmount = database.getDonationAmount(donorID, number, caseNumber);
         switch (donationAmount) {

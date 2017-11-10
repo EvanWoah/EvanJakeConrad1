@@ -15,9 +15,9 @@ public class DonorControl implements Serializable {
     private static final long serialVersionUID = 1L;
     private List<Donor> donors = new LinkedList();
     private static DonorControl donorControl;
-    public static int DONOR_ID_COUNT = 0;
+    private static int DONOR_ID_COUNT = 0;
 
-
+    // TODO, static variables are not serialized.
     /*
      * Private constructor for singleton pattern
      * 

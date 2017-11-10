@@ -19,7 +19,7 @@ public class Transaction implements Serializable {
     private String paymentType;
     private int donorIDOfDonation;
     private String transactionID;
-    private int transactionCount = 0;
+    private static int transactionCount = 0;
     private String title;
     private Calendar date;
 
